@@ -1,169 +1,197 @@
 import Link from 'next/link';
-import Image from 'next/image'; // Import next/image
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Briefcase, MessageSquare, Video, TrendingUp, ShieldCheck, Users } from 'lucide-react'; // Added more icons
+import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video } from 'lucide-react'; // Added Bot, BrainCircuit, ArrowRight, Star
+import UserReviews from '@/components/landing/user-reviews'; // Import Reviews component
+import CommunityPreview from '@/components/landing/community-preview'; // Import Community Preview component
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <header className="bg-primary text-primary-foreground p-4 shadow-md sticky top-0 z-50">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold hover:opacity-90 transition-opacity">ConnectPro</Link>
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
+          <Link href="/" className="text-xl font-bold gradient-text-primary hover:opacity-90 transition-opacity">ConnectPro</Link>
           <nav className="space-x-2 md:space-x-4">
-            <Button variant="ghost" className="text-primary-foreground hover:bg-primary/80" asChild>
+            <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted" asChild>
               <Link href="/login/user">User Login</Link>
             </Button>
-            <Button variant="secondary" className="hover:opacity-90" asChild>
+            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10" asChild>
               <Link href="/signup/professional">Join as Pro</Link>
             </Button>
           </nav>
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto p-6 md:p-12">
-        <section className="text-center mb-16 md:mb-24 animate-fade-in">
-           <Image
-              src="https://picsum.photos/seed/hero/1200/400" // Hero image placeholder
-              alt="Connecting professionals"
-              width={1200}
-              height={400}
-              className="w-full max-w-4xl mx-auto rounded-lg shadow-xl mb-8 object-cover aspect-[3/1]"
-              priority // Load hero image first
-           />
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-primary">Unlock Your Potential with Expert Guidance</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-            ConnectPro bridges the gap between ambition and achievement. Find verified professionals for personalized mentorship, strategic advice, or collaborative projects through secure video calls and intelligent AI chat support.
-          </p>
-          <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-            <Link href="/user/find-professional">Discover Your Mentor</Link>
-          </Button>
+      {/* Main Content */}
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
+          {/* Background Gradient/Abstract Shapes (Optional) */}
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/20 via-transparent to-transparent rounded-full blur-3xl opacity-30 animate-pulse"></div>
+             <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-accent/20 via-transparent to-transparent rounded-full blur-3xl opacity-30 animate-pulse [animation-delay:1s]"></div>
+          </div>
+
+          <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 gradient-text-primary">
+              Elevate Your Journey. Connect with Experts.
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
+              Access verified professionals, intelligent AI guidance, and a supportive community. Bridge the gap between ambition and achievement with secure video calls and insightful chat support.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300" asChild>
+                <Link href="/user/find-professional">Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" /></Link>
+              </Button>
+               <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground transition-colors" asChild>
+                 <Link href="/community">Explore Community</Link>
+               </Button>
+            </div>
+             {/* Optional: Placeholder image/graphic */}
+             {/* <Image
+               src="https://picsum.photos/seed/hero-graphic/800/400"
+               alt="Abstract connection graphic"
+               width={800}
+               height={400}
+               className="w-full max-w-3xl mx-auto mt-12 rounded-lg opacity-80 object-cover aspect-[2/1]"
+               priority
+             /> */}
+          </div>
         </section>
 
-        <section className="mb-16 md:mb-24">
-           <h3 className="text-3xl font-bold text-center mb-12">Why Choose ConnectPro?</h3>
-           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Card 1: Expert Network */}
-              <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 animate-slide-up [animation-delay:0.1s]">
-                 <CardHeader>
-                    <div className="flex justify-center mb-4">
-                     <Image src="https://picsum.photos/seed/experts/300/200" alt="Expert Network" width={300} height={200} className="rounded-t-lg object-cover w-full h-32"/>
+        {/* Features Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-background to-secondary/30">
+          <div className="container mx-auto px-4 md:px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text-accent">Why ConnectPro?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Feature Card 1 */}
+              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up">
+                 <CardHeader className="p-6">
+                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50">
+                        <Briefcase className="h-8 w-8 text-primary" />
                     </div>
-                   <Briefcase className="h-10 w-10 text-primary mx-auto mb-2" />
-                   <CardTitle className="text-center">Vast Expert Network</CardTitle>
+                    <CardTitle className="text-xl font-semibold">Vetted Expert Network</CardTitle>
                  </CardHeader>
-                 <CardContent>
-                   <CardDescription className="text-center">
-                     Explore a curated community of verified professionals spanning diverse industries. Our rigorous vetting process ensures you connect with top-tier experts ready to share their knowledge. Use advanced filters to pinpoint the perfect mentor for your specific goals.
-                   </CardDescription>
+                 <CardContent className="p-6 pt-0">
+                    <CardDescription>
+                       Access a curated community of top-tier professionals across diverse fields. Our verification ensures quality connections for mentorship, advice, or collaboration. Find your perfect match easily.
+                    </CardDescription>
                  </CardContent>
               </Card>
-
-             {/* Card 2: Video Calls */}
-              <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 animate-slide-up [animation-delay:0.2s]">
-                 <CardHeader>
-                     <div className="flex justify-center mb-4">
-                     <Image src="https://picsum.photos/seed/video/300/200" alt="Video Calls" width={300} height={200} className="rounded-t-lg object-cover w-full h-32"/>
-                    </div>
-                   <Video className="h-10 w-10 text-primary mx-auto mb-2" />
-                   <CardTitle className="text-center">Seamless Video Sessions</CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                   <CardDescription className="text-center">
-                     Engage in high-quality, real-time video consultations directly on our secure platform. Schedule meetings effortlessly and benefit from face-to-face interaction, fostering deeper connections and more effective learning.
-                   </CardDescription>
-                 </CardContent>
-              </Card>
-
-              {/* Card 3: AI Counselor */}
-              <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 animate-slide-up [animation-delay:0.3s]">
-                 <CardHeader>
-                    <div className="flex justify-center mb-4">
-                     <Image src="https://picsum.photos/seed/ai/300/200" alt="AI Chatbot" width={300} height={200} className="rounded-t-lg object-cover w-full h-32"/>
-                    </div>
-                   <MessageSquare className="h-10 w-10 text-primary mx-auto mb-2" />
-                   <CardTitle className="text-center">Intelligent AI Guidance</CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                   <CardDescription className="text-center">
-                     Leverage our advanced AI Counselor for instant insights and personalized recommendations. It analyzes your needs, understands context from your conversations, and suggests the most relevant professionals or resources, available 24/7.
-                   </CardDescription>
-                 </CardContent>
-              </Card>
-
-              {/* Added Card 4: Growth */}
-               <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 animate-slide-up [animation-delay:0.4s]">
-                 <CardHeader>
-                     <div className="flex justify-center mb-4">
-                       <Image src="https://picsum.photos/seed/growth/300/200" alt="Professional Growth" width={300} height={200} className="rounded-t-lg object-cover w-full h-32"/>
+              {/* Feature Card 2 */}
+              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.1s]">
+                 <CardHeader className="p-6">
+                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50">
+                        <BrainCircuit className="h-8 w-8 text-accent" />
                      </div>
-                   <TrendingUp className="h-10 w-10 text-primary mx-auto mb-2" />
-                   <CardTitle className="text-center">Accelerate Your Growth</CardTitle>
+                    <CardTitle className="text-xl font-semibold">AI-Powered Guidance</CardTitle>
                  </CardHeader>
-                 <CardContent>
-                   <CardDescription className="text-center">
-                     Whether you're navigating a career change, mastering a new skill, or scaling your business, ConnectPro provides the targeted support you need to overcome obstacles and achieve your professional milestones faster.
+                 <CardContent className="p-6 pt-0">
+                    <CardDescription>
+                       Leverage our sophisticated AI Counselor. It understands your conversation context, analyzes needs, suggests relevant experts, and provides initial actionable insights—24/7.
+                    </CardDescription>
+                 </CardContent>
+              </Card>
+               {/* Feature Card 3 */}
+              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.2s]">
+                 <CardHeader className="p-6">
+                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50">
+                       <Video className="h-8 w-8 text-blue-400" />
+                    </div>
+                   <CardTitle className="text-xl font-semibold">Secure Video Sessions</CardTitle>
+                 </CardHeader>
+                 <CardContent className="p-6 pt-0">
+                   <CardDescription>
+                     Engage in seamless, high-quality video consultations directly on our platform. Enjoy end-to-end encryption for confidential and productive face-to-face interactions.
                    </CardDescription>
+                 </CardContent>
+              </Card>
+               {/* Feature Card 4 */}
+              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.3s]">
+                 <CardHeader className="p-6">
+                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50">
+                         <Users className="h-8 w-8 text-green-400" />
+                     </div>
+                     <CardTitle className="text-xl font-semibold">Anonymous Community</CardTitle>
+                 </CardHeader>
+                 <CardContent className="p-6 pt-0">
+                     <CardDescription>
+                         Share experiences, ask questions, and connect with peers in a safe, anonymous space. Post text, images, code, and more without revealing your identity. Foster growth through shared knowledge.
+                     </CardDescription>
                  </CardContent>
                </Card>
-
-               {/* Added Card 5: Secure */}
-                <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 animate-slide-up [animation-delay:0.5s]">
-                  <CardHeader>
-                     <div className="flex justify-center mb-4">
-                       <Image src="https://picsum.photos/seed/secure/300/200" alt="Secure Platform" width={300} height={200} className="rounded-t-lg object-cover w-full h-32"/>
-                     </div>
-                    <ShieldCheck className="h-10 w-10 text-primary mx-auto mb-2" />
-                    <CardTitle className="text-center">Secure & Confidential</CardTitle>
+                {/* Feature Card 5 */}
+               <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.4s]">
+                  <CardHeader className="p-6">
+                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50">
+                          <MessageSquare className="h-8 w-8 text-yellow-400" />
+                       </div>
+                     <CardTitle className="text-xl font-semibold">Contextual Chat</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-center">
-                      Your privacy is paramount. Communicate and share information with confidence on our platform, featuring end-to-end encryption for video calls and secure data handling practices. Focus on your goals, knowing your interactions are protected.
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-
-                {/* Added Card 6: Community */}
-                 <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 animate-slide-up [animation-delay:0.6s]">
-                   <CardHeader>
-                     <div className="flex justify-center mb-4">
-                       <Image src="https://picsum.photos/seed/community/300/200" alt="Community" width={300} height={200} className="rounded-t-lg object-cover w-full h-32"/>
-                     </div>
-                     <Users className="h-10 w-10 text-primary mx-auto mb-2" />
-                     <CardTitle className="text-center">Supportive Community</CardTitle>
-                   </CardHeader>
-                   <CardContent>
-                     <CardDescription className="text-center">
-                       Join a network of like-minded individuals and seasoned experts. Beyond one-on-one sessions, benefit from a community atmosphere focused on mutual growth, shared insights, and collaborative opportunities.
+                  <CardContent className="p-6 pt-0">
+                     <CardDescription>
+                       Our AI understands the entire conversation thread, providing relevant, human-like responses and recommendations. Supports multiple languages for natural interaction.
                      </CardDescription>
+                  </CardContent>
+               </Card>
+                {/* Feature Card 6 */}
+                <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.5s]">
+                   <CardHeader className="p-6">
+                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50">
+                         <ShieldCheck className="h-8 w-8 text-red-400" />
+                       </div>
+                      <CardTitle className="text-xl font-semibold">Privacy & Security</CardTitle>
+                   </CardHeader>
+                   <CardContent className="p-6 pt-0">
+                      <CardDescription>
+                         Your privacy is paramount. Benefit from secure data handling, encrypted communications, and an anonymous community option. Focus on growth with peace of mind.
+                      </CardDescription>
                    </CardContent>
-                 </Card>
+                </Card>
             </div>
+          </div>
         </section>
 
+         {/* User Reviews Section */}
+         <UserReviews />
 
-        <section className="text-center bg-gradient-to-r from-primary via-blue-600 to-accent p-12 rounded-lg shadow-xl animate-fade-in">
-          <h3 className="text-3xl font-bold mb-4 text-primary-foreground">Ready to Elevate Your Career?</h3>
-          <p className="text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-            Stop searching, start connecting. Join ConnectPro today and unlock a world of professional guidance tailored just for you.
-          </p>
-          <div className="space-y-4 md:space-y-0 md:space-x-4">
-            <Button variant="secondary" size="lg" className="hover:opacity-95" asChild>
-              <Link href="/signup/user">Sign Up as User</Link>
-            </Button>
-             <Button variant="outline" size="lg" className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary" asChild>
-               <Link href="/signup/professional">Join as Professional</Link>
-             </Button>
-          </div>
+         {/* Community Preview Section */}
+         <CommunityPreview />
+
+        {/* Call to Action Section */}
+        <section className="py-16 md:py-24 text-center relative overflow-hidden">
+             {/* Background Glow */}
+             <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-gradient-to-t from-primary/10 via-transparent to-transparent blur-3xl"></div>
+
+            <div className="container mx-auto px-4 md:px-6 relative z-10">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text-primary">Ready to Connect & Grow?</h2>
+                <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                  Join ConnectPro today. Unlock expert guidance, leverage AI insights, and participate in a thriving, anonymous community.
+                </p>
+                <div className="space-y-4 sm:space-y-0 sm:space-x-4">
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300 animate-glow" asChild>
+                    <Link href="/signup/user">Get Started as User</Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10" asChild>
+                    <Link href="/signup/professional">Join as a Professional</Link>
+                  </Button>
+                </div>
+            </div>
         </section>
       </main>
 
-      <footer className="bg-muted text-muted-foreground p-6 text-center mt-12">
-        <p>&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
-         <nav className="mt-2 space-x-4 text-sm">
-            <Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-foreground">Terms of Service</Link>
-         </nav>
+      {/* Footer */}
+      <footer className="border-t border-border/40 bg-secondary/30 text-muted-foreground">
+        <div className="container mx-auto px-4 md:px-6 py-8 text-center sm:text-left sm:flex sm:justify-between sm:items-center">
+           <p className="text-sm">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
+           <nav className="mt-4 sm:mt-0 space-x-4 text-sm">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
+              {/* Add other footer links */}
+           </nav>
+        </div>
       </footer>
     </div>
   );

@@ -1,21 +1,17 @@
 import type {Metadata} from 'next';
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google' // Using Inter font like osmo.supply
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+// Configure Inter font
+const inter = Inter({
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-inter', // Optional: if you need to reference it via variable
 });
 
 export const metadata: Metadata = {
-  title: 'ConnectPro',
-  description: 'Connect with professionals in your field.',
+  title: 'ConnectPro - Expert Connections', // Updated title
+  description: 'Connect with verified professionals, gain insights with AI, and engage with a supportive community.', // Updated description
 };
 
 export default function RootLayout({
@@ -24,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Default to dark mode */}
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className="dark"> {/* Ensure dark class is always present */}
+      <body className={`${inter.className} antialiased bg-background text-foreground`}>
         {children}
         <Toaster />
       </body>

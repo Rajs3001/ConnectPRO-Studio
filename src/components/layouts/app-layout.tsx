@@ -17,9 +17,10 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut, User, Calendar, MessageSquare, Settings, LayoutDashboard, Search, UserCog, Bot } from 'lucide-react'; // Added Bot icon
+import { LogOut, User, Calendar, MessageSquare, Settings, LayoutDashboard, Search, UserCog, Bot, Users } from 'lucide-react'; // Added Bot, Users icons
 import { useToast } from '@/hooks/use-toast';
 import React from 'react';
+import { cn } from '@/lib/utils'; // Import cn
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -39,7 +40,8 @@ const getUserMenuItems = (): MenuItem[] => [
     { href: '/user/find-professional', label: 'Find Professionals', icon: Search },
     { href: '/user/appointments', label: 'My Appointments', icon: Calendar },
     { href: '/user/chat', label: 'Chats', icon: MessageSquare },
-    { href: '/user/chat/ai', label: 'AI Counselor', icon: Bot }, // Explicit AI chat link
+    { href: '/user/chat/ai', label: 'AI Counselor', icon: Bot },
+    { href: '/community', label: 'Community', icon: Users }, // Added Community Link
     { href: `/user/profile`, label: 'Profile Settings', icon: Settings },
 ];
 
@@ -47,8 +49,9 @@ const getProfessionalMenuItems = (): MenuItem[] => [
     { href: `/professional/dashboard`, label: 'Dashboard', icon: LayoutDashboard, exact: true },
     { href: '/professional/schedule', label: 'Manage Schedule', icon: Calendar },
     { href: '/professional/appointments', label: 'Appointments', icon: UserCog },
-    // { href: '/professional/chat', label: 'Chats', icon: MessageSquare }, // Assuming professionals might chat too
-    { href: `/professional/profile`, label: 'Profile & Settings', icon: Settings }, // Adjusted label slightly
+    { href: '/community', label: 'Community', icon: Users }, // Added Community Link
+    // { href: '/professional/chat', label: 'Chats', icon: MessageSquare }, // Keep commented if not implemented
+    { href: `/professional/profile`, label: 'Profile & Settings', icon: Settings },
 ];
 
 
@@ -78,15 +81,17 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
   const menuItems = userType === 'user' ? getUserMenuItems() : getProfessionalMenuItems();
 
   return (
+    // Use SidebarProvider for context
     <SidebarProvider>
-      <Sidebar>
+       {/* Sidebar definition - uses theme variables from globals.css */}
+      <Sidebar className="border-r border-border/60 bg-card"> {/* Use card bg for sidebar */}
         <SidebarHeader>
-           <div className="flex items-center gap-3 p-2">
-            <Avatar>
+           <div className="flex items-center gap-3 p-4"> {/* Increased padding */}
+            <Avatar className="h-9 w-9"> {/* Slightly smaller avatar */}
                <AvatarImage src={userData.avatarUrl} alt={userData.name} />
                <AvatarFallback>{userData.initials}</AvatarFallback>
              </Avatar>
-            <span className="font-semibold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
+            <span className="font-semibold text-foreground group-data-[collapsible=icon]:hidden"> {/* Use foreground color */}
                {userData.name}
              </span>
            </div>
@@ -94,29 +99,43 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
         <SidebarContent>
           <SidebarMenu>
              {menuItems.map((item) => {
-                // Determine if the item is active
-                const isActive = item.exact
-                  ? pathname === item.href
-                  : pathname.startsWith(item.href) && (item.href !== `/${userType}/dashboard` || pathname === `/${userType}/dashboard`); // Handle dashboard exact match within startsWith
+                 // Determine active state based on path matching
+                 const isActive = item.exact
+                   ? pathname === item.href
+                   : pathname.startsWith(item.href) && (item.href !== `/${userType}/dashboard` || pathname === `/${userType}/dashboard`) && item.href !== '/user/chat'; // Ensure dashboard matches exactly, avoid matching base chat url if sub-chats exist
 
-                // Special handling for chat: make '/user/chat' active if on '/user/chat/*' but not '/user/chat/ai' if AI has its own link
-                 let isChatItemActive = isActive;
-                 if (item.href === '/user/chat' && userType === 'user') {
-                     isChatItemActive = pathname.startsWith('/user/chat') && !pathname.startsWith('/user/chat/ai');
-                 }
-                 if (item.href === '/user/chat/ai' && userType === 'user') {
-                     isChatItemActive = pathname === '/user/chat/ai';
-                 }
+                 // Special handling for chat parent and AI chat item
+                  let finalIsActive = isActive;
+                  if (userType === 'user') {
+                     if (item.href === '/user/chat' && pathname.startsWith('/user/chat/') && !pathname.startsWith('/user/chat/ai')) {
+                         finalIsActive = true; // Activate base 'Chats' if in a specific user/pro chat
+                     } else if (item.href === '/user/chat/ai' && pathname === '/user/chat/ai') {
+                          finalIsActive = true; // Activate 'AI Counselor' specifically
+                     } else if (item.href === '/user/chat' && pathname === '/user/chat/ai') {
+                         finalIsActive = false; // Deactivate base 'Chats' if on AI chat page
+                     } else if (item.href === '/community' && pathname.startsWith('/community')) {
+                          finalIsActive = true; // Activate community if on any community sub-page
+                     }
+                  } else if (userType === 'professional') {
+                      if (item.href === '/community' && pathname.startsWith('/community')) {
+                          finalIsActive = true; // Activate community for professionals too
+                      }
+                  }
+
 
                return (
                  <SidebarMenuItem key={item.href}>
                    <SidebarMenuButton
                      asChild
                      tooltip={item.label}
-                     isActive={isChatItemActive} // Use the determined active state
+                     isActive={finalIsActive} // Use the refined active state
+                     className={cn(
+                       'hover:bg-muted/80', // Subtle hover
+                       finalIsActive && 'bg-primary/10 text-primary font-semibold' // Active state style
+                     )}
                    >
                      <Link href={item.href}>
-                       <item.icon />
+                       <item.icon className={cn(finalIsActive && 'text-primary')} />
                        <span>{item.label}</span>
                      </Link>
                    </SidebarMenuButton>
@@ -128,7 +147,7 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
         <SidebarFooter>
            <SidebarMenu>
              <SidebarMenuItem>
-               <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
+               <SidebarMenuButton onClick={handleLogout} tooltip="Logout" className="hover:bg-destructive/10 hover:text-destructive">
                   <LogOut />
                   <span>Logout</span>
                </SidebarMenuButton>
@@ -136,15 +155,19 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
            </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>
-         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 sm:py-4">
-           <SidebarTrigger className="sm:hidden"/>
+
+      {/* Main content area within SidebarInset */}
+      <SidebarInset className="bg-background"> {/* Ensure main area uses background */}
+         {/* Top header bar */}
+         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
+           <SidebarTrigger className="sm:hidden text-foreground"/> {/* Trigger for mobile */}
            <div className="flex-1">
-              {/* Optional: Dynamically display page title based on pathname */}
+              {/* Optional: Breadcrumbs or Page Title */}
            </div>
-            <SidebarTrigger className="hidden sm:flex" />
+            <SidebarTrigger className="hidden sm:flex text-foreground" /> {/* Trigger for desktop */}
          </header>
-         <main className="flex-1 overflow-auto p-4 sm:px-6 sm:py-0">
+         {/* The actual page content */}
+         <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
             {children}
          </main>
       </SidebarInset>
