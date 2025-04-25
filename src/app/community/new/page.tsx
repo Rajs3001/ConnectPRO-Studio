@@ -125,8 +125,8 @@ export default function NewCommunityPostPage() {
     return (
         <AppLayout userType="user"> {/* Or professional */}
             <div className="container mx-auto py-8 max-w-3xl">
-                <h1 className="text-3xl font-bold mb-6 gradient-text-primary">Create New Community Post</h1>
-                <Card className="shadow-lg glassmorphic border border-border/60">
+                <h1 className="text-3xl font-bold mb-6 text-primary">Create New Community Post</h1>
+                <Card className="shadow-lg border border-border/60"> {/* Removed glassmorphic */}
                      <form onSubmit={handleSubmit}>
                         <CardHeader>
                             <CardTitle>New Anonymous Post</CardTitle>

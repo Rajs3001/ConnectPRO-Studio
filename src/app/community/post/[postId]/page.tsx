@@ -161,7 +161,7 @@ export default function CommunityPostPage() {
                 {loadingPost ? (
                     <PostDetailsSkeleton />
                 ) : post ? (
-                    <Card className="mb-8 shadow-lg glassmorphic border border-border/60 overflow-hidden">
+                    <Card className="mb-8 shadow-lg border border-border/60 overflow-hidden"> {/* Removed glassmorphic */}
                         <CardHeader className="p-5 md:p-6">
                              <div className="flex items-center gap-3 mb-3">
                                 <Avatar className="h-9 w-9 bg-secondary">
@@ -206,7 +206,7 @@ export default function CommunityPostPage() {
                          </CardFooter>
                     </Card>
                 ) : (
-                    <Card className="text-center py-12 glassmorphic">
+                    <Card className="text-center py-12 bg-card border border-border/60"> {/* Removed glassmorphic */}
                         <CardContent>
                             <p className="text-destructive">Post not found.</p>
                         </CardContent>
@@ -215,10 +215,10 @@ export default function CommunityPostPage() {
 
                 {/* Comments Section */}
                  <div className="mt-10">
-                      <h2 className="text-2xl font-semibold mb-6 gradient-text-accent">Comments ({comments.length})</h2>
+                      <h2 className="text-2xl font-semibold mb-6 text-accent">Comments ({comments.length})</h2> {/* Removed gradient-text-accent */}
 
                       {/* Add Comment Form */}
-                      <Card className="mb-8 glassmorphic border border-border/60">
+                      <Card className="mb-8 border border-border/60"> {/* Removed glassmorphic */}
                          <form onSubmit={handlePostComment}>
                              <CardContent className="p-4">
                                  <Label htmlFor="new-comment" className="sr-only">Add a comment</Label>
@@ -264,7 +264,7 @@ const CommentCard: React.FC<{ comment: Comment; timeAgo: (date: Date) => string 
          <Avatar className="h-8 w-8 bg-secondary mt-1 shrink-0">
              <AvatarFallback>?</AvatarFallback> {/* Anonymous */}
          </Avatar>
-         <Card className="flex-grow glassmorphic border border-border/60 shadow-sm">
+         <Card className="flex-grow border border-border/60 shadow-sm"> {/* Removed glassmorphic */}
              <CardContent className="p-3 text-sm">
                   <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm dark:prose-invert max-w-none">
                       {comment.content}
@@ -280,7 +280,7 @@ const CommentCard: React.FC<{ comment: Comment; timeAgo: (date: Date) => string 
 
 // Skeleton Loaders
 const PostDetailsSkeleton = () => (
-    <Card className="mb-8 shadow-lg glassmorphic border border-border/60 overflow-hidden">
+    <Card className="mb-8 shadow-lg border border-border/60 overflow-hidden"> {/* Removed glassmorphic */}
         <CardHeader className="p-5 md:p-6">
             <div className="flex items-center gap-3 mb-3">
                  <Skeleton className="h-9 w-9 rounded-full bg-muted/50" />

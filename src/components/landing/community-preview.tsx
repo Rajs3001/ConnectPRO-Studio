@@ -37,15 +37,15 @@ export default function CommunityPreview() {
     <section className="py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold gradient-text-accent">Join the Conversation</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-accent">Join the Conversation</h2> {/* Removed gradient-text-accent */}
           <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
             Engage with peers, share insights, and ask questions in our anonymous community.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {dummyPosts.map((post) => (
-            <Card key={post.id} className="glassmorphic shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col animate-slide-up [animation-delay:calc(0.1s*var(--i))]">
+          {dummyPosts.map((post, index) => ( // Added index for potential staggered animation key
+            <Card key={post.id} className="border border-border/60 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"> {/* Removed glassmorphic and animation classes */}
               <CardHeader className="flex-row items-center gap-3 pb-2">
                  <div className="p-2 bg-primary/10 rounded-md border border-primary/30">
                    <post.icon className="h-5 w-5 text-primary" />
@@ -64,11 +64,7 @@ export default function CommunityPreview() {
               </div>
             </Card>
           ))}
-           {/* Set CSS variable for staggered animation */}
-           <style jsx>{`
-             .animate-slide-up { --i: ${dummyPosts.length}; }
-             ${dummyPosts.map((_, index) => `.grid > :nth-child(${index + 1}) { --i: ${index}; }`).join('\n')}
-           `}</style>
+           {/* Removed style tag for animation */}
         </div>
 
         <div className="text-center">

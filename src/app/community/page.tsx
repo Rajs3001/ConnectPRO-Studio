@@ -81,7 +81,7 @@ export default function CommunityPage() {
         <AppLayout userType="user"> {/* Or 'professional', layout adjusts */}
             <div className="container mx-auto py-8">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <h1 className="text-3xl font-bold gradient-text-primary">Community Feed</h1>
+                    <h1 className="text-3xl font-bold text-primary">Community Feed</h1> {/* Removed gradient-text-primary */}
                     <Link href="/community/new">
                         <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                             <Plus className="mr-2 h-4 w-4" /> Create New Post
@@ -115,7 +115,7 @@ export default function CommunityPage() {
                     ) : posts.length > 0 ? (
                         posts.map(post => <PostCard key={post.id} post={post} />)
                     ) : (
-                        <Card className="text-center py-12 glassmorphic">
+                        <Card className="text-center py-12 bg-card border border-border/60"> {/* Removed glassmorphic */}
                             <CardContent>
                                 <p className="text-muted-foreground">No posts found matching your criteria.</p>
                                 {searchTerm && <Button variant="link" onClick={() => setSearchTerm('')}>Clear search</Button>}
@@ -150,7 +150,7 @@ const PostCard: React.FC<{ post: CommunityPost }> = ({ post }) => {
 
 
     return (
-        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 glassmorphic border border-border/60 overflow-hidden">
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300 border border-border/60 overflow-hidden"> {/* Removed glassmorphic */}
             <CardHeader className="p-4 md:p-5">
                 <div className="flex items-center gap-3 mb-2">
                     <Avatar className="h-8 w-8 bg-secondary">
@@ -196,7 +196,7 @@ const PostCard: React.FC<{ post: CommunityPost }> = ({ post }) => {
 
 // Skeleton Loader for Post Card
 const PostSkeleton = () => (
-    <Card className="shadow-md glassmorphic border border-border/60 overflow-hidden">
+    <Card className="shadow-md border border-border/60 overflow-hidden"> {/* Removed glassmorphic */}
         <CardHeader className="p-4 md:p-5">
             <div className="flex items-center gap-3 mb-2">
                 <Skeleton className="h-8 w-8 rounded-full bg-muted/50" />

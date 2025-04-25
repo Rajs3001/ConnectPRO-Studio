@@ -79,7 +79,6 @@
   --radius: 0.5rem;
 }
 
-
 @layer base {
   body {
     @apply bg-background text-foreground;
@@ -89,4 +88,14 @@
   * {
     @apply border-border;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold; /* Ensure headings are bold by default */
+  }
+}
+
+@layer components {
+  /* Remove custom gradient text classes */
+  /* Remove custom glassmorphic class */
+  /* Remove custom pulse/glow classes */
 }

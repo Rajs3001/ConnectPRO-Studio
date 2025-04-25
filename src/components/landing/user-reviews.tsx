@@ -55,7 +55,7 @@ export default function UserReviews() {
   return (
     <section className="py-16 md:py-24 bg-secondary/30">
       <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text-primary">What Our Users Say</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">What Our Users Say</h2> {/* Removed gradient-text-primary */}
         <Carousel
            opts={{
              align: "start",
@@ -67,7 +67,7 @@ export default function UserReviews() {
             {reviews.map((review) => (
               <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-1 h-full">
-                  <Card className="glassmorphic h-full flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  <Card className="border border-border/60 h-full flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow duration-300"> {/* Removed glassmorphic */}
                     <CardHeader className="pb-4">
                       <div className="flex items-center gap-3 mb-3">
                         <Avatar>

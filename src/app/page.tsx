@@ -2,9 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video } from 'lucide-react'; // Added Bot, BrainCircuit, ArrowRight, Star
-import UserReviews from '@/components/landing/user-reviews'; // Import Reviews component
-import CommunityPreview from '@/components/landing/community-preview'; // Import Community Preview component
+import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video } from 'lucide-react';
+import UserReviews from '@/components/landing/user-reviews';
+import CommunityPreview from '@/components/landing/community-preview';
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
-          <Link href="/" className="text-xl font-bold gradient-text-primary hover:opacity-90 transition-opacity">ConnectPro</Link>
+          <Link href="/" className="text-xl font-bold text-primary hover:opacity-90 transition-opacity">ConnectPro</Link>
           <nav className="space-x-2 md:space-x-4">
             <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted" asChild>
               <Link href="/login/user">User Login</Link>
@@ -27,15 +27,15 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
-          {/* Background Gradient/Abstract Shapes (Optional) */}
+        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+          {/* Background Abstract Shapes (Subtle) */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
-             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary/20 via-transparent to-transparent rounded-full blur-3xl opacity-30 animate-pulse"></div>
-             <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-accent/20 via-transparent to-transparent rounded-full blur-3xl opacity-30 animate-pulse [animation-delay:1s]"></div>
+             <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-30"></div>
+             <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-30"></div>
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 gradient-text-primary">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary">
               Elevate Your Journey. Connect with Experts.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
@@ -62,12 +62,12 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-background to-secondary/30">
+        <section className="py-16 md:py-24 bg-secondary/10"> {/* Slightly different background */}
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text-accent">Why ConnectPro?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent">Why ConnectPro?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Feature Card 1 */}
-              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up">
+              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300"> {/* Simpler hover */}
                  <CardHeader className="p-6">
                     <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50">
                         <Briefcase className="h-8 w-8 text-primary" />
@@ -81,7 +81,7 @@ export default function Home() {
                  </CardContent>
               </Card>
               {/* Feature Card 2 */}
-              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.1s]">
+              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
                  <CardHeader className="p-6">
                      <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50">
                         <BrainCircuit className="h-8 w-8 text-accent" />
@@ -95,7 +95,7 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 3 */}
-              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.2s]">
+              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
                  <CardHeader className="p-6">
                     <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50">
                        <Video className="h-8 w-8 text-blue-400" />
@@ -109,7 +109,7 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 4 */}
-              <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.3s]">
+              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
                  <CardHeader className="p-6">
                      <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50">
                          <Users className="h-8 w-8 text-green-400" />
@@ -123,7 +123,7 @@ export default function Home() {
                  </CardContent>
                </Card>
                 {/* Feature Card 5 */}
-               <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.4s]">
+               <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
                   <CardHeader className="p-6">
                        <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50">
                           <MessageSquare className="h-8 w-8 text-yellow-400" />
@@ -137,7 +137,7 @@ export default function Home() {
                   </CardContent>
                </Card>
                 {/* Feature Card 6 */}
-                <Card className="glassmorphic overflow-hidden transform hover:scale-105 transition-transform duration-300 animate-slide-up [animation-delay:0.5s]">
+                <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
                    <CardHeader className="p-6">
                        <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50">
                          <ShieldCheck className="h-8 w-8 text-red-400" />
@@ -163,15 +163,15 @@ export default function Home() {
         {/* Call to Action Section */}
         <section className="py-16 md:py-24 text-center relative overflow-hidden">
              {/* Background Glow */}
-             <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-gradient-to-t from-primary/10 via-transparent to-transparent blur-3xl"></div>
+             <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-primary/5 blur-3xl"></div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text-primary">Ready to Connect & Grow?</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Ready to Connect & Grow?</h2>
                 <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
                   Join ConnectPro today. Unlock expert guidance, leverage AI insights, and participate in a thriving, anonymous community.
                 </p>
                 <div className="space-y-4 sm:space-y-0 sm:space-x-4">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300 animate-glow" asChild>
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300" asChild>
                     <Link href="/signup/user">Get Started as User</Link>
                   </Button>
                   <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10" asChild>
