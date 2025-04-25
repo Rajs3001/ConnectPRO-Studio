@@ -12,9 +12,9 @@ import ConnectionAnimation from '@/components/landing/connection-animation';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/shared/logo'; // Import the shared Logo component
 import React, { useState, useEffect } from 'react'; // Import useState and useEffect
+import MatrixBackground from '@/components/landing/matrix-background'; // Import MatrixBackground
 
-
-// Animated background nodes component
+// Animated background nodes component (Kept for potential reuse or layering)
 const AnimatedBackground = () => {
     const [nodes, setNodes] = useState<React.ReactNode[]>([]);
     const nodeCount = 20; // Number of nodes
@@ -67,12 +67,15 @@ export default function Home() {
    }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate"> {/* Added relative isolate */}
+       {/* Add Matrix Background */}
+       {isClient && <MatrixBackground />}
+
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity font-poppins">
-                <Logo /> {/* Use Logo component */}
+                <Logo className="h-7 w-7" /> {/* Use Logo component */}
                 <span className="text-glow-primary">ConnectPro</span>
             </Link>
           <nav className="space-x-2 md:space-x-4">
@@ -96,9 +99,9 @@ export default function Home() {
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
              <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-40 animate-[spin_25s_linear_infinite]"></div>
              {/* Animated Nodes - Render only on client */}
-              <div className="absolute inset-0">
+              {/* <div className="absolute inset-0">
                   {isClient && <AnimatedBackground />}
-              </div>
+              </div> */}
              {/* Large Logo Backdrop */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-20">
                  <Logo className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] opacity-5 text-primary/50 blur-[2px]" /> {/* Large, transparent, blurred logo */}
@@ -126,7 +129,7 @@ export default function Home() {
         </section>
 
         {/* How It Works Section */}
-        <section className="py-16 md:py-24 relative overflow-hidden bg-card/30 animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
+        <section className="py-16 md:py-24 relative overflow-hidden bg-background/50 backdrop-blur-sm animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
             <div className="container mx-auto px-4 md:px-6">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2>
                 <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
@@ -139,7 +142,7 @@ export default function Home() {
                 {/* Detailed Step Descriptions */}
                  <div className="mt-20 space-y-12">
                     {/* Step 1: Student */}
-                    <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-blue-500/30 hover:bg-blue-950/20" style={{ animationDelay: '0.2s' }}>
+                     <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-blue-500/30 hover:bg-blue-950/20" style={{ animationDelay: '0.2s' }}>
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-blue-500/20 rounded-full border border-blue-500/50">
                                 <GraduationCap className="h-8 w-8 text-blue-400" />
@@ -213,7 +216,7 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-background animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <section className="py-16 md:py-24 bg-background/70 backdrop-blur-sm animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent text-glow-accent font-poppins">Why ConnectPro?</h2>
              <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
@@ -315,7 +318,7 @@ export default function Home() {
          <CommunityPreview />
 
         {/* Call to Action Section */}
-        <section className="py-16 md:py-24 text-center relative overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <section className="py-16 md:py-24 text-center relative overflow-hidden animate-fade-in-up bg-background/50 backdrop-blur-sm" style={{ animationDelay: '0.4s' }}>
              {/* Background Glow */}
              <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-gradient-to-t from-primary/10 via-primary/5 to-transparent blur-3xl"></div>
 
@@ -340,17 +343,18 @@ export default function Home() {
       <footer className="border-t border-border/40 bg-card/30 text-muted-foreground">
         <div className="container mx-auto px-4 md:px-6 py-8 text-center sm:text-left sm:flex sm:justify-between sm:items-center">
            <div className="flex items-center justify-center sm:justify-start gap-2 mb-4 sm:mb-0">
-             <Logo /> {/* Use Logo component */}
+             <Logo className="h-6 w-6" /> {/* Use Logo component */}
              <p className="text-sm font-sans">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
            </div>
            <nav className="mt-4 sm:mt-0 space-x-4 text-sm font-sans">
-              <Link href="/privacy" className="hover:text-primary transition-colors hover:underline">Privacy Policy</Link> {/* Updated link color */}
-              <Link href="/terms" className="hover:text-primary transition-colors hover:underline">Terms of Service</Link> {/* Updated link color */}
-              <Link href="/contact" className="hover:text-primary transition-colors hover:underline">Contact Us</Link> {/* Updated link color */}
+              <Link href="/privacy" className="hover:text-foreground transition-colors hover:underline">Privacy Policy</Link> {/* Updated link color */}
+              <Link href="/terms" className="hover:text-foreground transition-colors hover:underline">Terms of Service</Link> {/* Updated link color */}
+              <Link href="/contact" className="hover:text-foreground transition-colors hover:underline">Contact Us</Link> {/* Updated link color */}
            </nav>
         </div>
       </footer>
     </div>
   );
 }
+
 
