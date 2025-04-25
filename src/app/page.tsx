@@ -23,7 +23,7 @@ export default function Home() {
    }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate"> {/* Added relative isolate */}
+    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden"> {/* Added relative isolate and overflow-hidden */}
        {/* Add Matrix Background - Render only on client */}
        {isClient && <MatrixBackground />}
 
@@ -46,11 +46,11 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow">
+      <main className="flex-grow relative z-10"> {/* Ensure main content is above background */}
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
-          {/* Background Shapes & Logo Backdrop */}
-          <div className="absolute inset-0 -z-10 overflow-hidden">
+          {/* Background Shapes & Logo Backdrop (Kept, but now behind Matrix if z-index is lower) */}
+          <div className="absolute inset-0 -z-10 overflow-hidden"> {/* Lower z-index than matrix */}
              {/* Subtle gradient shapes */}
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
              <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-40 animate-[spin_25s_linear_infinite]"></div>

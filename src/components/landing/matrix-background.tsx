@@ -23,27 +23,27 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
 
-    // Characters to display - Katakana subset + numbers
-    const characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    // Characters to display - Katakana subset + numbers + some symbols
+    const characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ+=-*<>{}[]|';
     const charactersArray = characters.split('');
 
-    const fontSize = 14; // Slightly smaller font size
-    const columns = Math.floor(width / fontSize);
+    const fontSize = 12; // Slightly smaller font size for denser effect
+    const columns = Math.ceil(width / fontSize); // Use ceil to cover edges
 
     // y-coordinate for each column's rain drop
     const drops: number[] = [];
     for (let x = 0; x < columns; x++) {
-      drops[x] = Math.random() * height / fontSize; // Start randomly
+      drops[x] = Math.random() * height / fontSize; // Start randomly off-screen or on-screen
     }
 
     const draw = () => {
       // Semi-transparent background for fading trail effect
       // Use the theme's background color with low alpha
-      ctx.fillStyle = 'hsla(var(--background), 0.08)'; // Adjusted fade effect
+      ctx.fillStyle = 'hsla(var(--background), 0.1)'; // Slightly slower fade for trails
       ctx.fillRect(0, 0, width, height);
 
-      // Use theme's primary color with some opacity for the characters
-      ctx.fillStyle = 'hsla(var(--primary), 0.5)'; // Adjusted character opacity
+      // Use theme's primary color but slightly brighter/more visible
+      ctx.fillStyle = 'hsla(var(--primary), 0.7)'; // Increased character opacity
       ctx.font = `${fontSize}px monospace`;
 
       // Loop through columns
@@ -54,7 +54,8 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
         // Reset drop to top randomly after it goes off screen
-        if (drops[i] * fontSize > height && Math.random() > 0.985) { // Slightly less frequent reset
+        // Make reset more frequent
+        if (drops[i] * fontSize > height && Math.random() > 0.97) {
           drops[i] = 0;
         }
 
@@ -72,15 +73,25 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       // Recalculate columns and reset drops if needed
-      const newColumns = Math.floor(width / fontSize);
+      const newColumns = Math.ceil(width / fontSize);
       drops.length = 0; // Clear old drops
       for (let x = 0; x < newColumns; x++) {
          drops[x] = Math.random() * height / fontSize;
       }
-      draw(); // Restart animation
+      if (ctx) { // Ensure context is still valid after resize potentially clears it
+        draw(); // Restart animation
+      }
     };
 
-    window.addEventListener('resize', resizeHandler);
+    // Debounce resize handler slightly
+    let resizeTimeout: NodeJS.Timeout;
+    const debouncedResizeHandler = () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(resizeHandler, 100);
+    };
+
+
+    window.addEventListener('resize', debouncedResizeHandler);
     draw(); // Initial draw
 
     // Cleanup function
@@ -88,7 +99,8 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
-      window.removeEventListener('resize', resizeHandler);
+      window.removeEventListener('resize', debouncedResizeHandler);
+      clearTimeout(resizeTimeout);
     };
   }, [isClient]); // Depend on isClient to ensure canvasRef is available
 
@@ -101,7 +113,7 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
     <canvas
       ref={canvasRef}
       className={cn(
-          'fixed inset-0 -z-20 w-full h-full pointer-events-none opacity-30 blur-[1px]', // Adjusted opacity and added blur
+          'fixed inset-0 -z-20 w-full h-full pointer-events-none opacity-40 blur-[0.5px]', // Increased opacity, slightly reduced blur
           className
       )}
     />
