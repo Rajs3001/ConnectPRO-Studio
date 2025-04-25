@@ -2,150 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Define fonts if necessary, or rely on layout.tsx */
-/* Example:
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-body {
-  font-family: 'Inter', sans-serif;
-} */
+/* Define :root variables for the default theme (which will be dark) */
+:root {
+  /* Core Colors - Inspired by osmo.supply (Dark Theme) */
+  --background: 224 71% 4%; /* Very dark blue/black */
+  --foreground: 210 40% 98%; /* Almost white */
 
-@layer base {
-  /* Define :root variables for the default theme (which will be dark) */
-  :root {
-    /* Core Colors - Inspired by osmo.supply (Dark Theme) */
-    --background: 224 71% 4%; /* Very dark blue/black */
-    --foreground: 210 40% 98%; /* Almost white */
+  /* Cards and Popovers */
+  --card: 224 71% 10%; /* Slightly lighter dark blue */
+  --card-foreground: 210 40% 98%;
+  --popover: 224 71% 8%; /* Darker popover */
+  --popover-foreground: 210 40% 98%;
 
-    /* Cards and Popovers */
-    --card: 224 71% 10%; /* Slightly lighter dark blue */
-    --card-foreground: 210 40% 98%;
-    --popover: 224 71% 8%; /* Darker popover */
-    --popover-foreground: 210 40% 98%;
+  /* Primary Accent (e.g., buttons, important links) - ConnectPro Blue */
+  --primary: 206 70% 55%; /* Calming Blue (#3498db) */
+  --primary-foreground: 210 40% 98%; /* White text on primary */
 
-    /* Primary Accent (e.g., buttons, important links) - Neon/Vibrant */
-    --primary: 180 100% 50%; /* Cyan/Teal */
-    --primary-foreground: 224 71% 4%; /* Dark text on primary */
+  /* Secondary Elements (Clean white) */
+  --secondary: 0 0% 100%; /* White (#ffffff) */
+  --secondary-foreground: 224 71% 4%; /* Dark text on secondary */
 
-    /* Secondary Elements (subtle backgrounds, borders) */
-    --secondary: 224 71% 15%; /* Dark muted blue */
-    --secondary-foreground: 210 40% 85%; /* Lighter gray */
+  /* Muted Text and Borders */
+  --muted: 224 71% 15%; /* Dark muted blue (for dark theme) */
+  --muted-foreground: 210 40% 60%; /* Medium gray (for dark theme) */
 
-    /* Muted Text and Borders */
-    --muted: 224 71% 15%; /* Same as secondary for consistency */
-    --muted-foreground: 210 40% 60%; /* Medium gray */
+  /* Accent Color (Vibrant green for CTAs) */
+  --accent: 145 63% 49%; /* Vibrant Green (#2ecc71) */
+  --accent-foreground: 224 71% 4%; /* Dark text on accent */
 
-    /* Accent Color (alternative highlight, gradients?) - Magenta/Purple */
-    --accent: 300 100% 60%; /* Vibrant Magenta/Purple */
-    --accent-foreground: 210 40% 98%; /* White text on accent */
+  /* Destructive Actions */
+  --destructive: 0 84.2% 60.2%; /* Red */
+  --destructive-foreground: 0 0% 98%; /* White */
 
-    /* Destructive Actions */
-    --destructive: 0 84.2% 60.2%; /* Red */
-    --destructive-foreground: 0 0% 98%; /* White */
+  /* Borders and Inputs */
+  --border: 224 71% 20%; /* Slightly visible border */
+  --input: 224 71% 10%; /* Same as card */
+  --ring: 206 70% 55%; /* Primary color for focus rings */
 
-    /* Borders and Inputs */
-    --border: 224 71% 20%; /* Slightly visible border */
-    --input: 224 71% 10%; /* Same as card */
-    --ring: 180 100% 50%; /* Primary color for focus rings */
+  /* Chart Colors (adjust if needed) */
+  --chart-1: 206 70% 55%; /* Blue */
+  --chart-2: 145 63% 49%; /* Green */
+  --chart-3: 210 100% 60%; /* Bright Blue */
+  --chart-4: 60 100% 50%;  /* Yellow */
+  --chart-5: 0 84.2% 60.2%;  /* Red */
 
-    /* Chart Colors (adjust if needed) */
-    --chart-1: 180 100% 50%; /* Cyan */
-    --chart-2: 300 100% 60%; /* Magenta */
-    --chart-3: 210 100% 60%; /* Bright Blue */
-    --chart-4: 60 100% 50%;  /* Yellow */
-    --chart-5: 120 100% 45%; /* Green */
-
-    /* Radius */
-    --radius: 0.5rem;
-
-    /* Remove sidebar specific theme vars - handle within sidebar component if needed */
-  }
-
-  /* Define .dark class variables - they are the same as :root for a default dark theme */
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
-    --card: 224 71% 10%;
-    --card-foreground: 210 40% 98%;
-    --popover: 224 71% 8%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 180 100% 50%;
-    --primary-foreground: 224 71% 4%;
-    --secondary: 224 71% 15%;
-    --secondary-foreground: 210 40% 85%;
-    --muted: 224 71% 15%;
-    --muted-foreground: 210 40% 60%;
-    --accent: 300 100% 60%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 224 71% 20%;
-    --input: 224 71% 10%;
-    --ring: 180 100% 50%;
-    --chart-1: 180 100% 50%;
-    --chart-2: 300 100% 60%;
-    --chart-3: 210 100% 60%;
-    --chart-4: 60 100% 50%;
-    --chart-5: 120 100% 45%;
-    --radius: 0.5rem;
-  }
+  /* Radius */
+  --radius: 0.5rem;
 }
 
+/* Keep .dark consistent with :root as it's the default theme */
+.dark {
+  --background: 224 71% 4%;
+  --foreground: 210 40% 98%;
+  --card: 224 71% 10%;
+  --card-foreground: 210 40% 98%;
+  --popover: 224 71% 8%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 206 70% 55%; /* Calming Blue */
+  --primary-foreground: 210 40% 98%;
+  --secondary: 224 71% 15%; /* Dark muted blue for secondary background elements in dark mode */
+  --secondary-foreground: 210 40% 85%; /* Lighter gray for text on secondary */
+  --muted: 224 71% 15%;
+  --muted-foreground: 210 40% 60%;
+  --accent: 145 63% 49%; /* Vibrant Green */
+  --accent-foreground: 224 71% 4%; /* Dark text on accent */
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 224 71% 20%;
+  --input: 224 71% 10%;
+  --ring: 206 70% 55%;
+  --chart-1: 206 70% 55%;
+  --chart-2: 145 63% 49%;
+  --chart-3: 210 100% 60%;
+  --chart-4: 60 100% 50%;
+  --chart-5: 0 84.2% 60.2%;
+  --radius: 0.5rem;
+}
+
+
 @layer base {
-  * {
-    @apply border-border; /* Apply border color variable */
-  }
   body {
     @apply bg-background text-foreground;
-    @apply transition-colors duration-300; /* Smooth transition */
-    font-feature-settings: "rlig" 1,"calt" 1; /* Enable optional ligatures */
+    font-feature-settings: "rlig" 1, "calt" 1; /* Enable optional ligatures */
   }
 
-  /* Basic element styling */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+  * {
+    @apply border-border;
   }
-
-  h1 { @apply text-4xl md:text-5xl lg:text-6xl; }
-  h2 { @apply text-3xl md:text-4xl; }
-  h3 { @apply text-2xl md:text-3xl; }
-  p { @apply leading-relaxed; }
-
-
-  /* Animation Definitions */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  .animate-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
-  }
-
-  @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-  }
-  .animate-slide-up {
-      animation: slideUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-   @keyframes glow {
-    0%, 100% { box-shadow: 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary) / 0.8), 0 0 15px hsl(var(--primary) / 0.6); }
-    50% { box-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary) / 0.8), 0 0 30px hsl(var(--primary) / 0.6); }
-  }
-  .animate-glow {
-    animation: glow 3s ease-in-out infinite;
-  }
-
-   /* Glassmorphism Effect Helper */
-  .glassmorphic {
-      @apply bg-card/60 backdrop-blur-lg border border-white/10;
-   }
-
-   /* Gradient Text Helper */
-   .gradient-text-primary {
-      @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
-   }
-   .gradient-text-accent {
-       @apply bg-gradient-to-r from-accent to-fuchsia-500 bg-clip-text text-transparent;
-   }
 }
