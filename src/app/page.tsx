@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video } from 'lucide-react';
 import UserReviews from '@/components/landing/user-reviews';
 import CommunityPreview from '@/components/landing/community-preview';
+import { cn } from '@/lib/utils'; // Import cn for conditional classes
 
 export default function Home() {
   return (
@@ -14,10 +15,10 @@ export default function Home() {
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
           <Link href="/" className="text-xl font-bold text-primary hover:opacity-90 transition-opacity">ConnectPro</Link>
           <nav className="space-x-2 md:space-x-4">
-            <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted" asChild>
+            <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted transition-colors" asChild>
               <Link href="/login/user">User Login</Link>
             </Button>
-            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10" asChild>
+            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10 transition-colors" asChild>
               <Link href="/signup/professional">Join as Pro</Link>
             </Button>
           </nav>
@@ -27,49 +28,55 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in"> {/* Added fade-in animation */}
           {/* Background Abstract Shapes (Subtle) */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
-             <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-30"></div>
-             <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-30"></div>
+             <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-30 animate-[spin_20s_linear_infinite_reverse]"></div> {/* Subtle spin */}
+             <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-30 animate-[spin_25s_linear_infinite]"></div> {/* Subtle spin */}
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               Elevate Your Journey. Connect with Experts.
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               Access verified professionals, intelligent AI guidance, and a supportive community. Bridge the gap between ambition and achievement with secure video calls and insightful chat support.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300" asChild>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105" asChild>
                 <Link href="/user/find-professional">Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
-               <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground transition-colors" asChild>
+               <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-300 transform hover:scale-105" asChild>
                  <Link href="/community">Explore Community</Link>
                </Button>
             </div>
-             {/* Optional: Placeholder image/graphic */}
-             {/* <Image
-               src="https://picsum.photos/seed/hero-graphic/800/400"
-               alt="Abstract connection graphic"
-               width={800}
-               height={400}
-               className="w-full max-w-3xl mx-auto mt-12 rounded-lg opacity-80 object-cover aspect-[2/1]"
-               priority
-             /> */}
+             {/* Optional: Placeholder image/graphic with animation */}
+             <div className="relative mt-16 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+                 <Image
+                   src="https://picsum.photos/seed/hero-connect/1000/500" // Use a relevant image
+                   alt="Diverse professionals connecting online"
+                   width={1000}
+                   height={500}
+                   className="w-full max-w-4xl mx-auto rounded-lg shadow-2xl opacity-90 object-cover aspect-[2/1] border-4 border-border/20"
+                   priority
+                 />
+                 {/* Floating icons/elements (optional) */}
+                 <Briefcase className="absolute top-1/4 left-[-5%] h-10 w-10 text-primary/50 animate-pulse opacity-70 hidden lg:block" style={{ animationDelay: '1s' }}/>
+                 <Video className="absolute bottom-1/4 right-[-5%] h-10 w-10 text-accent/50 animate-pulse opacity-70 hidden lg:block" style={{ animationDelay: '1.2s' }}/>
+                 <Bot className="absolute top-1/2 left-[10%] h-8 w-8 text-blue-400/50 animate-pulse opacity-70 hidden lg:block" style={{ animationDelay: '1.4s' }}/>
+             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-secondary/10"> {/* Slightly different background */}
+        <section className="py-16 md:py-24 bg-card/30 animate-fade-in-up" style={{ animationDelay: '0.3s' }}> {/* Slightly different background, animation */}
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent">Why ConnectPro?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Feature Card 1 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300"> {/* Simpler hover */}
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/10">
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50">
+                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50 transform group-hover:scale-110 transition-transform duration-300">
                         <Briefcase className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-xl font-semibold">Vetted Expert Network</CardTitle>
@@ -81,9 +88,9 @@ export default function Home() {
                  </CardContent>
               </Card>
               {/* Feature Card 2 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/10" style={{ animationDelay: '0.1s' }}>
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50">
+                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50 transform group-hover:scale-110 transition-transform duration-300">
                         <BrainCircuit className="h-8 w-8 text-accent" />
                      </div>
                     <CardTitle className="text-xl font-semibold">AI-Powered Guidance</CardTitle>
@@ -95,9 +102,9 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 3 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/10" style={{ animationDelay: '0.2s' }}>
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50">
+                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50 transform group-hover:scale-110 transition-transform duration-300">
                        <Video className="h-8 w-8 text-blue-400" />
                     </div>
                    <CardTitle className="text-xl font-semibold">Secure Video Sessions</CardTitle>
@@ -109,9 +116,9 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 4 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/10" style={{ animationDelay: '0.3s' }}>
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50">
+                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50 transform group-hover:scale-110 transition-transform duration-300">
                          <Users className="h-8 w-8 text-green-400" />
                      </div>
                      <CardTitle className="text-xl font-semibold">Anonymous Community</CardTitle>
@@ -123,9 +130,9 @@ export default function Home() {
                  </CardContent>
                </Card>
                 {/* Feature Card 5 */}
-               <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
+               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/10" style={{ animationDelay: '0.4s' }}>
                   <CardHeader className="p-6">
-                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50">
+                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50 transform group-hover:scale-110 transition-transform duration-300">
                           <MessageSquare className="h-8 w-8 text-yellow-400" />
                        </div>
                      <CardTitle className="text-xl font-semibold">Contextual Chat</CardTitle>
@@ -137,9 +144,9 @@ export default function Home() {
                   </CardContent>
                </Card>
                 {/* Feature Card 6 */}
-                <Card className="bg-card border border-border/60 overflow-hidden transform hover:scale-[1.03] transition-transform duration-300">
+                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/10" style={{ animationDelay: '0.5s' }}>
                    <CardHeader className="p-6">
-                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50">
+                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50 transform group-hover:scale-110 transition-transform duration-300">
                          <ShieldCheck className="h-8 w-8 text-red-400" />
                        </div>
                       <CardTitle className="text-xl font-semibold">Privacy & Security</CardTitle>
@@ -161,7 +168,7 @@ export default function Home() {
          <CommunityPreview />
 
         {/* Call to Action Section */}
-        <section className="py-16 md:py-24 text-center relative overflow-hidden">
+        <section className="py-16 md:py-24 text-center relative overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
              {/* Background Glow */}
              <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-primary/5 blur-3xl"></div>
 
@@ -171,10 +178,10 @@ export default function Home() {
                   Join ConnectPro today. Unlock expert guidance, leverage AI insights, and participate in a thriving, anonymous community.
                 </p>
                 <div className="space-y-4 sm:space-y-0 sm:space-x-4">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300" asChild>
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105" asChild>
                     <Link href="/signup/user">Get Started as User</Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10" asChild>
+                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 transition-colors transform hover:scale-105" asChild>
                     <Link href="/signup/professional">Join as a Professional</Link>
                   </Button>
                 </div>
@@ -183,13 +190,14 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 bg-secondary/30 text-muted-foreground">
+      <footer className="border-t border-border/40 bg-card/30 text-muted-foreground"> {/* Use card background */}
         <div className="container mx-auto px-4 md:px-6 py-8 text-center sm:text-left sm:flex sm:justify-between sm:items-center">
            <p className="text-sm">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
            <nav className="mt-4 sm:mt-0 space-x-4 text-sm">
-              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
+              <Link href="/privacy" className="hover:text-foreground transition-colors hover:underline">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors hover:underline">Terms of Service</Link>
               {/* Add other footer links */}
+              <Link href="/contact" className="hover:text-foreground transition-colors hover:underline">Contact Us</Link>
            </nav>
         </div>
       </footer>

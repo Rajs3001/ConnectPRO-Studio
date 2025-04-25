@@ -9,6 +9,13 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: { // Added container settings for better centering and padding
+      center: true,
+      padding: "1rem", // Default padding
+      screens: {
+        "2xl": "1400px",
+      },
+    },
   	extend: {
   		colors: {
   			background: 'hsl(var(--background))',
@@ -60,11 +67,31 @@ export default {
       fontFamily: {
          sans: ['var(--font-inter)', 'sans-serif'], // Ensure Inter font is used
       },
-      // Remove custom keyframes and animations here
+      keyframes: { // Define custom keyframes
+          "fade-in": {
+            "0%": { opacity: "0" },
+            "100%": { opacity: "1" },
+          },
+          "fade-in-up": {
+             "0%": {
+                opacity: "0",
+                transform: "translateY(20px)",
+             },
+             "100%": {
+               opacity: "1",
+               transform: "translateY(0)",
+             },
+           },
+           // Add other keyframes like slide-in, bounce, etc. if needed
+       },
+       animation: { // Define custom animations using keyframes
+          "fade-in": "fade-in 0.5s ease-in-out",
+          "fade-in-up": "fade-in-up 0.6s ease-out forwards", // forwards keeps the end state
+          // Add other animations
+       },
   	}
   },
   plugins: [
     require("tailwindcss-animate"),
-    // Remove: require("@tailwindcss/typography")
    ],
 } satisfies Config;

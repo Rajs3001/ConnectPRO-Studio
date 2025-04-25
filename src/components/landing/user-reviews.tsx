@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"; // Assuming you have a Carousel component
+import { cn } from '@/lib/utils'; // Import cn
 
 // Dummy review data
 const reviews = [
@@ -53,9 +54,9 @@ const reviews = [
 
 export default function UserReviews() {
   return (
-    <section className="py-16 md:py-24 bg-secondary/30">
+    <section className="py-16 md:py-24 bg-card/30 animate-fade-in-up" style={{ animationDelay: '0.5s' }}> {/* Section animation */}
       <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">What Our Users Say</h2> {/* Removed gradient-text-primary */}
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">What Our Users Say</h2>
         <Carousel
            opts={{
              align: "start",
@@ -63,14 +64,18 @@ export default function UserReviews() {
            }}
            className="w-full max-w-xs sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto"
          >
-          <CarouselContent>
-            {reviews.map((review) => (
-              <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3">
+          <CarouselContent className="-ml-4"> {/* Adjust margin for spacing */}
+            {reviews.map((review, index) => ( // Added index for staggered animation
+              <CarouselItem key={review.id} className="md:basis-1/2 lg:basis-1/3 pl-4"> {/* Add padding left */}
                 <div className="p-1 h-full">
-                  <Card className="border border-border/60 h-full flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow duration-300"> {/* Removed glassmorphic */}
+                  <Card className={cn(
+                      "border border-border/60 h-full flex flex-col justify-between shadow-lg transition-all duration-300 hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 animate-fade-in-up", // Hover and animation
+                      "bg-card" // Ensure card background
+                      )}
+                      style={{ animationDelay: `${index * 0.1 + 0.1}s` }}>
                     <CardHeader className="pb-4">
                       <div className="flex items-center gap-3 mb-3">
-                        <Avatar>
+                        <Avatar className="h-10 w-10 border-2 border-muted">
                           <AvatarImage src={review.avatar} alt={review.name} />
                           <AvatarFallback>{review.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
@@ -83,21 +88,22 @@ export default function UserReviews() {
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-4 w-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50'}`}
+                            className={`h-4 w-4 transition-colors ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50'}`}
                           />
                         ))}
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-foreground/90 italic">"{review.text}"</p>
+                    <CardContent className="flex-grow">
+                      <p className="text-sm text-foreground/90 italic leading-relaxed">"{review.text}"</p>
                     </CardContent>
                   </Card>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute left-[-50px] top-1/2 -translate-y-1/2 hidden md:inline-flex" />
-          <CarouselNext className="absolute right-[-50px] top-1/2 -translate-y-1/2 hidden md:inline-flex" />
+          {/* Styled Carousel Controls */}
+          <CarouselPrevious className="absolute left-[-15px] sm:left-[-30px] top-1/2 -translate-y-1/2 hidden md:inline-flex bg-background/80 hover:bg-background border-primary text-primary hover:scale-110 transition-all duration-200" />
+          <CarouselNext className="absolute right-[-15px] sm:right-[-30px] top-1/2 -translate-y-1/2 hidden md:inline-flex bg-background/80 hover:bg-background border-primary text-primary hover:scale-110 transition-all duration-200" />
         </Carousel>
       </div>
     </section>

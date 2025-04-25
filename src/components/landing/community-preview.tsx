@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Code, ImageIcon, LinkIcon, MessageCircle, Text } from 'lucide-react'; // Relevant icons
+import { cn } from '@/lib/utils'; // Import cn
 
 // Dummy post data (replace with actual fetch if needed)
 const dummyPosts = [
@@ -34,20 +35,27 @@ const dummyPosts = [
 
 export default function CommunityPreview() {
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-16 md:py-24 bg-background animate-fade-in-up" style={{ animationDelay: '0.7s' }}> {/* Section animation */}
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-accent">Join the Conversation</h2> {/* Removed gradient-text-accent */}
+          <h2 className="text-3xl md:text-4xl font-bold text-accent">Join the Conversation</h2>
           <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
             Engage with peers, share insights, and ask questions in our anonymous community.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {dummyPosts.map((post, index) => ( // Added index for potential staggered animation key
-            <Card key={post.id} className="border border-border/60 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"> {/* Removed glassmorphic and animation classes */}
+          {dummyPosts.map((post, index) => (
+            <Card
+              key={post.id}
+              className={cn(
+                  "border border-border/60 shadow-md transition-all duration-300 hover:shadow-lg hover:border-accent/40 hover:-translate-y-1 flex flex-col animate-fade-in-up",
+                  "bg-card" // Ensure card background
+              )}
+              style={{ animationDelay: `${index * 0.15 + 0.1}s` }} // Staggered animation
+            >
               <CardHeader className="flex-row items-center gap-3 pb-2">
-                 <div className="p-2 bg-primary/10 rounded-md border border-primary/30">
+                 <div className="p-2 bg-primary/10 rounded-md border border-primary/30 group-hover:bg-primary/20 transition-colors">
                    <post.icon className="h-5 w-5 text-primary" />
                  </div>
                 <CardTitle className="text-base font-semibold line-clamp-1">{post.title}</CardTitle>
@@ -58,17 +66,16 @@ export default function CommunityPreview() {
                 </CardDescription>
               </CardContent>
               <div className="p-4 pt-0 mt-auto">
-                 <Button variant="link" size="sm" className="p-0 h-auto text-primary" asChild>
-                    <Link href={`/community/post/${post.id}`}>Read More <ArrowRight className="ml-1 h-4 w-4" /></Link>
+                 <Button variant="link" size="sm" className="p-0 h-auto text-primary group-hover:underline" asChild>
+                    <Link href={`/community/post/${post.id}`}>Read More <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" /></Link>
                  </Button>
               </div>
             </Card>
           ))}
-           {/* Removed style tag for animation */}
         </div>
 
         <div className="text-center">
-          <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent/10" asChild>
+          <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent/10 transition-all transform hover:scale-105" asChild>
             <Link href="/community">Explore Full Community <MessageCircle className="ml-2 h-5 w-5" /></Link>
           </Button>
         </div>
