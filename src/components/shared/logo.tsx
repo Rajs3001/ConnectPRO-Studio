@@ -6,7 +6,7 @@ const Logo = ({ className }: { className?: string }) => ( // Accept className pr
     <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className={cn("text-primary hover:opacity-80 transition-opacity duration-300", className)}>
       {/* C Shape - Open Circle */}
       <path
-        d="M 75 25 A 40 40 0 1 0 75 75"
+        d="M 75 25 A 40 40 0 1 0 75 75" // Large C-like arc starting from top-right, going counter-clockwise
         fill="none"
         stroke="currentColor" // Use primary color
         strokeWidth="12" // Slightly thinner lines
@@ -14,12 +14,12 @@ const Logo = ({ className }: { className?: string }) => ( // Accept className pr
       />
       {/* P Shape - Vertical Line + Smaller Half Circle - using accent color */}
       <path
-        d="M 35 25 V 75 M 35 50 A 20 20 0 0 1 35 25"
+        d="M 35 25 V 75 M 35 50 A 20 20 0 0 1 35 25" // Vertical line + Arc from midpoint up
         fill="none"
         stroke="hsl(var(--accent))" // Use accent color
         strokeWidth="12" // Slightly thinner lines
         strokeLinecap="round"
-        opacity="0.9"
+        opacity="0.9" // Slightly transparent accent
       />
        {/* Optional: Small dot representing connection point or focus */}
        {/* <circle cx="55" cy="50" r="6" fill="currentColor" opacity="0.8"/> */}
