@@ -2,27 +2,29 @@
 import { cn } from '@/lib/utils'; // Import cn for conditional classes
 
 // Updated logo: Abstract interlocking C and P shapes representing connection
+// C forms a pathway, P interlinks, negative space implies forward motion.
 const Logo = ({ className }: { className?: string }) => ( // Accept className prop
     <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className={cn("text-primary hover:opacity-80 transition-opacity duration-300", className)}>
-      {/* C Shape - Open Circle */}
+      {/* C Shape - Open Circle/Pathway */}
       <path
-        d="M 75 25 A 40 40 0 1 0 75 75" // Large C-like arc starting from top-right, going counter-clockwise
+        d="M 80 25 A 40 40 0 1 0 80 75" // Large C-like arc starting from top-right, going counter-clockwise, slightly wider
         fill="none"
         stroke="currentColor" // Use primary color
-        strokeWidth="12" // Slightly thinner lines
+        strokeWidth="12" // Consistent stroke width
         strokeLinecap="round"
       />
-      {/* P Shape - Vertical Line + Smaller Half Circle - using accent color */}
+      {/* P Shape - Vertical Line + Smaller Half Circle - using accent color and positioned to slightly overlap/connect */}
       <path
-        d="M 35 25 V 75 M 35 50 A 20 20 0 0 1 35 25" // Vertical line + Arc from midpoint up
+        // Vertical line starts lower, arc connects higher and extends slightly right
+        d="M 45 35 V 75 M 45 55 A 20 20 0 0 1 45 35"
         fill="none"
         stroke="hsl(var(--accent))" // Use accent color
-        strokeWidth="12" // Slightly thinner lines
+        strokeWidth="12" // Consistent stroke width
         strokeLinecap="round"
-        opacity="0.9" // Slightly transparent accent
+        opacity="0.9" // Slight transparency for accent
       />
-       {/* Optional: Small dot representing connection point or focus */}
-       {/* <circle cx="55" cy="50" r="6" fill="currentColor" opacity="0.8"/> */}
+       {/* Small Node/Intersection Point (Optional) - visually connects the two */}
+       <circle cx="60" cy="55" r="5" fill="currentColor" opacity="0.7"/>
     </svg>
 );
 
