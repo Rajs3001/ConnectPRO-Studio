@@ -14,50 +14,6 @@ import Logo from '@/components/shared/logo'; // Import the shared Logo component
 import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import MatrixBackground from '@/components/landing/matrix-background'; // Import MatrixBackground
 
-// Animated background nodes component (Kept for potential reuse or layering)
-const AnimatedBackground = () => {
-    const [nodes, setNodes] = useState<React.ReactNode[]>([]);
-    const nodeCount = 20; // Number of nodes
-
-    useEffect(() => {
-        // Generate nodes only on the client-side after initial render
-        const generatedNodes = Array.from({ length: nodeCount }, (_, i) => {
-            const size = Math.random() * 3 + 2; // size between 2px and 5px
-            const delay = Math.random() * 5; // animation delay up to 5s
-            const duration = Math.random() * 5 + 5; // animation duration between 5s and 10s
-            const position = {
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-            };
-            const animationName = Math.random() > 0.5 ? 'animate-float' : 'animate-pulse-subtle';
-            const colorClass = Math.random() > 0.5 ? 'bg-primary/30' : 'bg-accent/30'; // Use theme colors with lower opacity
-
-            return (
-                <div
-                    key={i}
-                    className={cn(
-                        'absolute rounded-full opacity-60', // Slightly lower opacity
-                         animationName,
-                         colorClass
-                     )}
-                    style={{
-                        width: `${size}px`,
-                        height: `${size}px`,
-                        top: position.top,
-                        left: position.left,
-                        animationDelay: `${delay}s`,
-                        animationDuration: `${duration}s`,
-                        filter: 'blur(0.5px)', // Add subtle blur
-                    }}
-                />
-            );
-        });
-        setNodes(generatedNodes);
-    }, []); // Empty dependency array ensures this runs only once on mount
-
-    return <>{nodes}</>;
-};
-
 
 export default function Home() {
    const [isClient, setIsClient] = useState(false);
@@ -68,7 +24,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate"> {/* Added relative isolate */}
-       {/* Add Matrix Background */}
+       {/* Add Matrix Background - Render only on client */}
        {isClient && <MatrixBackground />}
 
       {/* Header */}
@@ -93,15 +49,11 @@ export default function Home() {
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
-          {/* Background Animation & Subtle Shapes */}
+          {/* Background Shapes & Logo Backdrop */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
              {/* Subtle gradient shapes */}
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
              <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-40 animate-[spin_25s_linear_infinite]"></div>
-             {/* Animated Nodes - Render only on client */}
-              {/* <div className="absolute inset-0">
-                  {isClient && <AnimatedBackground />}
-              </div> */}
              {/* Large Logo Backdrop */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-20">
                  <Logo className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] opacity-5 text-primary/50 blur-[2px]" /> {/* Large, transparent, blurred logo */}
@@ -356,5 +308,3 @@ export default function Home() {
     </div>
   );
 }
-
-

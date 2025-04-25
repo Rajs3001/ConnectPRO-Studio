@@ -27,7 +27,7 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
     const characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersArray = characters.split('');
 
-    const fontSize = 16;
+    const fontSize = 14; // Slightly smaller font size
     const columns = Math.floor(width / fontSize);
 
     // y-coordinate for each column's rain drop
@@ -37,12 +37,13 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
     }
 
     const draw = () => {
-      // Semi-transparent background to create the fading trail effect
-      ctx.fillStyle = 'rgba(10, 10, 15, 0.06)'; // Darker background, subtle fade
+      // Semi-transparent background for fading trail effect
+      // Use the theme's background color with low alpha
+      ctx.fillStyle = 'hsla(var(--background), 0.08)'; // Adjusted fade effect
       ctx.fillRect(0, 0, width, height);
 
-      // Primary color with some opacity for the characters
-      ctx.fillStyle = 'hsla(var(--primary), 0.7)'; // Use primary color from theme
+      // Use theme's primary color with some opacity for the characters
+      ctx.fillStyle = 'hsla(var(--primary), 0.5)'; // Adjusted character opacity
       ctx.font = `${fontSize}px monospace`;
 
       // Loop through columns
@@ -53,7 +54,7 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
         // Reset drop to top randomly after it goes off screen
-        if (drops[i] * fontSize > height && Math.random() > 0.975) { // Adjust randomness
+        if (drops[i] * fontSize > height && Math.random() > 0.985) { // Slightly less frequent reset
           drops[i] = 0;
         }
 
@@ -99,7 +100,10 @@ const MatrixBackground: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <canvas
       ref={canvasRef}
-      className={cn('fixed inset-0 -z-20 w-full h-full pointer-events-none opacity-40', className)} // Position behind everything, low opacity
+      className={cn(
+          'fixed inset-0 -z-20 w-full h-full pointer-events-none opacity-30 blur-[1px]', // Adjusted opacity and added blur
+          className
+      )}
     />
   );
 };
