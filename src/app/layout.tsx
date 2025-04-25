@@ -3,13 +3,13 @@ import { Inter, Poppins } from 'next/font/google' // Import Poppins
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
-// Configure Inter font
+// Configure Inter font (for body text)
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 });
 
-// Configure Poppins font (e.g., for headings)
+// Configure Poppins font (for headings, logo)
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '600', '700', '800'], // Include needed weights
@@ -29,7 +29,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark"> {/* Ensure dark class is always present */}
-      <body className={`${inter.variable} ${poppins.variable} font-sans antialiased bg-background text-foreground`}> {/* Apply both font variables and default to sans (Inter) */}
+      {/* Apply both font variables. Default body font is Inter (sans). Poppins can be applied specifically where needed. */}
+      <body className={`${inter.variable} ${poppins.variable} font-sans antialiased bg-background text-foreground`}>
         {children}
         <Toaster />
       </body>
