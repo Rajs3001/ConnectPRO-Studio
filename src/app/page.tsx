@@ -1,4 +1,6 @@
 
+"use client"; // Add "use client" if not already present, needed for useEffect/useState
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -9,48 +11,61 @@ import CommunityPreview from '@/components/landing/community-preview';
 import ConnectionAnimation from '@/components/landing/connection-animation';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/shared/logo'; // Import the shared Logo component
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 
 
-// Animated background nodes component (Keep this as background enhancement)
+// Animated background nodes component
 const AnimatedBackground = () => {
+    const [nodes, setNodes] = useState<React.ReactNode[]>([]);
     const nodeCount = 20; // Number of nodes
-    const nodes = Array.from({ length: nodeCount }, (_, i) => {
-        const size = Math.random() * 3 + 2; // size between 2px and 5px
-        const delay = Math.random() * 5; // animation delay up to 5s
-        const duration = Math.random() * 5 + 5; // animation duration between 5s and 10s
-        const position = {
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-        };
-        const animationName = Math.random() > 0.5 ? 'animate-float' : 'animate-pulse-subtle';
-        const colorClass = Math.random() > 0.5 ? 'bg-primary/30' : 'bg-accent/30'; // Use theme colors with lower opacity
 
-        return (
-            <div
-                key={i}
-                className={cn(
-                    'absolute rounded-full opacity-60', // Slightly lower opacity
-                     animationName,
-                     colorClass
-                 )}
-                style={{
-                    width: `${size}px`,
-                    height: `${size}px`,
-                    top: position.top,
-                    left: position.left,
-                    animationDelay: `${delay}s`,
-                    animationDuration: `${duration}s`,
-                    filter: 'blur(0.5px)', // Add subtle blur
-                }}
-            />
-        );
-    });
+    useEffect(() => {
+        // Generate nodes only on the client-side after initial render
+        const generatedNodes = Array.from({ length: nodeCount }, (_, i) => {
+            const size = Math.random() * 3 + 2; // size between 2px and 5px
+            const delay = Math.random() * 5; // animation delay up to 5s
+            const duration = Math.random() * 5 + 5; // animation duration between 5s and 10s
+            const position = {
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+            };
+            const animationName = Math.random() > 0.5 ? 'animate-float' : 'animate-pulse-subtle';
+            const colorClass = Math.random() > 0.5 ? 'bg-primary/30' : 'bg-accent/30'; // Use theme colors with lower opacity
+
+            return (
+                <div
+                    key={i}
+                    className={cn(
+                        'absolute rounded-full opacity-60', // Slightly lower opacity
+                         animationName,
+                         colorClass
+                     )}
+                    style={{
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        top: position.top,
+                        left: position.left,
+                        animationDelay: `${delay}s`,
+                        animationDuration: `${duration}s`,
+                        filter: 'blur(0.5px)', // Add subtle blur
+                    }}
+                />
+            );
+        });
+        setNodes(generatedNodes);
+    }, []); // Empty dependency array ensures this runs only once on mount
 
     return <>{nodes}</>;
 };
 
 
 export default function Home() {
+   const [isClient, setIsClient] = useState(false);
+
+   useEffect(() => {
+     setIsClient(true); // Set to true once component mounts on the client
+   }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -80,9 +95,9 @@ export default function Home() {
              {/* Subtle gradient shapes */}
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
              <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-40 animate-[spin_25s_linear_infinite]"></div>
-             {/* Animated Nodes */}
+             {/* Animated Nodes - Render only on client */}
               <div className="absolute inset-0">
-                  <AnimatedBackground />
+                  {isClient && <AnimatedBackground />}
               </div>
              {/* Large Logo Backdrop */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-20">
@@ -338,3 +353,4 @@ export default function Home() {
     </div>
   );
 }
+

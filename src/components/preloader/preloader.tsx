@@ -12,8 +12,11 @@ interface PreloaderProps {
 
 const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [step, setStep] = useState(0); // 0: Logo, 1: Site Name, 2: Creator Text
+  const [isClient, setIsClient] = useState(false); // State to track client-side execution
 
   useEffect(() => {
+    setIsClient(true); // Component has mounted on the client
+
     const timeouts = [
       setTimeout(() => setStep(1), 1200), // Show Site Name after 1.2s
       setTimeout(() => setStep(2), 2700), // Show Creator Text after 1.5s (total 2.7s)
@@ -37,6 +40,11 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: 'easeIn' } },
   };
 
+  // Render the preloader only if it's running on the client
+  if (!isClient) {
+    // Optional: Render a static placeholder or nothing during SSR
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background overflow-hidden">
