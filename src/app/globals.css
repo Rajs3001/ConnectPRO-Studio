@@ -54,48 +54,48 @@ body {
   }
 
   .dark {
-    --background: 240 10% 3.9%; /* Dark background */
+    --background: 0 0% 0%; /* Black background */
     --foreground: 0 0% 98%; /* Light foreground */
 
-    --card: 240 10% 3.9%;
+    --card: 240 5% 10%; /* Slightly lighter than pure black */
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 240 5% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 207 70% 53%; /* #3498db - Calming Blue */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary: 207 80% 55%; /* Brighter Blue */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 3.7% 15.9%; /* Dark secondary */
+    --secondary: 240 4% 15%; /* Dark secondary */
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 240 4% 15%;
+    --muted-foreground: 0 0% 65%; /* Slightly lighter muted foreground */
 
-    --accent: 145 63% 49%; /* #2ecc71 - Vibrant Green */
-    --accent-foreground: 0 0% 100%; /* White text on accent */
+    --accent: 145 70% 55%; /* Brighter Green */
+    --accent-foreground: 0 0% 5%; /* Darker text on accent */
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 70% 55%; /* Slightly adjusted red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 145 63% 49%; /* Vibrant Green for focus rings */
+    --border: 240 4% 20%; /* Slightly lighter border */
+    --input: 240 4% 15%;
+    --ring: 145 70% 55%; /* Brighter Green for focus rings */
 
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 220 70% 60%; /* Adjusted chart colors for dark mode */
+    --chart-2: 160 60% 55%;
+    --chart-3: 30 80% 65%;
+    --chart-4: 280 65% 70%;
+    --chart-5: 340 75% 65%;
 
     /* Dark Sidebar specific theme using primary blue */
-    --sidebar-background: 207 70% 53%; /* Primary blue */
+    --sidebar-background: 207 80% 55%; /* Brighter Primary blue */
     --sidebar-foreground: 0 0% 100%; /* White */
     --sidebar-primary: 0 0% 100%; /* White for active/hover text */
-    --sidebar-primary-foreground: 207 70% 53%; /* Primary blue for active/hover background */
-    --sidebar-accent: 207 70% 48%; /* Slightly darker blue for hover */
+    --sidebar-primary-foreground: 207 80% 55%; /* Brighter Primary blue for active/hover background */
+    --sidebar-accent: 207 80% 50%; /* Slightly darker blue for hover */
     --sidebar-accent-foreground: 0 0% 100%; /* White */
-    --sidebar-border: 207 70% 43%; /* Darker blue for borders */
-    --sidebar-ring: 145 63% 49%; /* Accent green for focus ring */
+    --sidebar-border: 207 80% 45%; /* Darker blue for borders */
+    --sidebar-ring: 145 70% 55%; /* Brighter Accent green for focus ring */
   }
 }
 
@@ -105,5 +105,53 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    @apply transition-colors duration-300; /* Add smooth transition for theme changes */
+  }
+
+  /* Add simple fade-in animation */
+   .animate-fade-in {
+       animation: fadeIn 0.5s ease-out forwards;
+   }
+
+   @keyframes fadeIn {
+     from { opacity: 0; }
+     to { opacity: 1; }
+   }
+
+   /* Add simple slide-up animation */
+    .animate-slide-up {
+        animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Ensure dark mode preference is respected */
+/* The `darkMode: "class"` in tailwind.config.ts handles applying the .dark variables */
+/* when the html tag has the 'dark' class. No explicit @apply needed here. */
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+     / Optional: Define default dark mode if no class is applied /
+     / @apply dark; / <- This was the likely cause of the circular dependency
   }
 }
+*/
+
+/* Remove this rule as it causes circular dependency */
+/*
+html.dark {
+  @apply dark;
+}
+*/
