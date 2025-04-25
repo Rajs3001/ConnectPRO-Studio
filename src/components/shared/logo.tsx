@@ -1,30 +1,69 @@
 
 import { cn } from '@/lib/utils'; // Import cn for conditional classes
 
-// Updated logo: Abstract interlocking C and P shapes representing connection
-// C forms a pathway, P interlinks, negative space implies forward motion.
-const Logo = ({ className }: { className?: string }) => ( // Accept className prop
-    <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className={cn("text-primary hover:opacity-80 transition-opacity duration-300", className)}>
-      {/* C Shape - Open Circle/Pathway */}
-      <path
-        d="M 80 25 A 40 40 0 1 0 80 75" // Large C-like arc starting from top-right, going counter-clockwise, slightly wider
-        fill="none"
-        stroke="currentColor" // Use primary color
-        strokeWidth="12" // Consistent stroke width
-        strokeLinecap="round"
-      />
-      {/* P Shape - Vertical Line + Smaller Half Circle - using accent color and positioned to slightly overlap/connect */}
-      <path
-        // Vertical line starts lower, arc connects higher and extends slightly right
-        d="M 45 35 V 75 M 45 55 A 20 20 0 0 1 45 35"
-        fill="none"
-        stroke="hsl(var(--accent))" // Use accent color
-        strokeWidth="12" // Consistent stroke width
-        strokeLinecap="round"
-        opacity="0.9" // Slight transparency for accent
-      />
-       {/* Small Node/Intersection Point (Optional) - visually connects the two */}
-       <circle cx="60" cy="55" r="5" fill="currentColor" opacity="0.7"/>
+// Updated logo based on the provided image: Concentric blue shapes with a central dot.
+const Logo = ({ className }: { className?: string }) => (
+    <svg
+        width="32" // Keep size consistent or adjust as needed
+        height="32"
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+        className={cn("hover:opacity-90 transition-opacity duration-300", className)}
+    >
+        {/* Define gradients for the blue shapes */}
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{ stopColor: 'hsl(210, 90%, 60%)', stopOpacity: 1 }} /> {/* Lighter Blue at top */}
+                <stop offset="100%" style={{ stopColor: 'hsl(226, 95%, 55%)', stopOpacity: 1 }} /> {/* Darker Blue at bottom */}
+            </linearGradient>
+             <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{ stopColor: 'hsl(210, 90%, 65%)', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: 'hsl(226, 95%, 60%)', stopOpacity: 1 }} />
+            </linearGradient>
+             <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{ stopColor: 'hsl(210, 90%, 70%)', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: 'hsl(226, 95%, 65%)', stopOpacity: 1 }} />
+            </linearGradient>
+            {/* Glow Filter (Optional, can be applied via CSS too) */}
+            <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+               <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+               </feMerge>
+            </filter>
+        </defs>
+
+         {/* Apply glow filter to the group */}
+         {/* <g filter="url(#logo-glow)"> */}
+         <g>
+            {/* Outer Shape */}
+            <path
+                d="M 60 20 C 40 20, 25 35, 25 50 C 25 65, 40 80, 60 80"
+                fill="none"
+                stroke="url(#grad1)"
+                strokeWidth="8"
+                strokeLinecap="round"
+            />
+             {/* Middle Shape */}
+            <path
+                d="M 50 25 C 35 25, 30 37.5, 30 50 C 30 62.5, 35 75, 50 75"
+                fill="none"
+                stroke="url(#grad2)"
+                strokeWidth="8"
+                strokeLinecap="round"
+            />
+             {/* Inner Shape */}
+            <path
+                d="M 40 30 C 30 30, 35 40, 35 50 C 35 60, 30 70, 40 70"
+                fill="none"
+                stroke="url(#grad3)"
+                strokeWidth="8"
+                strokeLinecap="round"
+            />
+            {/* Central Dot */}
+            <circle cx="75" cy="50" r="6" fill="url(#grad1)" />
+        </g>
     </svg>
 );
 

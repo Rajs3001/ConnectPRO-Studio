@@ -109,7 +109,7 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary animate-fade-in-up font-poppins text-glow-primary" style={{ animationDelay: '0.2s' }}>
               Elevate Your Journey. Connect with Experts.
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto animate-fade-in-up font-sans" style={{ animationDelay: '0.4s' }}>
+            <p className="text-lg md:text-xl text-foreground/90 mb-10 max-w-3xl mx-auto animate-fade-in-up font-sans" style={{ animationDelay: '0.4s' }}> {/* Changed text color to foreground/90 */}
               Access verified professionals for personalized guidance, leverage intelligent AI insights to navigate your path, and engage with a supportive, anonymous community. Bridge the gap between ambition and achievement with secure video calls and contextual chat support.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up font-sans" style={{ animationDelay: '0.6s' }}>
@@ -344,9 +344,9 @@ export default function Home() {
              <p className="text-sm font-sans">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
            </div>
            <nav className="mt-4 sm:mt-0 space-x-4 text-sm font-sans">
-              <Link href="/privacy" className="hover:text-foreground transition-colors hover:underline">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors hover:underline">Terms of Service</Link>
-              <Link href="/contact" className="hover:text-foreground transition-colors hover:underline">Contact Us</Link>
+              <Link href="/privacy" className="hover:text-primary transition-colors hover:underline">Privacy Policy</Link> {/* Updated link color */}
+              <Link href="/terms" className="hover:text-primary transition-colors hover:underline">Terms of Service</Link> {/* Updated link color */}
+              <Link href="/contact" className="hover:text-primary transition-colors hover:underline">Contact Us</Link> {/* Updated link color */}
            </nav>
         </div>
       </footer>

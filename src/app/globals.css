@@ -2,52 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Define :root variables for the default theme (which will be dark) */
+/* Define :root variables for the default theme (dark) based on the new logo/colors */
 :root {
-  /* Core Colors - Inspired by osmo.supply (Dark Theme) */
-  --background: 224 71% 4%; /* Very dark blue/black */
-  --foreground: 210 40% 98%; /* Almost white */
+  /* Core Colors - Dark Gray Background, White Foreground */
+  --background: 240 4% 15%; /* Dark Gray (#262626 approx) */
+  --foreground: 0 0% 98%; /* White (#FAFAFA approx) */
 
-  /* Cards and Popovers */
-  --card: 224 71% 10%; /* Slightly lighter dark blue */
-  --card-foreground: 210 40% 98%;
-  --popover: 224 71% 8%; /* Darker popover */
-  --popover-foreground: 210 40% 98%;
+  /* Cards and Popovers - Slightly lighter dark gray */
+  --card: 240 4% 20%; /* Slightly Lighter Dark Gray (#303030 approx) */
+  --card-foreground: 0 0% 98%; /* White */
+  --popover: 240 4% 18%; /* Darker Popover (#2d2d2d approx) */
+  --popover-foreground: 0 0% 98%; /* White */
 
-  /* Primary Accent (e.g., buttons, important links) - ConnectPro Blue */
-  --primary: 206 70% 55%; /* Calming Blue (#3498db) */
-  --primary-foreground: 210 40% 98%; /* White text on primary */
-  --primary-glow: 206 70% 65%; /* Slightly lighter for glow */
+  /* Primary Accent (Logo Mid Blue) */
+  --primary: 226 95% 60%; /* Mid Blue from logo (#4364F7 approx) */
+  --primary-foreground: 0 0% 98%; /* White text on primary */
+  --primary-glow: 226 95% 70%; /* Slightly lighter blue for glow */
 
-  /* Secondary Elements (Clean white) */
-  --secondary: 0 0% 100%; /* White (#ffffff) */
-  --secondary-foreground: 224 71% 4%; /* Dark text on secondary */
+  /* Secondary Elements (can be another shade or white/light gray) */
+  --secondary: 240 4% 25%; /* Lighter Gray for secondary elements (#3d3d3d approx) */
+  --secondary-foreground: 0 0% 90%; /* Lighter gray text on secondary */
 
   /* Muted Text and Borders */
-  --muted: 224 71% 15%; /* Dark muted blue (for dark theme) */
-  --muted-foreground: 210 40% 60%; /* Medium gray (for dark theme) */
+  --muted: 240 4% 25%; /* Same as secondary */
+  --muted-foreground: 0 0% 60%; /* Medium gray */
 
-  /* Accent Color (Vibrant green for CTAs) */
-  --accent: 145 63% 49%; /* Vibrant Green (#2ecc71) */
-  --accent-foreground: 224 71% 4%; /* Dark text on accent */
-  --accent-glow: 145 63% 59%; /* Slightly lighter for glow */
-
+  /* Accent Color (Logo Light Blue) */
+  --accent: 209 97% 71%; /* Light Blue from logo (#6FB1FC approx) */
+  --accent-foreground: 240 4% 10%; /* Dark text on accent */
+  --accent-glow: 209 97% 81%; /* Slightly lighter for glow */
 
   /* Destructive Actions */
-  --destructive: 0 84.2% 60.2%; /* Red */
+  --destructive: 0 72% 51%; /* Adjusted Red (slightly less intense) */
   --destructive-foreground: 0 0% 98%; /* White */
 
   /* Borders and Inputs */
-  --border: 224 71% 20%; /* Slightly visible border */
-  --input: 224 71% 10%; /* Same as card */
-  --ring: 206 70% 55%; /* Primary color for focus rings */
+  --border: 240 4% 28%; /* Slightly visible border (#424242 approx) */
+  --input: 240 4% 22%; /* Dark input background (#383838 approx) */
+  --ring: 226 95% 60%; /* Primary color for focus rings */
 
-  /* Chart Colors (adjust if needed) */
-  --chart-1: 206 70% 55%; /* Blue */
-  --chart-2: 145 63% 49%; /* Green */
-  --chart-3: 210 100% 60%; /* Bright Blue */
-  --chart-4: 60 100% 50%;  /* Yellow */
-  --chart-5: 0 84.2% 60.2%;  /* Red */
+  /* Chart Colors (adjust if needed for dark theme visibility) */
+  --chart-1: 226 95% 60%; /* Primary Blue */
+  --chart-2: 209 97% 71%; /* Accent Light Blue */
+  --chart-3: 190 80% 60%; /* Cyan */
+  --chart-4: 30 90% 60%;  /* Orange */
+  --chart-5: 0 72% 51%;  /* Red */
 
   /* Radius */
   --radius: 0.5rem;
@@ -55,32 +54,32 @@
 
 /* Keep .dark consistent with :root as it's the default theme */
 .dark {
-  --background: 224 71% 4%;
-  --foreground: 210 40% 98%;
-  --card: 224 71% 10%;
-  --card-foreground: 210 40% 98%;
-  --popover: 224 71% 8%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 206 70% 55%; /* Calming Blue */
-  --primary-foreground: 210 40% 98%;
-  --primary-glow: 206 70% 65%;
-  --secondary: 224 71% 15%; /* Dark muted blue for secondary background elements in dark mode */
-  --secondary-foreground: 210 40% 85%; /* Lighter gray for text on secondary */
-  --muted: 224 71% 15%;
-  --muted-foreground: 210 40% 60%;
-  --accent: 145 63% 49%; /* Vibrant Green */
-  --accent-foreground: 224 71% 4%; /* Dark text on accent */
-  --accent-glow: 145 63% 59%;
-  --destructive: 0 84.2% 60.2%;
+  --background: 240 4% 15%;
+  --foreground: 0 0% 98%;
+  --card: 240 4% 20%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 4% 18%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 226 95% 60%;
+  --primary-foreground: 0 0% 98%;
+  --primary-glow: 226 95% 70%;
+  --secondary: 240 4% 25%;
+  --secondary-foreground: 0 0% 90%;
+  --muted: 240 4% 25%;
+  --muted-foreground: 0 0% 60%;
+  --accent: 209 97% 71%;
+  --accent-foreground: 240 4% 10%;
+  --accent-glow: 209 97% 81%;
+  --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 98%;
-  --border: 224 71% 20%;
-  --input: 224 71% 10%;
-  --ring: 206 70% 55%;
-  --chart-1: 206 70% 55%;
-  --chart-2: 145 63% 49%;
-  --chart-3: 210 100% 60%;
-  --chart-4: 60 100% 50%;
-  --chart-5: 0 84.2% 60.2%;
+  --border: 240 4% 28%;
+  --input: 240 4% 22%;
+  --ring: 226 95% 60%;
+  --chart-1: 226 95% 60%;
+  --chart-2: 209 97% 71%;
+  --chart-3: 190 80% 60%;
+  --chart-4: 30 90% 60%;
+  --chart-5: 0 72% 51%;
   --radius: 0.5rem;
 }
 
@@ -127,25 +126,25 @@
    /* Subtle Neon Text Glow Effects */
    .text-glow-primary {
      text-shadow:
-       0 0 5px hsl(var(--primary-glow) / 0.5),
-       0 0 10px hsl(var(--primary-glow) / 0.3);
+       0 0 5px hsl(var(--primary-glow) / 0.6), /* Slightly stronger base glow */
+       0 0 12px hsl(var(--primary-glow) / 0.4); /* Wider glow */
    }
    .text-glow-accent {
      text-shadow:
-       0 0 5px hsl(var(--accent-glow) / 0.6),
-       0 0 12px hsl(var(--accent-glow) / 0.4);
+       0 0 5px hsl(var(--accent-glow) / 0.7), /* Brighter accent glow */
+       0 0 14px hsl(var(--accent-glow) / 0.5); /* Wider accent glow */
    }
 
    /* Subtle Neon Box Shadow Effects */
     .shadow-glow-primary {
      box-shadow:
-        0 0 10px 0 hsl(var(--primary) / 0.3), /* Inner soft glow */
-        0 0 20px 2px hsl(var(--primary-glow) / 0.2); /* Outer wider glow */
+        0 0 10px 0 hsl(var(--primary) / 0.4), /* Inner soft glow */
+        0 0 20px 2px hsl(var(--primary-glow) / 0.3); /* Outer wider glow */
     }
     .shadow-glow-accent {
      box-shadow:
-        0 0 10px 0 hsl(var(--accent) / 0.4),
-        0 0 20px 2px hsl(var(--accent-glow) / 0.25);
+        0 0 10px 0 hsl(var(--accent) / 0.5), /* Stronger accent shadow base */
+        0 0 20px 2px hsl(var(--accent-glow) / 0.35); /* Wider accent shadow glow */
     }
 
   /* Define keyframes */
@@ -204,7 +203,13 @@
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.8);
   }
+
+  /* Scrollbar Hiding */
+  .scrollbar-hide {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+  }
 }
-
-
-    
