@@ -29,7 +29,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark"> {/* Ensure dark class is always present */}
-      {/* Apply both font variables. Default body font is Inter (sans). Poppins can be applied specifically where needed. */}
       <body className={`${inter.variable} ${poppins.variable} font-sans antialiased bg-background text-foreground`}>
         {children}
         <Toaster />

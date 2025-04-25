@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video, TrendingUp, GraduationCap, Lightbulb } from 'lucide-react';
+import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video, TrendingUp, GraduationCap, Lightbulb, Search, Filter, UserCheck } from 'lucide-react';
 import UserReviews from '@/components/landing/user-reviews';
 import CommunityPreview from '@/components/landing/community-preview';
 import ConnectionAnimation from '@/components/landing/connection-animation'; // Import the new animation component
@@ -11,9 +11,22 @@ import { cn } from '@/lib/utils'; // Import cn for conditional classes
 
 // Simple, minimalistic logo using initials C and P
 const Logo = () => (
-    <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="text-primary">
-      <path d="M60,15 A35,35 0 0 0 60,85 A15,15 0 0 0 60,65 A15,15 0 0 1 60,35 A35,35 0 0 0 60,15 Z" fill="currentColor" />
-      <path d="M40,15 A35,35 0 1 1 40,85 L40,65 A15,15 0 1 0 40,35 L40,15 Z" fill="currentColor" opacity="0.7"/>
+    <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="text-primary hover:opacity-80 transition-opacity duration-300">
+      {/* Added subtle glow definition */}
+       <defs>
+         <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
+           <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+           <feMerge>
+             <feMergeNode in="coloredBlur"/>
+             <feMergeNode in="SourceGraphic"/>
+           </feMerge>
+         </filter>
+       </defs>
+      {/* Apply glow filter */}
+      <g filter="url(#logo-glow)" style={{ filter: 'drop-shadow(0 0 3px hsl(var(--primary-glow)))' }}>
+         <path d="M60,15 A35,35 0 0 0 60,85 A15,15 0 0 0 60,65 A15,15 0 0 1 60,35 A35,35 0 0 0 60,15 Z" fill="currentColor" />
+         <path d="M40,15 A35,35 0 1 1 40,85 L40,65 A15,15 0 1 0 40,35 L40,15 Z" fill="currentColor" opacity="0.7"/>
+      </g>
     </svg>
 );
 
@@ -30,13 +43,13 @@ const AnimatedBackground = () => {
             left: `${Math.random() * 100}%`,
         };
         const animationName = Math.random() > 0.5 ? 'animate-float' : 'animate-pulse-subtle';
-        const colorClass = Math.random() > 0.5 ? 'bg-primary/40' : 'bg-accent/40'; // Use theme colors with opacity
+        const colorClass = Math.random() > 0.5 ? 'bg-primary/30' : 'bg-accent/30'; // Use theme colors with lower opacity
 
         return (
             <div
                 key={i}
                 className={cn(
-                    'absolute rounded-full opacity-70',
+                    'absolute rounded-full opacity-60', // Slightly lower opacity
                      animationName,
                      colorClass
                  )}
@@ -47,6 +60,7 @@ const AnimatedBackground = () => {
                     left: position.left,
                     animationDelay: `${delay}s`,
                     animationDuration: `${duration}s`,
+                    filter: 'blur(0.5px)', // Add subtle blur
                 }}
             />
         );
@@ -64,13 +78,13 @@ export default function Home() {
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity font-poppins">
                 <Logo />
-                <span>ConnectPro</span>
+                <span className="text-glow-primary">ConnectPro</span> {/* Added Neon Glow */}
             </Link>
           <nav className="space-x-2 md:space-x-4">
             <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted transition-colors font-sans" asChild>
               <Link href="/login/user">User Login</Link>
             </Button>
-            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10 transition-colors font-sans" asChild>
+            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10 transition-colors font-sans shadow-glow-primary hover:shadow-none" asChild>
               <Link href="/signup/professional">Join as Pro</Link>
             </Button>
           </nav>
@@ -93,15 +107,20 @@ export default function Home() {
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary animate-fade-in-up font-poppins" style={{ animationDelay: '0.2s' }}>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary animate-fade-in-up font-poppins text-glow-primary" style={{ animationDelay: '0.2s' }}> {/* Added Neon Glow */}
               Elevate Your Journey. Connect with Experts.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto animate-fade-in-up font-sans" style={{ animationDelay: '0.4s' }}>
               Access verified professionals for personalized guidance, leverage intelligent AI insights to navigate your path, and engage with a supportive, anonymous community. Bridge the gap between ambition and achievement with secure video calls and contextual chat support.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up font-sans" style={{ animationDelay: '0.6s' }}>
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105" asChild>
-                <Link href="/user/find-professional">Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" /></Link>
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild>
+                <Link href="/user/find-professional">
+                  {/* Wrap content in a span */}
+                  <span className="flex items-center justify-center">
+                    Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" />
+                  </span>
+                </Link>
               </Button>
                <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-300 transform hover:scale-105" asChild>
                  <Link href="/community">Explore Community</Link>
@@ -110,52 +129,107 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works Section (Moved Up) */}
-        <section className="py-16 md:py-24 relative overflow-hidden bg-card/30 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        {/* How It Works Section (Moved Up & Enhanced) */}
+        <section className="py-16 md:py-24 relative overflow-hidden animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
             <div className="container mx-auto px-4 md:px-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary font-poppins">How ConnectPro Works</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2> {/* Added Neon Glow */}
                 <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
-                    A simple, streamlined process to connect students with experienced professionals and accelerate their career growth.
+                   A simple, streamlined process to connect students and users with experienced professionals, fostering growth and providing clear guidance. Click on the icons to learn more about each step.
                 </p>
-                <ConnectionAnimation />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 text-center">
-                    <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                        <div className="p-4 bg-accent/20 rounded-full w-fit mx-auto mb-4 border border-accent/50">
-                            <GraduationCap className="h-8 w-8 text-accent" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 font-poppins">1. Explore & Connect</h3>
-                        <p className="text-muted-foreground font-sans">Students browse profiles, filter by expertise, and initiate connections via chat or schedule video calls.</p>
-                    </div>
-                     <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                         <div className="p-4 bg-primary/20 rounded-full w-fit mx-auto mb-4 border border-primary/50">
-                            <Lightbulb className="h-8 w-8 text-primary" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 font-poppins">2. Gain Insights</h3>
-                        <p className="text-muted-foreground font-sans">Engage with professionals for personalized advice, mentorship, or use the AI Counselor for instant guidance and suggestions.</p>
-                    </div>
-                     <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-                         <div className="p-4 bg-green-500/20 rounded-full w-fit mx-auto mb-4 border border-green-500/50">
-                            <TrendingUp className="h-8 w-8 text-green-500" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 font-poppins">3. Accelerate Growth</h3>
-                        <p className="text-muted-foreground font-sans">Apply learned strategies, leverage community support, and build a network to confidently advance your career path.</p>
-                    </div>
+                {/* Functional Animation Component - Removed background/border */}
+                <div className="mb-16 md:mb-20"> {/* Add margin bottom */}
+                    <ConnectionAnimation />
                 </div>
+
+
+                {/* Detailed Step Descriptions - Removed Card backgrounds, added padding */}
+                 <div className="mt-20 space-y-12">
+                    {/* Step 1: Student */}
+                    <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                        <div className="flex items-center gap-4 mb-3">
+                            <div className="p-3 bg-blue-500/20 rounded-full border border-blue-500/50">
+                                <GraduationCap className="h-8 w-8 text-blue-400" />
+                            </div>
+                             <h3 className="text-2xl font-semibold text-blue-300 font-poppins">Step 1: The User Journey Begins</h3>
+                        </div>
+                        <p className="text-muted-foreground font-sans ml-1 pl-14 border-l-2 border-blue-500/50">
+                           Whether you're a student seeking career advice, someone facing a specific challenge, or simply looking for guidance, your journey starts here. Define your goals or questions to make the most of ConnectPro.
+                         </p>
+                    </div>
+
+                    {/* Step 2: Find & Filter */}
+                    <div id="step-find" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                        <div className="flex items-center gap-4 mb-3">
+                             <div className="p-3 bg-purple-500/20 rounded-full border border-purple-500/50">
+                                <Search className="h-8 w-8 text-purple-400" />
+                             </div>
+                             <div className="p-3 bg-orange-500/20 rounded-full border border-orange-500/50 -ml-2">
+                               <Filter className="h-8 w-8 text-orange-400" />
+                             </div>
+                             <h3 className="text-2xl font-semibold text-purple-300 font-poppins">Step 2: Discover the Right Expertise</h3>
+                        </div>
+                         <p className="text-muted-foreground font-sans ml-1 pl-14 border-l-2 border-purple-500/50">
+                           Utilize our powerful search and filtering tools. Look for professionals based on their field (like Software Engineering, Marketing, etc.), specific skills (e.g., Python, SEO, Leadership), or keywords related to your needs. Narrow down the options to find the perfect match for your query.
+                         </p>
+                    </div>
+
+                     {/* Step 3: Connect */}
+                    <div id="step-connect" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                        <div className="flex items-center gap-4 mb-3">
+                             <div className="p-3 bg-yellow-500/20 rounded-full border border-yellow-500/50">
+                               <MessageSquare className="h-8 w-8 text-yellow-400" />
+                             </div>
+                             <div className="p-3 bg-red-500/20 rounded-full border border-red-500/50 -ml-2">
+                                <Video className="h-8 w-8 text-red-400" />
+                             </div>
+                             <h3 className="text-2xl font-semibold text-yellow-300 font-poppins">Step 3: Initiate Contact</h3>
+                         </div>
+                         <p className="text-muted-foreground font-sans ml-1 pl-14 border-l-2 border-yellow-500/50">
+                           Once you've found a potential professional, you have options. Start a conversation via our secure chat to ask initial questions or clarify needs. Alternatively, check their availability and directly schedule a one-on-one video call through our integrated system for a more in-depth discussion.
+                         </p>
+                     </div>
+
+                     {/* Step 4: Professional Interaction */}
+                     <div id="step-professional" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+                         <div className="flex items-center gap-4 mb-3">
+                             <div className="p-3 bg-indigo-500/20 rounded-full border border-indigo-500/50">
+                                <UserCheck className="h-8 w-8 text-indigo-400" />
+                             </div>
+                             <h3 className="text-2xl font-semibold text-indigo-300 font-poppins">Step 4: Engage & Learn</h3>
+                         </div>
+                         <p className="text-muted-foreground font-sans ml-1 pl-14 border-l-2 border-indigo-500/50">
+                           Engage with the verified professional through chat or video. Get personalized advice, mentorship, and answers to your specific questions. Our AI Counselor can also assist during chats, providing context-aware suggestions and helping formulate questions.
+                         </p>
+                     </div>
+
+                     {/* Step 5: Growth */}
+                     <div id="step-growth" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-accent animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                         <div className="flex items-center gap-4 mb-3">
+                             <div className="p-3 bg-green-500/20 rounded-full border border-green-500/50">
+                                <TrendingUp className="h-8 w-8 text-green-400" />
+                             </div>
+                             <h3 className="text-2xl font-semibold text-green-300 font-poppins">Step 5: Apply & Grow</h3>
+                         </div>
+                         <p className="text-muted-foreground font-sans ml-1 pl-14 border-l-2 border-green-500/50">
+                           Apply the insights and strategies gained from your interaction. Leverage the knowledge shared, utilize the AI Counselor for further exploration, and participate in the anonymous community to reinforce learning and connect with peers. This is your path to accelerated growth.
+                         </p>
+                     </div>
+                 </div>
             </div>
         </section>
 
         {/* Features Section (Moved Down) */}
         <section className="py-16 md:py-24 bg-background animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent font-poppins">Why ConnectPro?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent text-glow-accent font-poppins">Why ConnectPro?</h2> {/* Added Neon Glow */}
              <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
                ConnectPro is more than just a platform; it's your dedicated partner in professional growth. We offer a unique blend of human expertise and AI intelligence to empower your journey.
              </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Feature Card 1 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/10 group animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/20 group animate-fade-in-up hover:border-primary/50" style={{ animationDelay: '0.4s' }}> {/* Enhanced Hover */}
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50 transform group-hover:scale-110 transition-transform duration-300">
+                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-primary"> {/* Added glow on hover */}
                         <Briefcase className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-xl font-semibold font-poppins">Vetted Expert Network</CardTitle>
@@ -167,9 +241,9 @@ export default function Home() {
                  </CardContent>
               </Card>
               {/* Feature Card 2 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/10 group animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/20 group animate-fade-in-up hover:border-accent/50" style={{ animationDelay: '0.5s' }}> {/* Enhanced Hover */}
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50 transform group-hover:scale-110 transition-transform duration-300">
+                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-accent"> {/* Added glow on hover */}
                         <BrainCircuit className="h-8 w-8 text-accent" />
                      </div>
                     <CardTitle className="text-xl font-semibold font-poppins">AI-Powered Guidance</CardTitle>
@@ -181,9 +255,9 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 3 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/10 group animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/20 group animate-fade-in-up hover:border-blue-500/50" style={{ animationDelay: '0.6s' }}> {/* Enhanced Hover */}
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50 transform group-hover:scale-110 transition-transform duration-300">
+                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(59,130,246,0.3)]"> {/* Custom Glow */}
                        <Video className="h-8 w-8 text-blue-400" />
                     </div>
                    <CardTitle className="text-xl font-semibold font-poppins">Seamless Video Sessions</CardTitle>
@@ -195,9 +269,9 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 4 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/10 group animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/20 group animate-fade-in-up hover:border-green-500/50" style={{ animationDelay: '0.7s' }}> {/* Enhanced Hover */}
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50 transform group-hover:scale-110 transition-transform duration-300">
+                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(34,197,94,0.3)]"> {/* Custom Glow */}
                          <Users className="h-8 w-8 text-green-400" />
                      </div>
                      <CardTitle className="text-xl font-semibold font-poppins">Supportive Community</CardTitle>
@@ -209,9 +283,9 @@ export default function Home() {
                  </CardContent>
                </Card>
                 {/* Feature Card 5 */}
-               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/10 group animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/20 group animate-fade-in-up hover:border-yellow-500/50" style={{ animationDelay: '0.8s' }}> {/* Enhanced Hover */}
                   <CardHeader className="p-6">
-                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50 transform group-hover:scale-110 transition-transform duration-300">
+                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(234,179,8,0.3)]"> {/* Custom Glow */}
                           <MessageSquare className="h-8 w-8 text-yellow-400" />
                        </div>
                      <CardTitle className="text-xl font-semibold font-poppins">Contextual AI Chat</CardTitle>
@@ -223,9 +297,9 @@ export default function Home() {
                   </CardContent>
                </Card>
                 {/* Feature Card 6 */}
-                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/10 group animate-fade-in-up" style={{ animationDelay: '0.9s' }}>
+                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/20 group animate-fade-in-up hover:border-red-500/50" style={{ animationDelay: '0.9s' }}> {/* Enhanced Hover */}
                    <CardHeader className="p-6">
-                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50 transform group-hover:scale-110 transition-transform duration-300">
+                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(239,68,68,0.3)]"> {/* Custom Glow */}
                          <ShieldCheck className="h-8 w-8 text-red-400" />
                        </div>
                       <CardTitle className="text-xl font-semibold font-poppins">Privacy & Security First</CardTitle>
@@ -249,18 +323,18 @@ export default function Home() {
         {/* Call to Action Section */}
         <section className="py-16 md:py-24 text-center relative overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
              {/* Background Glow */}
-             <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-primary/5 blur-3xl"></div>
+             <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-gradient-to-t from-primary/10 via-primary/5 to-transparent blur-3xl"></div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary font-poppins">Ready to Connect & Grow?</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary text-glow-primary font-poppins">Ready to Connect & Grow?</h2> {/* Added Neon Glow */}
                 <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto font-sans">
                   Join ConnectPro today. Unlock personalized expert guidance, leverage cutting-edge AI insights for clearer direction, and participate in a thriving, anonymous community dedicated to mutual support and advancement.
                 </p>
                 <div className="space-y-4 sm:space-y-0 sm:space-x-4 font-sans">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-primary/40 transition-all duration-300 transform hover:scale-105" asChild>
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild>
                     <Link href="/signup/user">Get Started as User</Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 transition-colors transform hover:scale-105" asChild>
+                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 transition-colors transform hover:scale-105 shadow-glow-primary hover:shadow-none" asChild>
                     <Link href="/signup/professional">Join as a Professional</Link>
                   </Button>
                 </div>
@@ -285,3 +359,6 @@ export default function Home() {
     </div>
   );
 }
+
+
+    

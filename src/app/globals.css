@@ -17,6 +17,7 @@
   /* Primary Accent (e.g., buttons, important links) - ConnectPro Blue */
   --primary: 206 70% 55%; /* Calming Blue (#3498db) */
   --primary-foreground: 210 40% 98%; /* White text on primary */
+  --primary-glow: 206 70% 65%; /* Slightly lighter for glow */
 
   /* Secondary Elements (Clean white) */
   --secondary: 0 0% 100%; /* White (#ffffff) */
@@ -29,6 +30,8 @@
   /* Accent Color (Vibrant green for CTAs) */
   --accent: 145 63% 49%; /* Vibrant Green (#2ecc71) */
   --accent-foreground: 224 71% 4%; /* Dark text on accent */
+  --accent-glow: 145 63% 59%; /* Slightly lighter for glow */
+
 
   /* Destructive Actions */
   --destructive: 0 84.2% 60.2%; /* Red */
@@ -60,12 +63,14 @@
   --popover-foreground: 210 40% 98%;
   --primary: 206 70% 55%; /* Calming Blue */
   --primary-foreground: 210 40% 98%;
+  --primary-glow: 206 70% 65%;
   --secondary: 224 71% 15%; /* Dark muted blue for secondary background elements in dark mode */
   --secondary-foreground: 210 40% 85%; /* Lighter gray for text on secondary */
   --muted: 224 71% 15%;
   --muted-foreground: 210 40% 60%;
   --accent: 145 63% 49%; /* Vibrant Green */
   --accent-foreground: 224 71% 4%; /* Dark text on accent */
+  --accent-glow: 145 63% 59%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
   --border: 224 71% 20%;
@@ -80,6 +85,10 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth; /* Enable smooth scrolling */
+  }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1; /* Enable optional ligatures */
@@ -115,6 +124,30 @@
 }
 
 @layer utilities {
+   /* Subtle Neon Text Glow Effects */
+   .text-glow-primary {
+     text-shadow:
+       0 0 5px hsl(var(--primary-glow) / 0.5),
+       0 0 10px hsl(var(--primary-glow) / 0.3);
+   }
+   .text-glow-accent {
+     text-shadow:
+       0 0 5px hsl(var(--accent-glow) / 0.6),
+       0 0 12px hsl(var(--accent-glow) / 0.4);
+   }
+
+   /* Subtle Neon Box Shadow Effects */
+    .shadow-glow-primary {
+     box-shadow:
+        0 0 10px 0 hsl(var(--primary) / 0.3), /* Inner soft glow */
+        0 0 20px 2px hsl(var(--primary-glow) / 0.2); /* Outer wider glow */
+    }
+    .shadow-glow-accent {
+     box-shadow:
+        0 0 10px 0 hsl(var(--accent) / 0.4),
+        0 0 20px 2px hsl(var(--accent-glow) / 0.25);
+    }
+
   /* Define keyframes */
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -172,3 +205,6 @@
     background: hsl(var(--primary) / 0.8);
   }
 }
+
+
+    
