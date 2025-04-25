@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -10,8 +11,8 @@ import { cn } from '@/lib/utils'; // Import cn for conditional classes
 
 
 // Simple, minimalistic logo using initials C and P
-const Logo = () => (
-    <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="text-primary hover:opacity-80 transition-opacity duration-300">
+const Logo = ({ className }: { className?: string }) => ( // Accept className prop
+    <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className={cn("text-primary hover:opacity-80 transition-opacity duration-300", className)}>
       {/* Added subtle glow definition */}
        <defs>
          <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
@@ -104,6 +105,10 @@ export default function Home() {
               <div className="absolute inset-0">
                   <AnimatedBackground />
               </div>
+             {/* Large Logo Backdrop */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-20">
+                 <Logo className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] opacity-5 text-primary/50 blur-[2px]" /> {/* Large, transparent, blurred logo */}
+             </div>
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
@@ -115,12 +120,9 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up font-sans" style={{ animationDelay: '0.6s' }}>
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild>
-                <Link href="/user/find-professional">
-                  {/* Wrap content in a span */}
-                  <span className="flex items-center justify-center">
+                <Link href="/user/find-professional" className="flex items-center justify-center"> {/* Moved flex here */}
                     Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" />
-                  </span>
-                </Link>
+                 </Link>
               </Button>
                <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-300 transform hover:scale-105" asChild>
                  <Link href="/community">Explore Community</Link>
@@ -130,22 +132,22 @@ export default function Home() {
         </section>
 
         {/* How It Works Section (Moved Up & Enhanced) */}
-        <section className="py-16 md:py-24 relative overflow-hidden animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
+        <section className="py-16 md:py-24 relative overflow-hidden bg-card/30 animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
             <div className="container mx-auto px-4 md:px-6">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2> {/* Added Neon Glow */}
                 <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
                    A simple, streamlined process to connect students and users with experienced professionals, fostering growth and providing clear guidance. Click on the icons to learn more about each step.
                 </p>
-                {/* Functional Animation Component - Removed background/border */}
+                {/* Functional Animation Component - Now uses relative positioning for better layout */}
                 <div className="mb-16 md:mb-20"> {/* Add margin bottom */}
                     <ConnectionAnimation />
                 </div>
 
 
-                {/* Detailed Step Descriptions - Removed Card backgrounds, added padding */}
+                {/* Detailed Step Descriptions - Removed Card backgrounds, added padding and hover glow */}
                  <div className="mt-20 space-y-12">
                     {/* Step 1: Student */}
-                    <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-blue-500/30 hover:bg-blue-950/20" style={{ animationDelay: '0.2s' }}>
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-blue-500/20 rounded-full border border-blue-500/50">
                                 <GraduationCap className="h-8 w-8 text-blue-400" />
@@ -158,7 +160,7 @@ export default function Home() {
                     </div>
 
                     {/* Step 2: Find & Filter */}
-                    <div id="step-find" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                    <div id="step-find" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-purple-500/30 hover:bg-purple-950/20" style={{ animationDelay: '0.3s' }}>
                         <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-purple-500/20 rounded-full border border-purple-500/50">
                                 <Search className="h-8 w-8 text-purple-400" />
@@ -174,7 +176,7 @@ export default function Home() {
                     </div>
 
                      {/* Step 3: Connect */}
-                    <div id="step-connect" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                    <div id="step-connect" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-yellow-500/30 hover:bg-yellow-950/20" style={{ animationDelay: '0.4s' }}>
                         <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-yellow-500/20 rounded-full border border-yellow-500/50">
                                <MessageSquare className="h-8 w-8 text-yellow-400" />
@@ -190,7 +192,7 @@ export default function Home() {
                      </div>
 
                      {/* Step 4: Professional Interaction */}
-                     <div id="step-professional" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+                     <div id="step-professional" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-indigo-500/30 hover:bg-indigo-950/20" style={{ animationDelay: '0.5s' }}>
                          <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-indigo-500/20 rounded-full border border-indigo-500/50">
                                 <UserCheck className="h-8 w-8 text-indigo-400" />
@@ -203,7 +205,7 @@ export default function Home() {
                      </div>
 
                      {/* Step 5: Growth */}
-                     <div id="step-growth" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-accent animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                     <div id="step-growth" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-accent animate-fade-in-up border border-transparent hover:border-green-500/30 hover:bg-green-950/20" style={{ animationDelay: '0.6s' }}>
                          <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-green-500/20 rounded-full border border-green-500/50">
                                 <TrendingUp className="h-8 w-8 text-green-400" />
@@ -359,6 +361,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-    

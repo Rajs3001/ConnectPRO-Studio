@@ -4,7 +4,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GraduationCap, Search, Filter, MessageSquare, Video, UserCheck, TrendingUp } from 'lucide-react';
-import Link from 'next/link'; // Import Link for internal navigation
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 const ConnectionAnimation: React.FC = () => {
@@ -38,48 +38,49 @@ const ConnectionAnimation: React.FC = () => {
   };
 
   const iconBgClass = "p-3 rounded-full border shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg"; // Added hover effects
-  const iconClass = "h-8 w-8 transition-colors duration-300"; // Added transition
-  const textClass = "text-xs font-semibold text-muted-foreground mt-1.5";
+  const iconClass = "h-7 w-7 md:h-8 md:w-8 transition-colors duration-300"; // Responsive icon size
+  const textClass = "text-[10px] md:text-xs font-semibold text-muted-foreground mt-1.5 text-center"; // Responsive text size
 
-  // Adjusted node positions (relative percentages for SVG viewBox 0 0 500 200)
-  const nodeSize = 40; // Approximate icon container size for path calculation
-  const studentPos = { x: 50, y: 100 };
-  const searchPos = { x: 160, y: 45 }; // Adjusted
-  const filterPos = { x: 160, y: 155 }; // Adjusted
-  const messagePos = { x: 280, y: 45 }; // Adjusted
-  const videoPos = { x: 280, y: 155 }; // Adjusted
-  const professionalPos = { x: 390, y: 100 }; // Adjusted
-  const growthPos = { x: 470, y: 100 };
+  // Adjusted node positions using percentages for better responsiveness in SVG viewBox 0 0 600 250
+  // Increased viewBox height for more vertical space
+  const nodeSize = 45; // Approximate icon container size for path calculation
+  const studentPos = { x: 50, y: 125 }; // Centered vertically
+  const searchPos = { x: 180, y: 75 }; // Top path
+  const filterPos = { x: 180, y: 175 }; // Bottom path
+  const messagePos = { x: 310, y: 75 }; // Top path
+  const videoPos = { x: 310, y: 175 }; // Bottom path
+  const professionalPos = { x: 440, y: 125 }; // Centered vertically
+  const growthPos = { x: 550, y: 125 }; // Centered vertically
 
   // Calculate path end/start points closer to icon centers/edges
-  const pathOffset = nodeSize / 3; // Offset from center to edge
+  const pathOffset = nodeSize / 2.5; // Offset based on icon container size
 
   return (
     <motion.div
-      // Removed card background and adjusted styling
-      className="relative flex items-center justify-center p-4 md:p-8 min-h-[300px] overflow-hidden"
-      key={Date.now()} // Add key to force re-render on view, triggering animation
+      // Removed card background, use relative positioning for layout
+      className="relative w-full max-w-5xl mx-auto flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-hidden"
+      key={Date.now()} // Key to force re-render on view, triggering animation
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.3 }} // once: false to trigger animation everytime it enters viewport
+      viewport={{ once: false, amount: 0.3 }} // Re-trigger animation on scroll into view
     >
       {/* SVG for lines */}
       <motion.svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 500 200" // Maintained viewBox for coordinate system
+        viewBox="0 0 600 250" // Adjusted viewBox
         preserveAspectRatio="xMidYMid meet"
         style={{ zIndex: 5 }}
       >
-        {/* Lines from Student to Search/Filter */}
+        {/* Lines from Student to Search/Filter (using Bezier curves for smoother paths) */}
         <motion.path
-           d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 50},${studentPos.y} ${searchPos.x - 50},${searchPos.y} ${searchPos.x - pathOffset},${searchPos.y}`}
+           d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 60},${studentPos.y} ${searchPos.x - 60},${searchPos.y} ${searchPos.x - pathOffset},${searchPos.y}`}
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
            variants={lineVariants} custom={0}
-           className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary" // Neon effect on hover
+           className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
          />
          <motion.path
-            d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 50},${studentPos.y} ${filterPos.x - 50},${filterPos.y} ${filterPos.x - pathOffset},${filterPos.y}`}
+            d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 60},${studentPos.y} ${filterPos.x - 60},${filterPos.y} ${filterPos.x - pathOffset},${filterPos.y}`}
             stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
             variants={lineVariants} custom={0.3}
             className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
@@ -87,13 +88,13 @@ const ConnectionAnimation: React.FC = () => {
 
         {/* Lines from Search/Filter to Message/Video */}
          <motion.path
-           d={`M ${searchPos.x + pathOffset},${searchPos.y} C ${searchPos.x + 30},${searchPos.y} ${messagePos.x - 30},${messagePos.y} ${messagePos.x - pathOffset},${messagePos.y}`}
+           d={`M ${searchPos.x + pathOffset},${searchPos.y} L ${messagePos.x - pathOffset},${messagePos.y}`} // Straight line
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
            variants={lineVariants} custom={0.6}
            className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
          />
          <motion.path
-            d={`M ${filterPos.x + pathOffset},${filterPos.y} C ${filterPos.x + 30},${filterPos.y} ${videoPos.x - 30},${videoPos.y} ${videoPos.x - pathOffset},${videoPos.y}`}
+            d={`M ${filterPos.x + pathOffset},${filterPos.y} L ${videoPos.x - pathOffset},${videoPos.y}`} // Straight line
             stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
             variants={lineVariants} custom={0.9}
             className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
@@ -101,13 +102,13 @@ const ConnectionAnimation: React.FC = () => {
 
         {/* Lines from Message/Video to Professional */}
         <motion.path
-            d={`M ${messagePos.x + pathOffset},${messagePos.y} C ${messagePos.x + 30},${messagePos.y} ${professionalPos.x - 50},${professionalPos.y} ${professionalPos.x - pathOffset},${professionalPos.y}`}
+             d={`M ${messagePos.x + pathOffset},${messagePos.y} C ${messagePos.x + 60},${messagePos.y} ${professionalPos.x - 60},${professionalPos.y} ${professionalPos.x - pathOffset},${professionalPos.y}`}
             stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
             variants={lineVariants} custom={1.2}
             className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
         />
          <motion.path
-           d={`M ${videoPos.x + pathOffset},${videoPos.y} C ${videoPos.x + 30},${videoPos.y} ${professionalPos.x - 50},${professionalPos.y} ${professionalPos.x - pathOffset},${professionalPos.y}`}
+             d={`M ${videoPos.x + pathOffset},${videoPos.y} C ${videoPos.x + 60},${videoPos.y} ${professionalPos.x - 60},${professionalPos.y} ${professionalPos.x - pathOffset},${professionalPos.y}`}
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
            variants={lineVariants} custom={1.5}
            className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
@@ -126,25 +127,24 @@ const ConnectionAnimation: React.FC = () => {
         />
       </motion.svg>
 
-      {/* Nodes - Wrapped with Link - Use percentages for positioning */}
+      {/* Nodes - Use absolute positioning within the parent motion.div */}
+      {/* Positioning with left/top percentages and transform for centering */}
       <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-          // Adjusted positioning using percentages relative to the container
-          style={{ left: `${studentPos.x / 5}%`, top: `${studentPos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20" // Fixed width for text wrapping
+          style={{ left: `${studentPos.x / 6}%`, top: `${studentPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
           variants={itemVariants}
        >
          <Link href="#step-student" aria-label="Go to Student Step Description">
             <div className={cn(`${iconBgClass} bg-blue-500/10 border-blue-500/30 group-hover:bg-blue-500/20 group-hover:border-blue-500/50 group-hover:shadow-glow-primary`)}>
               <GraduationCap className={`${iconClass} text-blue-500 group-hover:text-blue-400`} />
             </div>
-            <span className={textClass}>Student</span>
+            <span className={textClass}>User</span>
          </Link>
       </motion.div>
 
-
        <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-          style={{ left: `${searchPos.x / 5}%`, top: `${searchPos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
+          style={{ left: `${searchPos.x / 6}%`, top: `${searchPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
           variants={itemVariants}
         >
           <Link href="#step-find" aria-label="Go to Find Professional Step Description">
@@ -156,11 +156,11 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-           style={{ left: `${filterPos.x / 5}%`, top: `${filterPos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
+           style={{ left: `${filterPos.x / 6}%`, top: `${filterPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
           variants={itemVariants}
         >
-           <Link href="#step-find" aria-label="Go to Filter Professional Step Description"> {/* Links to same section as Search */}
+           <Link href="#step-find" aria-label="Go to Filter Professional Step Description">
              <div className={cn(`${iconBgClass} bg-orange-500/10 border-orange-500/30 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 group-hover:shadow-glow-primary`)}>
                <Filter className={`${iconClass} text-orange-500 group-hover:text-orange-400`} />
              </div>
@@ -169,24 +169,24 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-         style={{ left: `${messagePos.x / 5}%`, top: `${messagePos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
+         style={{ left: `${messagePos.x / 6}%`, top: `${messagePos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
          <Link href="#step-connect" aria-label="Go to Connect Step Description">
              <div className={cn(`${iconBgClass} bg-yellow-500/10 border-yellow-500/30 group-hover:bg-yellow-500/20 group-hover:border-yellow-500/50 group-hover:shadow-glow-primary`)}>
               <MessageSquare className={`${iconClass} text-yellow-500 group-hover:text-yellow-400`} />
             </div>
-            <span className={textClass}>Connect</span>
+            <span className={textClass}>Chat</span>
           </Link>
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-         style={{ left: `${videoPos.x / 5}%`, top: `${videoPos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-20 md:w-24" // Wider for longer text
+         style={{ left: `${videoPos.x / 6}%`, top: `${videoPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
-          <Link href="#step-connect" aria-label="Go to Video Call Step Description"> {/* Links to same section as Chat */}
+          <Link href="#step-connect" aria-label="Go to Video Call Step Description">
              <div className={cn(`${iconBgClass} bg-red-500/10 border-red-500/30 group-hover:bg-red-500/20 group-hover:border-red-500/50 group-hover:shadow-glow-primary`)}>
                <Video className={`${iconClass} text-red-500 group-hover:text-red-400`} />
              </div>
@@ -195,8 +195,8 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-         style={{ left: `${professionalPos.x / 5}%`, top: `${professionalPos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-20 md:w-24" // Wider for text
+         style={{ left: `${professionalPos.x / 6}%`, top: `${professionalPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
           <Link href="#step-professional" aria-label="Go to Professional Interaction Step Description">
@@ -208,8 +208,8 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
       <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group"
-         style={{ left: `${growthPos.x / 5}%`, top: `${growthPos.y / 2}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
+         style={{ left: `${growthPos.x / 6}%`, top: `${growthPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
            <Link href="#step-growth" aria-label="Go to Growth Step Description">
@@ -225,5 +225,3 @@ const ConnectionAnimation: React.FC = () => {
 };
 
 export default ConnectionAnimation;
-
-    
