@@ -110,8 +110,42 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="py-16 md:py-24 bg-card/30 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        {/* How It Works Section (Moved Up) */}
+        <section className="py-16 md:py-24 relative overflow-hidden bg-card/30 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <div className="container mx-auto px-4 md:px-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary font-poppins">How ConnectPro Works</h2>
+                <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
+                    A simple, streamlined process to connect students with experienced professionals and accelerate their career growth.
+                </p>
+                <ConnectionAnimation />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 text-center">
+                    <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                        <div className="p-4 bg-accent/20 rounded-full w-fit mx-auto mb-4 border border-accent/50">
+                            <GraduationCap className="h-8 w-8 text-accent" />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2 font-poppins">1. Explore & Connect</h3>
+                        <p className="text-muted-foreground font-sans">Students browse profiles, filter by expertise, and initiate connections via chat or schedule video calls.</p>
+                    </div>
+                     <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                         <div className="p-4 bg-primary/20 rounded-full w-fit mx-auto mb-4 border border-primary/50">
+                            <Lightbulb className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2 font-poppins">2. Gain Insights</h3>
+                        <p className="text-muted-foreground font-sans">Engage with professionals for personalized advice, mentorship, or use the AI Counselor for instant guidance and suggestions.</p>
+                    </div>
+                     <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                         <div className="p-4 bg-green-500/20 rounded-full w-fit mx-auto mb-4 border border-green-500/50">
+                            <TrendingUp className="h-8 w-8 text-green-500" />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2 font-poppins">3. Accelerate Growth</h3>
+                        <p className="text-muted-foreground font-sans">Apply learned strategies, leverage community support, and build a network to confidently advance your career path.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* Features Section (Moved Down) */}
+        <section className="py-16 md:py-24 bg-background animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent font-poppins">Why ConnectPro?</h2>
              <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
@@ -205,41 +239,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* How It Works Section */}
-        <section className="py-16 md:py-24 relative overflow-hidden">
-            <div className="container mx-auto px-4 md:px-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary font-poppins">How ConnectPro Works</h2>
-                <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
-                    A simple, streamlined process to connect students with experienced professionals and accelerate their career growth.
-                </p>
-                <ConnectionAnimation />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 text-center">
-                    <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                        <div className="p-4 bg-accent/20 rounded-full w-fit mx-auto mb-4 border border-accent/50">
-                            <GraduationCap className="h-8 w-8 text-accent" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 font-poppins">1. Explore & Connect</h3>
-                        <p className="text-muted-foreground font-sans">Students browse profiles, filter by expertise, and initiate connections via chat or schedule video calls.</p>
-                    </div>
-                     <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                         <div className="p-4 bg-primary/20 rounded-full w-fit mx-auto mb-4 border border-primary/50">
-                            <Lightbulb className="h-8 w-8 text-primary" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 font-poppins">2. Gain Insights</h3>
-                        <p className="text-muted-foreground font-sans">Engage with professionals for personalized advice, mentorship, or use the AI Counselor for instant guidance and suggestions.</p>
-                    </div>
-                     <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-                         <div className="p-4 bg-green-500/20 rounded-full w-fit mx-auto mb-4 border border-green-500/50">
-                            <TrendingUp className="h-8 w-8 text-green-500" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2 font-poppins">3. Accelerate Growth</h3>
-                        <p className="text-muted-foreground font-sans">Apply learned strategies, leverage community support, and build a network to confidently advance your career path.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
 
          {/* User Reviews Section */}
          <UserReviews />

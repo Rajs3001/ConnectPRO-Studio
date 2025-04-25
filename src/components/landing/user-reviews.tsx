@@ -1,12 +1,13 @@
 
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react'; // Import useRef
+import Autoplay from "embla-carousel-autoplay"; // Import Autoplay plugin
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"; // Assuming you have a Carousel component
-import { cn } from '@/lib/utils'; // Import cn
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { cn } from '@/lib/utils';
 
 // Dummy review data
 const reviews = [
@@ -53,15 +54,23 @@ const reviews = [
 ];
 
 export default function UserReviews() {
+   // Initialize the autoplay plugin
+   const plugin = useRef(
+     Autoplay({ delay: 4000, stopOnInteraction: true }) // Adjust delay as needed
+   );
+
   return (
     <section className="py-16 md:py-24 bg-card/30 animate-fade-in-up" style={{ animationDelay: '0.5s' }}> {/* Section animation */}
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">What Our Users Say</h2>
         <Carousel
+           plugins={[plugin.current]} // Add the autoplay plugin instance
            opts={{
              align: "start",
              loop: true,
            }}
+           onMouseEnter={plugin.current.stop} // Pause on hover
+           onMouseLeave={plugin.current.reset} // Resume on mouse leave
            className="w-full max-w-xs sm:max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto"
          >
           <CarouselContent className="-ml-4"> {/* Adjust margin for spacing */}
