@@ -17,10 +17,11 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut, User, Calendar, MessageSquare, Settings, LayoutDashboard, Search, UserCog, Bot, Users } from 'lucide-react'; // Added Bot, Users icons
+import { LogOut, User, Calendar, MessageSquare, Settings, LayoutDashboard, Search, UserCog, Bot, Users, CodeXml } from 'lucide-react'; // Added Bot, Users icons
 import { useToast } from '@/hooks/use-toast';
 import React from 'react';
 import { cn } from '@/lib/utils'; // Import cn
+import Logo from '@/components/shared/logo'; // Import the shared Logo component
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -157,7 +158,12 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
       </Sidebar>
 
       {/* Main content area within SidebarInset */}
-      <SidebarInset className="bg-background"> {/* Ensure main area uses background */}
+      <SidebarInset className="bg-background relative"> {/* Ensure main area uses background and is relative for absolute positioning */}
+         {/* Subtle Logo Backdrop */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-hidden">
+            <Logo className="w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] lg:w-[25vw] lg:h-[25vw] opacity-5 text-primary/50 blur-[3px]" />
+        </div>
+
          {/* Top header bar */}
          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
            <SidebarTrigger className="sm:hidden text-foreground"/> {/* Trigger for mobile */}

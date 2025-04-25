@@ -3,33 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video, TrendingUp, GraduationCap, Lightbulb, Search, Filter, UserCheck } from 'lucide-react';
+import { ArrowRight, Bot, BrainCircuit, Briefcase, MessageSquare, ShieldCheck, Star, Users, Video, TrendingUp, GraduationCap, Lightbulb, Search, Filter, UserCheck, CodeXml } from 'lucide-react';
 import UserReviews from '@/components/landing/user-reviews';
 import CommunityPreview from '@/components/landing/community-preview';
-import ConnectionAnimation from '@/components/landing/connection-animation'; // Import the new animation component
-import { cn } from '@/lib/utils'; // Import cn for conditional classes
-
-
-// Simple, minimalistic logo using initials C and P
-const Logo = ({ className }: { className?: string }) => ( // Accept className prop
-    <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className={cn("text-primary hover:opacity-80 transition-opacity duration-300", className)}>
-      {/* Added subtle glow definition */}
-       <defs>
-         <filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
-           <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
-           <feMerge>
-             <feMergeNode in="coloredBlur"/>
-             <feMergeNode in="SourceGraphic"/>
-           </feMerge>
-         </filter>
-       </defs>
-      {/* Apply glow filter */}
-      <g filter="url(#logo-glow)" style={{ filter: 'drop-shadow(0 0 3px hsl(var(--primary-glow)))' }}>
-         <path d="M60,15 A35,35 0 0 0 60,85 A15,15 0 0 0 60,65 A15,15 0 0 1 60,35 A35,35 0 0 0 60,15 Z" fill="currentColor" />
-         <path d="M40,15 A35,35 0 1 1 40,85 L40,65 A15,15 0 1 0 40,35 L40,15 Z" fill="currentColor" opacity="0.7"/>
-      </g>
-    </svg>
-);
+import ConnectionAnimation from '@/components/landing/connection-animation';
+import { cn } from '@/lib/utils';
+import Logo from '@/components/shared/logo'; // Import the shared Logo component
 
 
 // Animated background nodes component (Keep this as background enhancement)
@@ -78,8 +57,8 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity font-poppins">
-                <Logo />
-                <span className="text-glow-primary">ConnectPro</span> {/* Added Neon Glow */}
+                <Logo /> {/* Use Logo component */}
+                <span className="text-glow-primary">ConnectPro</span>
             </Link>
           <nav className="space-x-2 md:space-x-4">
             <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted transition-colors font-sans" asChild>
@@ -112,7 +91,7 @@ export default function Home() {
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary animate-fade-in-up font-poppins text-glow-primary" style={{ animationDelay: '0.2s' }}> {/* Added Neon Glow */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-primary animate-fade-in-up font-poppins text-glow-primary" style={{ animationDelay: '0.2s' }}>
               Elevate Your Journey. Connect with Experts.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto animate-fade-in-up font-sans" style={{ animationDelay: '0.4s' }}>
@@ -120,7 +99,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up font-sans" style={{ animationDelay: '0.6s' }}>
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild>
-                <Link href="/user/find-professional" className="flex items-center justify-center"> {/* Moved flex here */}
+                 <Link href="/user/find-professional" className="flex items-center justify-center">
                     Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" />
                  </Link>
               </Button>
@@ -131,20 +110,18 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works Section (Moved Up & Enhanced) */}
+        {/* How It Works Section */}
         <section className="py-16 md:py-24 relative overflow-hidden bg-card/30 animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
             <div className="container mx-auto px-4 md:px-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2> {/* Added Neon Glow */}
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2>
                 <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
                    A simple, streamlined process to connect students and users with experienced professionals, fostering growth and providing clear guidance. Click on the icons to learn more about each step.
                 </p>
-                {/* Functional Animation Component - Now uses relative positioning for better layout */}
-                <div className="mb-16 md:mb-20"> {/* Add margin bottom */}
+                <div className="mb-16 md:mb-20">
                     <ConnectionAnimation />
                 </div>
 
-
-                {/* Detailed Step Descriptions - Removed Card backgrounds, added padding and hover glow */}
+                {/* Detailed Step Descriptions */}
                  <div className="mt-20 space-y-12">
                     {/* Step 1: Student */}
                     <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-blue-500/30 hover:bg-blue-950/20" style={{ animationDelay: '0.2s' }}>
@@ -220,18 +197,18 @@ export default function Home() {
             </div>
         </section>
 
-        {/* Features Section (Moved Down) */}
+        {/* Features Section */}
         <section className="py-16 md:py-24 bg-background animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent text-glow-accent font-poppins">Why ConnectPro?</h2> {/* Added Neon Glow */}
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent text-glow-accent font-poppins">Why ConnectPro?</h2>
              <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
                ConnectPro is more than just a platform; it's your dedicated partner in professional growth. We offer a unique blend of human expertise and AI intelligence to empower your journey.
              </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Feature Card 1 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/20 group animate-fade-in-up hover:border-primary/50" style={{ animationDelay: '0.4s' }}> {/* Enhanced Hover */}
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/20 group animate-fade-in-up hover:border-primary/50" style={{ animationDelay: '0.4s' }}>
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-primary"> {/* Added glow on hover */}
+                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-primary">
                         <Briefcase className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-xl font-semibold font-poppins">Vetted Expert Network</CardTitle>
@@ -243,9 +220,9 @@ export default function Home() {
                  </CardContent>
               </Card>
               {/* Feature Card 2 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/20 group animate-fade-in-up hover:border-accent/50" style={{ animationDelay: '0.5s' }}> {/* Enhanced Hover */}
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/20 group animate-fade-in-up hover:border-accent/50" style={{ animationDelay: '0.5s' }}>
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-accent"> {/* Added glow on hover */}
+                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-accent">
                         <BrainCircuit className="h-8 w-8 text-accent" />
                      </div>
                     <CardTitle className="text-xl font-semibold font-poppins">AI-Powered Guidance</CardTitle>
@@ -257,9 +234,9 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 3 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/20 group animate-fade-in-up hover:border-blue-500/50" style={{ animationDelay: '0.6s' }}> {/* Enhanced Hover */}
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/20 group animate-fade-in-up hover:border-blue-500/50" style={{ animationDelay: '0.6s' }}>
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(59,130,246,0.3)]"> {/* Custom Glow */}
+                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(59,130,246,0.3)]">
                        <Video className="h-8 w-8 text-blue-400" />
                     </div>
                    <CardTitle className="text-xl font-semibold font-poppins">Seamless Video Sessions</CardTitle>
@@ -271,9 +248,9 @@ export default function Home() {
                  </CardContent>
               </Card>
                {/* Feature Card 4 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/20 group animate-fade-in-up hover:border-green-500/50" style={{ animationDelay: '0.7s' }}> {/* Enhanced Hover */}
+              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/20 group animate-fade-in-up hover:border-green-500/50" style={{ animationDelay: '0.7s' }}>
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(34,197,94,0.3)]"> {/* Custom Glow */}
+                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(34,197,94,0.3)]">
                          <Users className="h-8 w-8 text-green-400" />
                      </div>
                      <CardTitle className="text-xl font-semibold font-poppins">Supportive Community</CardTitle>
@@ -285,9 +262,9 @@ export default function Home() {
                  </CardContent>
                </Card>
                 {/* Feature Card 5 */}
-               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/20 group animate-fade-in-up hover:border-yellow-500/50" style={{ animationDelay: '0.8s' }}> {/* Enhanced Hover */}
+               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/20 group animate-fade-in-up hover:border-yellow-500/50" style={{ animationDelay: '0.8s' }}>
                   <CardHeader className="p-6">
-                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(234,179,8,0.3)]"> {/* Custom Glow */}
+                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(234,179,8,0.3)]">
                           <MessageSquare className="h-8 w-8 text-yellow-400" />
                        </div>
                      <CardTitle className="text-xl font-semibold font-poppins">Contextual AI Chat</CardTitle>
@@ -299,9 +276,9 @@ export default function Home() {
                   </CardContent>
                </Card>
                 {/* Feature Card 6 */}
-                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/20 group animate-fade-in-up hover:border-red-500/50" style={{ animationDelay: '0.9s' }}> {/* Enhanced Hover */}
+                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/20 group animate-fade-in-up hover:border-red-500/50" style={{ animationDelay: '0.9s' }}>
                    <CardHeader className="p-6">
-                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(239,68,68,0.3)]"> {/* Custom Glow */}
+                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(239,68,68,0.3)]">
                          <ShieldCheck className="h-8 w-8 text-red-400" />
                        </div>
                       <CardTitle className="text-xl font-semibold font-poppins">Privacy & Security First</CardTitle>
@@ -328,7 +305,7 @@ export default function Home() {
              <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-gradient-to-t from-primary/10 via-primary/5 to-transparent blur-3xl"></div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary text-glow-primary font-poppins">Ready to Connect & Grow?</h2> {/* Added Neon Glow */}
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary text-glow-primary font-poppins">Ready to Connect & Grow?</h2>
                 <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto font-sans">
                   Join ConnectPro today. Unlock personalized expert guidance, leverage cutting-edge AI insights for clearer direction, and participate in a thriving, anonymous community dedicated to mutual support and advancement.
                 </p>
@@ -348,7 +325,7 @@ export default function Home() {
       <footer className="border-t border-border/40 bg-card/30 text-muted-foreground">
         <div className="container mx-auto px-4 md:px-6 py-8 text-center sm:text-left sm:flex sm:justify-between sm:items-center">
            <div className="flex items-center justify-center sm:justify-start gap-2 mb-4 sm:mb-0">
-             <Logo />
+             <Logo /> {/* Use Logo component */}
              <p className="text-sm font-sans">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
            </div>
            <nav className="mt-4 sm:mt-0 space-x-4 text-sm font-sans">
