@@ -14,6 +14,8 @@ import { ArrowLeft, Code, ImageIcon, LinkIcon, MessageCircle, Send, Text } from 
 import { useToast } from '@/hooks/use-toast';
 import ReactMarkdown from 'react-markdown'; // For rendering markdown/code
 import remarkGfm from 'remark-gfm'; // GitHub Flavored Markdown
+import { Label } from '@/components/ui/label'; // Import Label
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"; // Added Alert
 
 // Mock data (replace with actual API fetching)
 interface CommunityPost {
@@ -316,3 +318,4 @@ const CommentSkeleton = () => (
         </div>
     </div>
 );
+
