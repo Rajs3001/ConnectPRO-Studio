@@ -87,8 +87,9 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
             variants={creatorVariants} // Slightly different animation for creator text
             className="flex flex-col items-center"
           >
-            <p className="text-lg md:text-xl text-muted-foreground font-sans">
-              Created by Rajdeep Saha
+             {/* Updated text, size, and added glow effect */}
+            <p className="text-lg md:text-xl text-muted-foreground font-medium font-sans text-glow-primary">
+              An Initiative by Rajdeep Saha
             </p>
           </motion.div>
         )}
