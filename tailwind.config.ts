@@ -66,6 +66,7 @@ export default {
   		},
       fontFamily: {
          sans: ['var(--font-inter)', 'sans-serif'], // Ensure Inter font is used
+         poppins: ['var(--font-poppins)', 'sans-serif'], // Add Poppins font family
       },
       keyframes: { // Define custom keyframes
           "fade-in": {
@@ -82,11 +83,23 @@ export default {
                transform: "translateY(0)",
              },
            },
+            // Keyframe for floating effect
+           float: {
+             '0%, 100%': { transform: 'translateY(0px)' },
+             '50%': { transform: 'translateY(-10px)' }, // Adjust vertical distance
+           },
+           // Keyframe for subtle pulsing effect
+           'pulse-subtle': {
+             '0%, 100%': { opacity: '0.7' },
+             '50%': { opacity: '0.4' }, // Adjust opacity change
+           },
            // Add other keyframes like slide-in, bounce, etc. if needed
        },
        animation: { // Define custom animations using keyframes
           "fade-in": "fade-in 0.5s ease-in-out",
           "fade-in-up": "fade-in-up 0.6s ease-out forwards", // forwards keeps the end state
+          float: 'float 6s ease-in-out infinite', // Add float animation
+          'pulse-subtle': 'pulse-subtle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite', // Add pulse animation
           // Add other animations
        },
   	}
