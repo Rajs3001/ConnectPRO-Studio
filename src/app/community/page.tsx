@@ -211,7 +211,7 @@ export default function CommunityPage() {
 
                 {/* Search Bar (Optional) */}
                 {activeSection === "feed" && (
-                {/* Search Bar (Optional) */}
+
                  <form onSubmit={handleSearch} className="mb-6 p-3 bg-card border border-border/60 rounded-lg shadow-sm flex items-center gap-3">
                     <Search className="h-4 w-4 text-muted-foreground" />
                      <Input
@@ -224,27 +224,27 @@ export default function CommunityPage() {
                  </form>
                 )}
                 {/* Posts Feed */}
-            {activeSection === "feed" && (
-              <div className="space-y-0 border border-border/60 rounded-lg overflow-hidden bg-card max-h-[calc(100vh-20rem)] overflow-y-auto">
-                {loading ? (
-                  [...Array(5)].map((_, i) => <PostSkeleton key={i} />)
-                ) : posts.length > 0 ? (
-                  posts.map((post) => (
-                    <PostCard
-                      key={post.id}
-                      post={post}
-                      onLike={handleLike}
-                      onReshare={handleReshare}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground">No posts available</p>
-                    {searchTerm && <Button variant="link" onClick={() => setSearchTerm("")}>Clear search</Button>}
+                {activeSection === "feed" && (
+                  <div className="space-y-0 border border-border/60 rounded-lg overflow-hidden bg-card max-h-[calc(100vh-20rem)] overflow-y-auto">
+                    {loading ? (
+                      [...Array(5)].map((_, i) => <PostSkeleton key={i} />)
+                    ) : posts.length > 0 ? (
+                      posts.map((post) => (
+                        <PostCard
+                          key={post.id}
+                          post={post}
+                          onLike={handleLike}
+                          onReshare={handleReshare}
+                        />
+                      ))
+                    ) : (
+                      <div className="text-center py-12">
+                        <p className="text-muted-foreground">No posts available</p>
+                        {searchTerm && <Button variant="link" onClick={() => setSearchTerm("")}>Clear search</Button>}
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
                 {activeSection === "reels" && (
                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[...Array(6)].map((_, i) => (
@@ -258,17 +258,21 @@ export default function CommunityPage() {
                   </div>
                  )}
                   {activeSection === "create" && (
-                      <div className="text-center">
-                          <p>Create post section coming soon...</p>
-                      </div>
+                     <div className="text-center py-12">
+                        <Button asChild size="lg">
+                          <Link href="/community/new">
+                             <Plus className="mr-2 h-5 w-5" /> Create New Post
+                          </Link>
+                        </Button>
+                     </div>
                    )}
                      {activeSection === "profile" && (
-                        <div className="text-center">
-                            <p>User profile section coming soon...</p>
+                        <div className="text-center py-12">
+                            <p className="text-muted-foreground">User profile section coming soon...</p>
                              {/* Add a dummy profile section here */}
                         </div>
                     )}
-        
+            </main>
         </div>
     );
 }
