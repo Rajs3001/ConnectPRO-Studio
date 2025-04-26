@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -20,6 +20,30 @@ interface ShortVideo {
   isLiked?: boolean;
 }
 
+// Global Mute State (Simulated - replace with context or Zustand/Redux in a real app)
+let isGloballyMuted = false; // Default to unmuted as per request
+const muteListeners = new Set<(muted: boolean) => void>();
+
+const useGlobalMuteState = (): [boolean, (muted: boolean) => void] => {
+    const [isMuted, setIsMuted] = useState(isGloballyMuted);
+
+    useEffect(() => {
+        const listener = (muted: boolean) => setIsMuted(muted);
+        muteListeners.add(listener);
+        return () => {
+            muteListeners.delete(listener);
+        };
+    }, []);
+
+    const setGlobalMute = useCallback((muted: boolean) => {
+        isGloballyMuted = muted;
+        muteListeners.forEach(listener => listener(muted));
+    }, []);
+
+    return [isMuted, setGlobalMute];
+};
+
+
 // Mock data for Pro Shorts
 const mockShorts: ShortVideo[] = [
   { id: 's1', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', title: 'Quick Git Tips', uploaderName: 'CodeNinja', likes: 1200, comments: 45, shares: 150, isLiked: false },
@@ -31,11 +55,14 @@ const mockShorts: ShortVideo[] = [
 const ShortCard: React.FC<{ short: ShortVideo; isVisible: boolean; onLike: (id: string) => void }> = ({ short, isVisible, onLike }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true); // Start muted
+  const [isMuted, setIsMutedGlobally] = useGlobalMuteState(); // Use global mute state hook
 
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
+
+    // Apply global mute state immediately
+    videoElement.muted = isMuted;
 
     if (isVisible) {
       // Attempt to play when visible
@@ -44,36 +71,37 @@ const ShortCard: React.FC<{ short: ShortVideo; isVisible: boolean; onLike: (id: 
       }).catch(error => {
         // Autoplay might be blocked, user interaction needed
         console.warn("Autoplay blocked for short:", short.id, error);
-        setIsPlaying(false);
+        setIsPlaying(false); // Show play button if autoplay fails
       });
-      // Always start muted or respect current mute state
-      videoElement.muted = isMuted;
     } else {
       // Pause when not visible
       videoElement.pause();
       setIsPlaying(false);
-      // Reset time? Maybe not necessary for short loops
+      // Optionally reset time for short loops if desired when they become invisible
       // videoElement.currentTime = 0;
     }
-  }, [isVisible, short.id, isMuted]); // Add isMuted dependency
+  }, [isVisible, short.id, isMuted]); // Depend on isMuted from global state
 
-  const togglePlay = () => {
+  const togglePlay = (event: React.MouseEvent<HTMLVideoElement>) => {
+    // Prevent the mute toggle from also triggering play/pause if clicked on the mute icon area (though it's outside the video)
+    event.stopPropagation();
     const videoElement = videoRef.current;
     if (!videoElement) return;
     if (videoElement.paused || videoElement.ended) {
-      videoElement.play();
-      setIsPlaying(true);
+      videoElement.play().then(() => setIsPlaying(true)).catch(err => console.error("Play error:", err));
     } else {
       videoElement.pause();
       setIsPlaying(false);
     }
   };
 
-  const toggleMute = () => {
+  const toggleMute = (event: React.MouseEvent<HTMLButtonElement>) => {
+     event.stopPropagation(); // Prevent click from bubbling to video togglePlay
      const videoElement = videoRef.current;
      if (!videoElement) return;
-     videoElement.muted = !videoElement.muted;
-     setIsMuted(videoElement.muted);
+     const newMuteState = !isMuted;
+     videoElement.muted = newMuteState;
+     setIsMutedGlobally(newMuteState); // Update global state
    };
 
 
@@ -84,13 +112,15 @@ const ShortCard: React.FC<{ short: ShortVideo; isVisible: boolean; onLike: (id: 
         src={short.url}
         loop
         playsInline // Important for mobile autoplay
-        muted={isMuted} // Controlled by state
-        className="absolute inset-0 w-full h-full object-cover"
+        muted={isMuted} // Controlled by global state
+        className="absolute inset-0 w-full h-full object-cover cursor-pointer" // Add cursor pointer
         onClick={togglePlay} // Toggle play/pause on video click
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
       />
 
       {/* Overlay for controls and info */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex flex-col justify-between p-4 text-white">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex flex-col justify-between p-4 text-white pointer-events-none"> {/* Make overlay non-interactive for clicks */}
         {/* Top Info (optional) */}
         <div></div>
 
@@ -109,7 +139,7 @@ const ShortCard: React.FC<{ short: ShortVideo; isVisible: boolean; onLike: (id: 
           </div>
 
           {/* Right: Actions */}
-          <div className="flex flex-col items-center space-y-3">
+          <div className="flex flex-col items-center space-y-3 pointer-events-auto"> {/* Make actions interactive */}
              <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 h-10 w-10" onClick={() => onLike(short.id)}>
                 <Heart className={cn("h-6 w-6", short.isLiked && "fill-red-500 text-red-500")} />
                 <span className="text-[10px] mt-0.5">{short.likes}</span>
@@ -129,7 +159,7 @@ const ShortCard: React.FC<{ short: ShortVideo; isVisible: boolean; onLike: (id: 
         </div>
       </div>
 
-       {/* Play/Pause indicator in center (optional) */}
+       {/* Play/Pause indicator in center (only show if paused AND visible) */}
        {!isPlaying && isVisible && (
          <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
             <Play className="h-16 w-16 text-white/70" fill="currentColor" />
@@ -144,7 +174,7 @@ export default function ProShortsSection() {
   const [visibleShortIndex, setVisibleShortIndex] = useState(0);
   const [shortsData, setShortsData] = useState<ShortVideo[]>(mockShorts); // Use state for likes
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -152,24 +182,41 @@ export default function ProShortsSection() {
     const cardHeight = container.clientHeight; // Height of the viewport
 
     const newIndex = Math.round(scrollPosition / cardHeight);
-    setVisibleShortIndex(newIndex);
-  };
+     if (newIndex !== visibleShortIndex) {
+        setVisibleShortIndex(newIndex);
+     }
+  }, [visibleShortIndex]); // Only depend on visibleShortIndex to prevent excessive updates
 
   useEffect(() => {
     const container = containerRef.current;
-    container?.addEventListener('scroll', handleScroll);
-    return () => container?.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Debounce scroll handler
+     let scrollTimeout: NodeJS.Timeout;
+     const debouncedScrollHandler = () => {
+         clearTimeout(scrollTimeout);
+         scrollTimeout = setTimeout(handleScroll, 50); // Adjust debounce time as needed
+     };
+
+    container?.addEventListener('scroll', debouncedScrollHandler);
+    return () => {
+         container?.removeEventListener('scroll', debouncedScrollHandler);
+         clearTimeout(scrollTimeout);
+     };
+  }, [handleScroll]); // Rerun effect if handleScroll changes (due to visibleShortIndex dependency)
 
   // Handle scroll buttons
   const scrollByCard = (direction: 'up' | 'down') => {
      const container = containerRef.current;
      if (!container) return;
      const cardHeight = container.clientHeight;
-     container.scrollBy({
-       top: direction === 'up' ? -cardHeight : cardHeight,
-       behavior: 'smooth',
-     });
+     const currentScroll = container.scrollTop;
+     const targetIndex = direction === 'up' ? Math.max(0, visibleShortIndex - 1) : Math.min(shortsData.length - 1, visibleShortIndex + 1);
+     const targetScroll = targetIndex * cardHeight;
+
+     // Use smooth scrolling
+     container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+
+     // Update visible index immediately for button disable state, scroll handler will confirm later
+     // setVisibleShortIndex(targetIndex); // Potentially causes race condition, let scroll handler manage it.
    };
 
 
@@ -213,7 +260,7 @@ export default function ProShortsSection() {
         <Button
             variant="ghost"
             size="icon"
-            className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-white bg-black/30 hover:bg-black/50"
+            className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-white bg-black/30 hover:bg-black/50 disabled:opacity-30"
             onClick={() => scrollByCard('up')}
             disabled={visibleShortIndex === 0}
             aria-label="Scroll Up"
@@ -223,7 +270,7 @@ export default function ProShortsSection() {
          <Button
              variant="ghost"
              size="icon"
-             className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-white bg-black/30 hover:bg-black/50"
+             className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-white bg-black/30 hover:bg-black/50 disabled:opacity-30"
              onClick={() => scrollByCard('down')}
              disabled={visibleShortIndex === shortsData.length - 1}
              aria-label="Scroll Down"
@@ -233,3 +280,6 @@ export default function ProShortsSection() {
      </div>
   );
 }
+
+
+    

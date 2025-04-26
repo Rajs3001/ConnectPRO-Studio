@@ -2,47 +2,56 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Use for redirection
-// Removed AppLayout import
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'; // Adjusted imports
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from '@/hooks/use-toast';
-import { CodeXml, Image as ImageIconLucid, Link as LinkIconLucid, Send, Text, ArrowLeft, UserCircle } from 'lucide-react'; // Renamed icons
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'; // Added Avatar
-import Link from 'next/link'; // Import Link
+import { CodeXml, Image as ImageIconLucid, Link as LinkIconLucid, Send, Text, ArrowLeft, UserCircle, Hash, FileText as FileTextIcon, MessageSquare } from 'lucide-react'; // Added Hash, FileTextIcon, MessageSquare
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge'; // Import Badge
 
 type PostType = 'text' | 'image' | 'code' | 'link';
 
 // Simulate authentication check - Replace with actual auth logic
 const useAuthCheck = () => {
     const router = useRouter();
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Start as null
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
     useEffect(() => {
         const checkAuth = async () => {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Simulate async check
-            const authStatus = true; // Assume user is logged in for now
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const authStatus = true;
             setIsAuthenticated(authStatus);
             if (!authStatus) {
                 console.log("User not authenticated, redirecting to login...");
-                router.push('/login/user?redirect=/community/new'); // Redirect to login if not authenticated
+                router.push('/login/user?redirect=/community/new');
             }
         };
         checkAuth();
     }, [router]);
 
-    return isAuthenticated; // Return the auth status
+    return isAuthenticated;
 };
+
+// Mock suggestions
+const popularHashtags = ['#careeradvice', '#tech', '#interviewtips', '#remotework', '#python'];
+const postTemplates = [
+    { title: 'Ask for Advice', content: 'Seeking advice on [Your Topic/Challenge]...\n\nBackground: [Provide context]\n\nQuestion: [Your specific question(s)]\n\nAny insights appreciated! #advice #[relevantTag]' },
+    { title: 'Share a Resource', content: 'Found this helpful resource for [Topic]:\n\n[Link to resource]\n\nWhy it\'s useful: [Brief explanation]\n\n#resource #[relevantTag]' },
+    { title: 'Project Showcase', content: 'Sharing a project I worked on: [Project Title/Link]\n\nKey features/learnings: [Highlight key aspects]\n\nTech stack: [List technologies]\n\n#showcase #[projectTag]' },
+];
+
 
 export default function NewCommunityPostPage() {
     const isAuthenticated = useAuthCheck();
     const { toast } = useToast();
     const router = useRouter();
-    const [title, setTitle] = useState(''); // Optional title
+    const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState('');
     const [postType, setPostType] = useState<PostType>('text');
@@ -68,7 +77,7 @@ export default function NewCommunityPostPage() {
             title: title.trim() || `Anonymous ${postType} post`, // Default title if empty
             content,
             type: postType,
-            tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+            tags: tags.split(',').map(tag => tag.trim().replace(/^#/, '')).filter(Boolean), // Remove leading # if present
             // Timestamp, likes, comments will be added server-side
         };
         console.log('Submitting new anonymous post:', postData);
@@ -116,6 +125,27 @@ export default function NewCommunityPostPage() {
         // Default to Textarea for 'text' type
         return <Textarea {...commonProps} rows={5} />;
     };
+
+     // Add suggested template content to the textarea
+     const applyTemplate = (templateContent: string) => {
+        setContent(templateContent);
+        // Optionally set post type if template implies it, e.g., code template
+        // setPostType('text'); // Reset to text or deduce from template
+        toast({ title: "Template Applied", description: "Template content added to your post." });
+     };
+
+     // Add suggested hashtag to the tags input
+     const addHashtag = (tag: string) => {
+        const cleanTag = tag.replace(/^#/, ''); // Remove leading #
+        setTags(prevTags => {
+            const existingTags = prevTags.split(',').map(t => t.trim()).filter(Boolean);
+            if (existingTags.includes(cleanTag)) {
+                return prevTags; // Avoid duplicates
+            }
+            return prevTags ? `${prevTags}, ${cleanTag}` : cleanTag;
+        });
+     };
+
 
      // Show loading or require login screen
      if (isAuthenticated === null) {
@@ -196,6 +226,45 @@ export default function NewCommunityPostPage() {
                                         className="text-sm border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 bg-transparent h-auto"
                                     />
                                 </div>
+
+                                 {/* Suggestions Section */}
+                                 <div className="space-y-3 pt-2">
+                                     {/* Popular Hashtags */}
+                                     <div>
+                                        <Label className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1.5">
+                                            <Hash size={14} /> Popular Tags
+                                        </Label>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {popularHashtags.map(tag => (
+                                                <Badge key={tag} variant="secondary" className="cursor-pointer hover:bg-secondary/80 text-xs font-normal" onClick={() => addHashtag(tag)}>
+                                                    {tag}
+                                                </Badge>
+                                            ))}
+                                        </div>
+                                     </div>
+                                     {/* Post Templates (only show for text posts maybe?) */}
+                                     {postType === 'text' && (
+                                        <div>
+                                            <Label className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1.5">
+                                                 <FileTextIcon size={14} /> Post Templates
+                                            </Label>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {postTemplates.map(template => (
+                                                    <Button
+                                                        key={template.title}
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="text-xs h-7 px-2"
+                                                        onClick={() => applyTemplate(template.content)}
+                                                    >
+                                                        {template.title}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                     )}
+                                 </div>
+
                              </div>
                         </CardContent>
 
@@ -223,6 +292,11 @@ export default function NewCommunityPostPage() {
                                      <RadioGroupItem value="link" id="r-link" className="sr-only"/>
                                      <LinkIconLucid size={20} className={postType === 'link' ? 'text-orange-500' : 'text-muted-foreground'}/>
                                  </Label>
+                                  {/* Video Post Type - Add if supported */}
+                                 {/* <Label htmlFor="r-video" className="cursor-pointer p-2 rounded-full hover:bg-red-500/10 data-[state=checked]:bg-red-500/10">
+                                     <RadioGroupItem value="video" id="r-video" className="sr-only"/>
+                                     <Video size={20} className={postType === 'video' ? 'text-red-500' : 'text-muted-foreground'}/>
+                                 </Label> */}
                             </RadioGroup>
                             {/* Character count or other info could go here */}
                          </CardFooter>
@@ -232,3 +306,5 @@ export default function NewCommunityPostPage() {
         </div>
     );
 }
+
+    

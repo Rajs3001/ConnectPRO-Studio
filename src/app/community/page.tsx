@@ -14,11 +14,12 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from "lucide-react";
-import CommunityProfileSection from "@/components/community/ProfileSection"; // Import profile section component
-import CommunitySearchSection from "@/components/community/SearchSection"; // Import search section component
-import CommunityGroupsSection from "@/components/community/GroupsSection"; // Import groups section component
-import CommunityMessagesSection from "@/components/community/MessagesSection"; // Import messages section component
+import CommunityProfileSection from "@/components/community/ProfileSection";
+import CommunitySearchSection from "@/components/community/SearchSection";
+import CommunityGroupsSection from "@/components/community/GroupsSection";
+import CommunityMessagesSection from "@/components/community/MessagesSection";
 import ProShortsSection from "@/components/community/ProShortsSection"; // Import Pro Shorts section component
+import NewCommunityPostPage from "./new/page"; // Import Create Post page component
 
 
 // Mock data for community posts (replace with actual API fetching)
@@ -93,6 +94,16 @@ const typeIcons = {
     image: ImageIcon,
     code: Code,
     link: LinkIconLucid, // Use the aliased import
+};
+
+const sectionTitles: Record<CommunitySection, string> = {
+    feed: "Community Feed",
+    shorts: "Pro Shorts",
+    create: "Create Post",
+    search: "Search Community",
+    groups: "Community Groups",
+    messages: "Messages & Chats",
+    profile: "My Profile",
 };
 
 
@@ -187,11 +198,14 @@ export default function CommunityPage() {
              {/* Community Header */}
             <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                    <Link href="/" className="text-2xl font-bold text-primary font-poppins text-glow-primary">
-                        ConnectPro Community
-                     </Link>
-                     {/* Profile icon removed from here */}
-                     <div>{/* Placeholder for potential future header actions */}</div>
+                    {/* Display current section title */}
+                    <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary">
+                        {sectionTitles[activeSection]}
+                    </h1>
+                    {/* Back to Home or other global actions */}
+                    <Button variant="ghost" size="sm" asChild>
+                        <Link href="/">Home</Link>
+                    </Button>
                 </div>
              </header>
 
@@ -218,18 +232,9 @@ export default function CommunityPage() {
                         )}
                      </div>
                  )}
-                 {/* Replaced Reels with Pro Shorts */}
                  {activeSection === "shorts" && <ProShortsSection />}
-                  {activeSection === "create" && (
-                     <div className="text-center py-12 flex flex-col items-center">
-                         <p className="text-muted-foreground mb-4">Ready to share something?</p>
-                        <Button asChild size="lg">
-                          <Link href="/community/new">
-                             <Plus className="mr-2 h-5 w-5" /> Create New Post
-                          </Link>
-                        </Button>
-                     </div>
-                   )}
+                  {/* Render the NewCommunityPostPage component directly for 'create' section */}
+                  {activeSection === "create" && <NewCommunityPostPage />}
                  {activeSection === "search" && <CommunitySearchSection />}
                  {activeSection === "groups" && <CommunityGroupsSection />}
                  {activeSection === "messages" && <CommunityMessagesSection />}
@@ -239,41 +244,54 @@ export default function CommunityPage() {
              {/* Community Bottom Navigation Bar (Fixed) */}
              <nav className="sticky bottom-0 z-40 w-full border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                  <div className="container mx-auto flex h-14 items-center justify-around px-4 md:px-6">
-                     {/* Feed Icon */}
-                     <button onClick={() => setActiveSection("feed")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "feed" ? "text-primary" : "text-muted-foreground"}`}>
+                      {/* Feed Icon */}
+                      <button onClick={() => setActiveSection("feed")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "feed" ? "text-primary" : "text-muted-foreground"}`}>
                          <Home className="h-6 w-6" />
-                         {/* <p className="text-xs font-medium mt-0.5">Feed</p> */}
-                     </button>
-                     {/* Pro Shorts Icon */}
-                     <button onClick={() => setActiveSection("shorts")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "shorts" ? "text-primary" : "text-muted-foreground"}`}>
-                         <Clapperboard className="h-6 w-6" /> {/* Changed Icon */}
-                         {/* <p className="text-xs font-medium mt-0.5">Shorts</p> */}
-                     </button>
-                     {/* Create Icon */}
-                     <button onClick={() => setActiveSection("create")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "create" ? "text-primary" : "text-muted-foreground"}`}>
-                         <PlusCircle className="h-6 w-6" />
-                         {/* <p className="text-xs font-medium mt-0.5">Create</p> */}
-                     </button>
-                     {/* Search Icon */}
-                      <button onClick={() => setActiveSection("search")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}>
-                        <Search className="h-6 w-6" />
-                        {/* <p className="text-xs font-medium mt-0.5">Search</p> */}
+                          {/* Underline for active state */}
+                          {activeSection === 'feed' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
                       </button>
-                       {/* Groups Icon */}
-                       <button onClick={() => setActiveSection("groups")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "groups" ? "text-primary" : "text-muted-foreground"}`}>
-                           <Users className="h-6 w-6" />
-                           {/* <p className="text-xs font-medium mt-0.5">Groups</p> */}
-                       </button>
+
+                      {/* Pro Shorts Icon */}
+                      <button onClick={() => setActiveSection("shorts")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "shorts" ? "text-primary" : "text-muted-foreground"}`}>
+                          <Clapperboard className="h-6 w-6" />
+                          {activeSection === 'shorts' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
+                      </button>
+
+                      {/* Create Icon (Centered, Larger, Background) */}
+                      <button
+                         onClick={() => setActiveSection("create")}
+                         className={`flex-1 flex flex-col items-center justify-center relative -mt-4 group`} // Lift button up
+                         aria-label="Create Post"
+                       >
+                         <div className={`h-12 w-12 rounded-full flex items-center justify-center transition-all duration-300 ${activeSection === "create" ? "bg-primary shadow-lg scale-110" : "bg-secondary group-hover:bg-primary/20"}`}>
+                            <PlusCircle className={`h-7 w-7 transition-colors duration-200 ${activeSection === "create" ? "text-primary-foreground" : "text-primary group-hover:text-primary"}`} />
+                         </div>
+                          {/* No text label for create button */}
+                      </button>
+
+                      {/* Search Icon */}
+                      <button onClick={() => setActiveSection("search")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}>
+                         <Search className="h-6 w-6" />
+                         {activeSection === 'search' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
+                      </button>
+
+                      {/* Groups Icon */}
+                      <button onClick={() => setActiveSection("groups")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "groups" ? "text-primary" : "text-muted-foreground"}`}>
+                          <Users className="h-6 w-6" />
+                          {activeSection === 'groups' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
+                      </button>
+
                        {/* Messages Icon */}
-                       <button onClick={() => setActiveSection("messages")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "messages" ? "text-primary" : "text-muted-foreground"}`}>
+                       <button onClick={() => setActiveSection("messages")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "messages" ? "text-primary" : "text-muted-foreground"}`}>
                            <MessageCircle className="h-6 w-6" />
-                           {/* <p className="text-xs font-medium mt-0.5">Messages</p> */}
+                           {activeSection === 'messages' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
                        </button>
-                      {/* Profile Icon */}
-                      <button onClick={() => setActiveSection("profile")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "profile" ? "text-primary" : "text-muted-foreground"}`}>
-                        <UserCircle className="h-6 w-6" />
-                        {/* <p className="text-xs font-medium mt-0.5">Profile</p> */}
-                     </button>
+
+                       {/* Profile Icon */}
+                       <button onClick={() => setActiveSection("profile")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "profile" ? "text-primary" : "text-muted-foreground"}`}>
+                          <UserCircle className="h-6 w-6" />
+                          {activeSection === 'profile' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
+                       </button>
                  </div>
              </nav>
         </div>
@@ -473,3 +491,6 @@ const PostSkeleton = () => (
 );
 
 
+
+
+    
