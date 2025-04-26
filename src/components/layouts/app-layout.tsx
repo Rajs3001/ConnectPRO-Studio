@@ -41,7 +41,7 @@ const getUserMenuItems = (): MenuItem[] => [
     { href: '/user/find-professional', label: 'Find Professionals', icon: Search },
     { href: '/user/appointments', label: 'My Appointments', icon: Calendar },
     { href: '/user/chat/ai', label: 'AI Counselor', icon: Bot }, // Direct link to AI chat
-    // { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
+    { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
     { href: `/user/profile`, label: 'Profile Settings', icon: Settings },
 ];
 
@@ -49,7 +49,7 @@ const getProfessionalMenuItems = (): MenuItem[] => [
     { href: `/professional/dashboard`, label: 'Dashboard', icon: LayoutDashboard, exact: true },
     { href: '/professional/schedule', label: 'Manage Schedule', icon: Calendar },
     { href: '/professional/appointments', label: 'Appointments', icon: UserCog },
-    // { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
+    { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
     // { href: '/professional/chat', label: 'Chats', icon: MessageSquare }, // Keep commented if not implemented
     { href: `/professional/profile`, label: 'Profile & Settings', icon: Settings },
 ];
