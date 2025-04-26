@@ -24,23 +24,24 @@ export default function ViewCommunityProfilePage() {
   console.log("Viewing profile for ID:", profileId);
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen" data-testid={`view-profile-page-${profileId}`}>
       {/* Simple Header for Profile View */}
-      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="view-profile-header">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-          <Button variant="ghost" size="icon" onClick={() => router.back()}>
+          <Button variant="ghost" size="icon" onClick={() => router.back()} data-testid="view-profile-back-button">
             <ChevronLeft size={20} />
           </Button>
-          <h1 className="text-lg font-semibold">Profile</h1>
+          <h1 className="text-lg font-semibold" data-testid="view-profile-title">Profile</h1>
           <div>{/* Placeholder */}</div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto py-8 max-w-4xl">
+      <main className="container mx-auto py-8 max-w-4xl" data-testid="view-profile-main-content">
         {/* Render the profile section - pass profileId and potentially a 'viewOnly' prop */}
-        <CommunityProfileSection />
+        <CommunityProfileSection profileId={profileId} viewOnly={true} /> {/* Pass profileId and viewOnly flag */}
       </main>
     </div>
   );
 }
+

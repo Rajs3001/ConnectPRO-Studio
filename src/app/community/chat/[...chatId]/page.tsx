@@ -201,17 +201,17 @@ export default function CommunityChatPage() {
 
   return (
      // This page doesn't use AppLayout, it's a focused chat view
-      <div className="flex flex-col h-screen bg-background">
+      <div className="flex flex-col h-screen bg-background" data-testid="chat-page-container">
        {loadingChat ? (
            <ChatLoadingSkeleton />
        ) : chatPartner ? (
-          <Card className="flex-1 flex flex-col shadow-lg overflow-hidden border-none rounded-none">
+          <Card className="flex-1 flex flex-col shadow-lg overflow-hidden border-none rounded-none" data-testid={`chat-card-${chatPartner.id}`}>
             {/* Chat Header */}
-            <CardHeader className="flex flex-row items-center gap-3 border-b p-3 bg-muted/50 sticky top-0 z-10">
-              <Button variant="ghost" size="icon" className="mr-1 h-8 w-8" onClick={() => router.back()}>
+            <CardHeader className="flex flex-row items-center gap-3 border-b p-3 bg-muted/50 sticky top-0 z-10" data-testid="chat-header">
+              <Button variant="ghost" size="icon" className="mr-1 h-8 w-8" onClick={() => router.back()} data-testid="chat-back-button">
                   <ChevronLeft size={20} />
               </Button>
-              <Avatar className="h-9 w-9">
+              <Avatar className="h-9 w-9" data-testid="chat-partner-avatar">
                  <AvatarImage src={chatPartner.avatarUrl} />
                  <AvatarFallback>
                     {chatPartner.type === 'ai' ? <Bot size={18} /> :
@@ -219,12 +219,12 @@ export default function CommunityChatPage() {
                      chatPartner.initials}
                   </AvatarFallback>
               </Avatar>
-              <CardTitle className="text-base font-medium">{chatPartner.name}</CardTitle>
+              <CardTitle className="text-base font-medium" data-testid="chat-partner-name">{chatPartner.name}</CardTitle>
               {/* Add group members icon or other actions here */}
             </CardHeader>
 
             {/* Message Area */}
-            <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+            <ScrollArea className="flex-1 p-4" ref={scrollAreaRef} data-testid="chat-message-area">
               <div className="space-y-4 pb-4">
                 {messages.map((message) => (
                   <div
@@ -233,9 +233,10 @@ export default function CommunityChatPage() {
                       "flex items-end gap-2 max-w-[85%]", // Allow slightly wider messages
                        message.senderId === 'currentUser' ? 'ml-auto flex-row-reverse' : 'mr-auto'
                     )}
+                    data-testid={`message-${message.id}`}
                   >
                      {message.senderId !== 'currentUser' && (
-                       <Avatar className="h-7 w-7 self-start mt-1 shrink-0"> {/* Align avatar top */}
+                       <Avatar className="h-7 w-7 self-start mt-1 shrink-0" data-testid={`message-avatar-${message.senderId}`}> {/* Align avatar top */}
                           <AvatarImage src={message.senderAvatar || chatPartner.avatarUrl} /> {/* Use sender avatar if available */}
                           <AvatarFallback>
                             {message.senderName.substring(0, 1).toUpperCase()}
@@ -250,14 +251,15 @@ export default function CommunityChatPage() {
                           : 'bg-muted text-foreground',
                         message.isError ? 'bg-destructive text-destructive-foreground border border-destructive-foreground/20' : ''
                       )}
+                      data-testid="message-content-bubble"
                     >
                      {/* Display sender name for groups, optional for DMs */}
                       {chatPartner.type === 'group' && message.senderId !== 'currentUser' && (
-                          <p className="text-xs font-semibold mb-0.5 opacity-80">{message.senderName}</p>
+                          <p className="text-xs font-semibold mb-0.5 opacity-80" data-testid="message-sender-name">{message.senderName}</p>
                       )}
-                     <p>{message.text}</p>
+                     <p data-testid="message-text">{message.text}</p>
                      {message.timestamp && (
-                         <p className="text-[10px] opacity-60 mt-1 text-right">
+                         <p className="text-[10px] opacity-60 mt-1 text-right" data-testid="message-timestamp">
                            {formatTime(message.timestamp)}
                          </p>
                       )}
@@ -269,8 +271,8 @@ export default function CommunityChatPage() {
             </ScrollArea>
 
             {/* Input Footer */}
-            <CardFooter className="p-3 border-t bg-muted/30">
-              <form onSubmit={handleSendMessage} className="flex w-full items-center gap-2">
+            <CardFooter className="p-3 border-t bg-muted/30" data-testid="chat-footer">
+              <form onSubmit={handleSendMessage} className="flex w-full items-center gap-2" data-testid="chat-input-form">
                 <Input
                   placeholder="Type your message..."
                   value={newMessage}
@@ -279,8 +281,9 @@ export default function CommunityChatPage() {
                   className="flex-1 bg-background focus:ring-primary h-9 text-sm"
                   autoComplete="off"
                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) handleSendMessage(e); }}
+                  data-testid="chat-input"
                 />
-                <Button type="submit" size="icon" className="h-9 w-9" disabled={isLoading || !newMessage.trim() || !chatPartner} aria-label="Send Message">
+                <Button type="submit" size="icon" className="h-9 w-9" disabled={isLoading || !newMessage.trim() || !chatPartner} aria-label="Send Message" data-testid="chat-send-button">
                   <Send className="h-4 w-4" />
                 </Button>
               </form>
@@ -288,14 +291,14 @@ export default function CommunityChatPage() {
           </Card>
        ) : (
           // Handle case where chat couldn't be loaded
-           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-              <Button variant="outline" size="sm" className="mb-4" onClick={() => router.back()}>
+           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center" data-testid="chat-not-found">
+              <Button variant="outline" size="sm" className="mb-4" onClick={() => router.back()} data-testid="chat-not-found-back-button">
                   <ChevronLeft className="mr-1 h-4 w-4" /> Back
               </Button>
              <Card className="max-w-md p-6 shadow-lg">
-                 <CardTitle className="text-destructive">Chat Not Found</CardTitle>
-                 <CardDescription className="mt-2 mb-4">Could not load the requested chat.</CardDescription>
-                  <Button asChild variant="secondary">
+                 <CardTitle className="text-destructive" data-testid="chat-not-found-title">Chat Not Found</CardTitle>
+                 <CardDescription className="mt-2 mb-4" data-testid="chat-not-found-description">Could not load the requested chat.</CardDescription>
+                  <Button asChild variant="secondary" data-testid="chat-not-found-community-link">
                     <Link href="/community">Go to Community</Link>
                   </Button>
               </Card>
@@ -307,7 +310,7 @@ export default function CommunityChatPage() {
 
 // Helper Components
 const ChatLoadingSkeleton = () => (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col" data-testid="chat-loading-skeleton">
         <CardHeader className="flex flex-row items-center gap-3 border-b p-3 bg-muted/50 sticky top-0 z-10">
             <Skeleton className="h-9 w-9 rounded-full" />
             <Skeleton className="h-5 w-32" />
@@ -325,8 +328,8 @@ const ChatLoadingSkeleton = () => (
 );
 
 const TypingIndicator: React.FC<{ partner: ChatPartner }> = ({ partner }) => (
-    <div className="flex items-end gap-2 max-w-[75%] mr-auto">
-        <Avatar className="h-7 w-7 self-start mt-1 shrink-0">
+    <div className="flex items-end gap-2 max-w-[75%] mr-auto" data-testid="typing-indicator">
+        <Avatar className="h-7 w-7 self-start mt-1 shrink-0" data-testid="typing-indicator-avatar">
             <AvatarImage src={partner.avatarUrl} />
             <AvatarFallback>
                  {partner.type === 'ai' ? <Bot size={14} /> :
@@ -349,4 +352,5 @@ const TypingIndicator: React.FC<{ partner: ChatPartner }> = ({ partner }) => (
 function formatTime(date: Date): string {
   return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
 }
+
 

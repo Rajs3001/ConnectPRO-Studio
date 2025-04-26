@@ -14,7 +14,7 @@ import { ArrowLeft, Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle
 import { useToast } from '@/hooks/use-toast';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label'; // Import Label
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from '@/lib/utils'; // Import cn
 import Link from 'next/link'; // Import Link
@@ -277,33 +277,33 @@ export default function CommunityPostPage() {
     const renderContent = (p: CommunityPost) => {
         switch (p.type) {
             case 'image':
-                return <img src={p.content} alt={p.title} className="mt-2 rounded-lg border border-border/60 w-full object-contain max-h-[70vh]" />;
+                return <img src={p.content} alt={p.title} className="mt-2 rounded-lg border border-border/60 w-full object-contain max-h-[70vh]" data-testid="post-image-content" />;
             case 'code':
-                return <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-md mt-2">{p.content}</ReactMarkdown>;
+                return <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-md mt-2" data-testid="post-code-content">{p.content}</ReactMarkdown>;
             case 'link':
                 return (
-                    <a href={p.content} target="_blank" rel="noopener noreferrer" className="block mt-2 border border-border/60 rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                    <a href={p.content} target="_blank" rel="noopener noreferrer" className="block mt-2 border border-border/60 rounded-lg p-4 hover:bg-muted/50 transition-colors" data-testid="post-link-content">
                         <p className="font-medium text-primary">{p.title}</p>
                         <p className="text-sm text-muted-foreground break-all">{p.content}</p>
                     </a>
                 );
             case 'text':
             default:
-                return <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm md:prose-base dark:prose-invert max-w-none mt-2 whitespace-pre-wrap">{p.content}</ReactMarkdown>;
+                return <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm md:prose-base dark:prose-invert max-w-none mt-2 whitespace-pre-wrap" data-testid="post-text-content">{p.content}</ReactMarkdown>;
         }
     };
 
       // Show loading or require login screen
       if (isAuthenticated === null) {
          return (
-             <div className="flex items-center justify-center min-h-screen bg-background">
+             <div className="flex items-center justify-center min-h-screen bg-background" data-testid="auth-loading-screen">
                  <SiteLoader size="lg" />
              </div>
          );
      }
      if (isAuthenticated === false) {
           return (
-              <div className="flex items-center justify-center min-h-screen bg-background">
+              <div className="flex items-center justify-center min-h-screen bg-background" data-testid="auth-redirect-screen">
                  <p className="text-muted-foreground">Redirecting to login...</p>
               </div>
           );
@@ -312,91 +312,91 @@ export default function CommunityPostPage() {
 
     return (
          // Removed AppLayout, using simple div wrapper
-         <div className="bg-background min-h-screen">
+         <div className="bg-background min-h-screen" data-testid="post-detail-page">
              {/* Community Header */}
-             <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+             <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="post-detail-header">
                  <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
                       {/* Back Button */}
-                     <Button variant="ghost" size="icon" className="text-foreground" onClick={() => router.back()}>
+                     <Button variant="ghost" size="icon" className="text-foreground" onClick={() => router.back()} data-testid="back-button">
                          <ArrowLeft size={20} />
                      </Button>
-                     <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary">
+                     <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary" data-testid="page-title">
                          Post Details
                      </h1>
                       {/* Placeholder for User Menu or Profile Button */}
-                     <Avatar className="h-9 w-9">
+                     <Avatar className="h-9 w-9" data-testid="user-header-avatar">
                          {/* <AvatarImage src="user-avatar.png" /> */}
                          <AvatarFallback><UserCircle size={20} /></AvatarFallback>
                       </Avatar>
                  </div>
              </header>
 
-            <main className="container mx-auto py-6 max-w-2xl">
+            <main className="container mx-auto py-6 max-w-2xl" data-testid="post-detail-main-content">
                 {/* Post Details */}
                 {loadingPost ? (
                     <PostDetailsSkeleton />
                 ) : post ? (
-                    <Card className="mb-6 shadow-none border-none rounded-none"> {/* Remove card look */}
-                         <CardHeader className="flex flex-row gap-3 px-4 pt-4 pb-2">
-                            <Avatar className="h-10 w-10 bg-secondary">
+                    <Card className="mb-6 shadow-none border-none rounded-none" data-testid={`post-card-${post.id}`}> {/* Remove card look */}
+                         <CardHeader className="flex flex-row gap-3 px-4 pt-4 pb-2" data-testid="post-header">
+                            <Avatar className="h-10 w-10 bg-secondary" data-testid="post-author-avatar">
                                 <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
                             </Avatar>
                             <div className="flex-grow">
                                 <div className="flex items-center justify-between">
                                     <div className='flex items-center gap-2'>
-                                        <span className="font-semibold text-sm">Anonymous</span>
+                                        <span className="font-semibold text-sm" data-testid="post-author-name">Anonymous</span>
                                         <span className="text-xs text-muted-foreground">&middot;</span>
-                                         <span className="text-xs text-muted-foreground">{timeAgo(post.timestamp)}</span>
+                                         <span className="text-xs text-muted-foreground" data-testid="post-timestamp">{timeAgo(post.timestamp)}</span>
                                     </div>
                                      {/* More actions button (...) */}
                                 </div>
                                  {/* Title can be optional or integrated */}
-                                 <h2 className="text-lg font-semibold mt-0.5">{post.title}</h2>
+                                 <h2 className="text-lg font-semibold mt-0.5" data-testid="post-title">{post.title}</h2>
                             </div>
                          </CardHeader>
-                         <CardContent className="px-4 pt-1 pb-3">
+                         <CardContent className="px-4 pt-1 pb-3" data-testid="post-content">
                             {renderContent(post)}
                              {/* Tags */}
                              {post.tags && post.tags.length > 0 && (
-                                <div className="mt-4 flex flex-wrap gap-1">
+                                <div className="mt-4 flex flex-wrap gap-1" data-testid="post-tags">
                                     {post.tags.map(tag => (
-                                        <Badge key={tag} variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-secondary/80">#{tag}</Badge>
+                                        <Badge key={tag} variant="secondary" className="text-xs font-normal cursor-pointer hover:bg-secondary/80" data-testid={`post-tag-${tag}`}>#{tag}</Badge>
                                     ))}
                                 </div>
                              )}
                          </CardContent>
                          {/* Stats and Actions */}
-                          <div className="px-4 pt-3 pb-2 border-t border-border/60 flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>{post.likeCount} Likes</span>
-                            <span>{post.commentCount} Comments</span>
-                            <span>{post.reshareCount} Reshares</span>
+                          <div className="px-4 pt-3 pb-2 border-t border-border/60 flex items-center gap-4 text-xs text-muted-foreground" data-testid="post-stats">
+                            <span data-testid="post-like-count">{post.likeCount} Likes</span>
+                            <span data-testid="post-comment-count">{post.commentCount} Comments</span>
+                            <span data-testid="post-reshare-count">{post.reshareCount} Reshares</span>
                           </div>
-                         <CardFooter className="px-4 py-2 border-t border-border/60 flex justify-around items-center text-muted-foreground">
+                         <CardFooter className="px-4 py-2 border-t border-border/60 flex justify-around items-center text-muted-foreground" data-testid="post-actions">
                               {/* Action Bar */}
-                              <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm hover:text-blue-500", "flex-1 justify-center")} onClick={() => document.getElementById('new-comment')?.focus()}>
+                              <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm hover:text-blue-500", "flex-1 justify-center")} onClick={() => document.getElementById('new-comment')?.focus()} data-testid="comment-action-button">
                                  <MessageCircle size={18} />
                                  <span className="ml-1 hidden sm:inline">Comment</span>
                               </Button>
-                               <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm", post.resharedByMe ? "text-green-500" : "hover:text-green-500", "flex-1 justify-center")} onClick={handleResharePost}>
+                               <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm", post.resharedByMe ? "text-green-500" : "hover:text-green-500", "flex-1 justify-center")} onClick={handleResharePost} data-testid="reshare-action-button">
                                   <Repeat size={18} className={cn(post.resharedByMe ? "fill-current" : "")}/>
                                   <span className="ml-1 hidden sm:inline">Reshare</span>
                                </Button>
-                               <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm", post.likedByMe ? "text-red-500" : "hover:text-red-500", "flex-1 justify-center")} onClick={handleLikePost}>
+                               <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm", post.likedByMe ? "text-red-500" : "hover:text-red-500", "flex-1 justify-center")} onClick={handleLikePost} data-testid="like-action-button">
                                    <Heart size={18} className={cn(post.likedByMe ? "fill-current" : "")}/>
                                    <span className="ml-1 hidden sm:inline">Like</span>
                                </Button>
-                               <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm hover:text-primary", "flex-1 justify-center")} onClick={handleShare}>
+                               <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-sm hover:text-primary", "flex-1 justify-center")} onClick={handleShare} data-testid="share-action-button">
                                    <Share2 size={18} />
                                    <span className="ml-1 hidden sm:inline">Share</span>
                                </Button>
                          </CardFooter>
                     </Card>
                 ) : (
-                    <Card className="text-center py-12 bg-card border border-destructive/50">
+                    <Card className="text-center py-12 bg-card border border-destructive/50" data-testid="post-not-found">
                         <CardContent>
                             <p className="text-destructive font-semibold">Post not found.</p>
                             <p className="text-muted-foreground text-sm mt-1">The post may have been removed or the link is incorrect.</p>
-                             <Button variant="outline" size="sm" className="mt-4" onClick={() => router.push('/community')}>
+                             <Button variant="outline" size="sm" className="mt-4" onClick={() => router.push('/community')} data-testid="go-to-feed-button">
                                 Go to Community Feed
                             </Button>
                         </CardContent>
@@ -405,10 +405,10 @@ export default function CommunityPostPage() {
 
                 {/* Add Comment Form */}
                  {post && (
-                     <Card className="mb-6 border-t border-b border-border/60 shadow-none rounded-none">
-                         <form onSubmit={handlePostComment}>
+                     <Card className="mb-6 border-t border-b border-border/60 shadow-none rounded-none" data-testid="add-comment-card">
+                         <form onSubmit={handlePostComment} data-testid="add-comment-form">
                              <CardContent className="p-4 flex gap-3 items-start">
-                                  <Avatar className="h-10 w-10 bg-secondary mt-1 shrink-0">
+                                  <Avatar className="h-10 w-10 bg-secondary mt-1 shrink-0" data-testid="add-comment-avatar">
                                      <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
                                   </Avatar>
                                  <div className="flex-grow">
@@ -422,9 +422,10 @@ export default function CommunityPostPage() {
                                          disabled={postingComment || loadingPost}
                                          required
                                          className="mb-3 bg-background/80 focus:bg-background border-border/60 focus:ring-primary text-sm resize-none" // No resize
+                                         data-testid="new-comment-textarea"
                                      />
                                      <div className="flex justify-end">
-                                          <Button type="submit" disabled={postingComment || !newComment.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-4 h-8 text-xs">
+                                          <Button type="submit" disabled={postingComment || !newComment.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-4 h-8 text-xs" data-testid="submit-comment-button">
                                               {postingComment ? 'Posting...' : 'Reply'}
                                           </Button>
                                       </div>
@@ -435,9 +436,9 @@ export default function CommunityPostPage() {
                  )}
 
                 {/* Comments Section */}
-                 <div className="mt-0 border-t border-border/60" id="comments"> {/* Anchor for comment button */}
+                 <div className="mt-0 border-t border-border/60" id="comments" data-testid="comments-section"> {/* Anchor for comment button */}
                       {loadingComments ? (
-                           <div className="flex items-center justify-center py-8">
+                           <div className="flex items-center justify-center py-8" data-testid="comments-loading">
                               <SiteLoader size="md" />
                            </div>
                       ) : comments.length > 0 ? (
@@ -450,7 +451,7 @@ export default function CommunityPostPage() {
                                />
                           ))
                       ) : !loadingPost && post ? ( // Only show if post loaded and no comments
-                           <p className="text-muted-foreground text-center py-8 text-sm">Be the first to comment.</p>
+                           <p className="text-muted-foreground text-center py-8 text-sm" data-testid="no-comments-message">Be the first to comment.</p>
                       ) : null }
                   </div>
             </main>
@@ -470,9 +471,9 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onLike, onReshare })
      <Card className={cn(
         "shadow-none hover:bg-muted/30 transition-colors duration-150 border-b border-border/60 rounded-none last:border-b-0", // More like Twitter/Threads
         "flex p-4 gap-3" // Use flex layout
-    )}>
+    )} data-testid={`comment-card-${comment.id}`}>
          {/* Avatar Column */}
-        <div className="shrink-0">
+        <div className="shrink-0" data-testid="comment-avatar-column">
             <Avatar className="h-10 w-10 bg-secondary">
                 <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
             </Avatar>
@@ -480,19 +481,19 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onLike, onReshare })
         </div>
 
         {/* Content Column */}
-        <div className="flex-grow overflow-hidden"> {/* Added overflow-hidden */}
+        <div className="flex-grow overflow-hidden" data-testid="comment-content-column"> {/* Added overflow-hidden */}
             {/* Comment Header */}
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-between gap-2" data-testid="comment-header">
                  <div className="flex items-center gap-2 overflow-hidden"> {/* Added overflow-hidden */}
-                     <span className="font-semibold text-sm truncate">Anonymous</span> {/* Truncate if needed */}
+                     <span className="font-semibold text-sm truncate" data-testid="comment-author-name">Anonymous</span> {/* Truncate if needed */}
                      <span className="text-xs text-muted-foreground">&middot;</span>
-                     <span className="text-xs text-muted-foreground flex-shrink-0">{timeAgo(comment.timestamp)}</span>
+                     <span className="text-xs text-muted-foreground flex-shrink-0" data-testid="comment-timestamp">{timeAgo(comment.timestamp)}</span>
                  </div>
                  {/* Optional: More actions button (...) */}
             </div>
 
              {/* Comment Content */}
-            <div className="mt-1 text-sm text-foreground/90 whitespace-pre-wrap"> {/* Allow line breaks */}
+            <div className="mt-1 text-sm text-foreground/90 whitespace-pre-wrap" data-testid="comment-content"> {/* Allow line breaks */}
                  <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm dark:prose-invert max-w-none">
                       {comment.content}
                   </ReactMarkdown>
@@ -500,24 +501,24 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onLike, onReshare })
 
 
              {/* Action Bar */}
-             <div className="mt-2 flex items-center text-muted-foreground -ml-2">
+             <div className="mt-2 flex items-center text-muted-foreground -ml-2" data-testid="comment-actions">
                   {/* Reply Button (placeholder) */}
-                   <Button variant="ghost" size="sm" className="flex items-center gap-1.5 text-xs hover:text-blue-500">
+                   <Button variant="ghost" size="sm" className="flex items-center gap-1.5 text-xs hover:text-blue-500" data-testid="comment-reply-button">
                       <MessageCircle size={16} />
                       {/* Reply count if nested */}
                    </Button>
                    {/* Reshare Button */}
-                   <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-xs", comment.resharedByMe ? "text-green-500" : "hover:text-green-500")} onClick={() => onReshare(comment.id)}>
+                   <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-xs", comment.resharedByMe ? "text-green-500" : "hover:text-green-500")} onClick={() => onReshare(comment.id)} data-testid="comment-reshare-button">
                       <Repeat size={16} className={cn(comment.resharedByMe ? "fill-current" : "")}/>
-                      <span>{comment.reshareCount && comment.reshareCount > 0 ? comment.reshareCount : ''}</span>
+                      <span data-testid="comment-reshare-count">{comment.reshareCount && comment.reshareCount > 0 ? comment.reshareCount : ''}</span>
                    </Button>
                    {/* Like Button */}
-                   <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-xs", comment.likedByMe ? "text-red-500" : "hover:text-red-500")} onClick={() => onLike(comment.id)}>
+                   <Button variant="ghost" size="sm" className={cn("flex items-center gap-1.5 text-xs", comment.likedByMe ? "text-red-500" : "hover:text-red-500")} onClick={() => onLike(comment.id)} data-testid="comment-like-button">
                        <Heart size={16} className={cn(comment.likedByMe ? "fill-current" : "")}/>
-                       <span>{comment.likeCount > 0 ? comment.likeCount : ''}</span>
+                       <span data-testid="comment-like-count">{comment.likeCount > 0 ? comment.likeCount : ''}</span>
                    </Button>
                     {/* Share Button (placeholder) */}
-                   <Button variant="ghost" size="sm" className="flex items-center gap-1.5 text-xs hover:text-primary">
+                   <Button variant="ghost" size="sm" className="flex items-center gap-1.5 text-xs hover:text-primary" data-testid="comment-share-button">
                        <Share2 size={16} />
                    </Button>
              </div>
@@ -528,7 +529,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onLike, onReshare })
 
 // Skeleton Loaders (Updated)
 const PostDetailsSkeleton = () => (
-    <Card className="mb-6 shadow-none border-none rounded-none">
+    <Card className="mb-6 shadow-none border-none rounded-none" data-testid="post-details-skeleton">
         <CardHeader className="flex flex-row gap-3 px-4 pt-4 pb-2">
              <Skeleton className="h-10 w-10 rounded-full bg-muted/50" />
              <div className="flex-grow space-y-1.5">
@@ -560,7 +561,7 @@ const PostDetailsSkeleton = () => (
 );
 
 const CommentSkeleton = () => (
-    <Card className="border-b border-border/60 rounded-none flex p-4 gap-3">
+    <Card className="border-b border-border/60 rounded-none flex p-4 gap-3" data-testid="comment-skeleton">
         <div className="shrink-0">
             <Skeleton className="h-10 w-10 rounded-full bg-muted/50" />
         </div>
@@ -580,3 +581,4 @@ const CommentSkeleton = () => (
         </div>
     </Card>
 );
+

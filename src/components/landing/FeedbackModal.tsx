@@ -83,11 +83,11 @@ export default function FeedbackModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
+        <Button variant="outline" className="border-primary text-primary hover:bg-primary/10" data-testid="feedback-trigger-button">
           Provide Feedback
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-[480px]" data-testid="feedback-dialog-content">
         <AnimatePresence mode="wait">
           {isSubmitted ? (
             <motion.div
@@ -97,6 +97,7 @@ export default function FeedbackModal() {
               initial="hidden"
               animate="visible"
               exit="exit"
+              data-testid="feedback-success-message"
             >
               <motion.div variants={successVariants}>
                 <CheckCircle className="h-16 w-16 text-green-500 mb-4 mx-auto" />
@@ -105,14 +106,14 @@ export default function FeedbackModal() {
               </motion.div>
             </motion.div>
           ) : (
-            <motion.div key="form">
+            <motion.div key="form" data-testid="feedback-form-container">
               <DialogHeader>
-                <DialogTitle>Connect PRO Feedback</DialogTitle>
-                <DialogDescription>
+                <DialogTitle data-testid="feedback-dialog-title">Connect PRO Feedback</DialogTitle>
+                <DialogDescription data-testid="feedback-dialog-description">
                   Share your thoughts to help us make ConnectPro better.
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} data-testid="feedback-form">
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="name" className="text-right col-span-1 flex items-center gap-1 justify-end">
@@ -125,6 +126,7 @@ export default function FeedbackModal() {
                       className="col-span-3"
                       required
                       disabled={isSubmitting}
+                      data-testid="feedback-name-input"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -139,6 +141,7 @@ export default function FeedbackModal() {
                       className="col-span-3"
                       required
                       disabled={isSubmitting}
+                      data-testid="feedback-email-input"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -152,6 +155,7 @@ export default function FeedbackModal() {
                       onChange={(e) => setPhone(e.target.value)}
                       className="col-span-3"
                       disabled={isSubmitting}
+                      data-testid="feedback-phone-input"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-start gap-4">
@@ -166,16 +170,17 @@ export default function FeedbackModal() {
                       required
                       disabled={isSubmitting}
                       placeholder="Tell us what you think..."
+                      data-testid="feedback-textarea"
                     />
                   </div>
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button type="button" variant="outline" disabled={isSubmitting}>
+                    <Button type="button" variant="outline" disabled={isSubmitting} data-testid="feedback-cancel-button">
                       Cancel
                     </Button>
                   </DialogClose>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button type="submit" disabled={isSubmitting} data-testid="feedback-submit-button">
                     {isSubmitting ? 'Submitting...' : <><Send size={16} className="mr-2"/> Submit Feedback</>}
                   </Button>
                 </DialogFooter>

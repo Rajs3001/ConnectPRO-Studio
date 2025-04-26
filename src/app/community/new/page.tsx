@@ -113,7 +113,8 @@ export default function NewCommunityPostPage() {
             placeholder: getInputPlaceholder(),
             disabled: loading,
             required: true,
-            className: "text-base border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 bg-transparent shadow-none h-auto resize-none min-h-[120px]" // Basic textarea look
+            className: "text-base border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 bg-transparent shadow-none h-auto resize-none min-h-[120px]", // Basic textarea look
+            'data-testid': `post-content-input-${postType}`
         };
 
         if (postType === 'image' || postType === 'link') {
@@ -150,14 +151,14 @@ export default function NewCommunityPostPage() {
      // Show loading or require login screen
      if (isAuthenticated === null) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-background">
+            <div className="flex items-center justify-center min-h-screen bg-background" data-testid="auth-loading-screen">
                 <p className="text-muted-foreground">Checking authentication...</p>
             </div>
         );
     }
     if (isAuthenticated === false) {
          return (
-             <div className="flex items-center justify-center min-h-screen bg-background">
+             <div className="flex items-center justify-center min-h-screen bg-background" data-testid="auth-redirect-screen">
                 <p className="text-muted-foreground">Redirecting to login...</p>
              </div>
          );
@@ -165,36 +166,36 @@ export default function NewCommunityPostPage() {
 
     return (
        // Removed AppLayout
-        <div className="bg-background min-h-screen">
+        <div className="bg-background min-h-screen" data-testid="new-post-page">
            {/* Community Header */}
-           <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+           <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="new-post-header">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
                      {/* Back Button */}
-                     <Button variant="ghost" size="icon" className="text-foreground" onClick={() => router.back()}>
+                     <Button variant="ghost" size="icon" className="text-foreground" onClick={() => router.back()} data-testid="back-button">
                          <ArrowLeft size={20} />
                      </Button>
-                     <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary">
+                     <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary" data-testid="page-title">
                          Create New Post
                      </h1>
                      {/* Post Button */}
-                      <Button type="submit" form="new-post-form" disabled={loading || !content.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 h-9">
+                      <Button type="submit" form="new-post-form" disabled={loading || !content.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 h-9" data-testid="submit-post-button">
                          {loading ? 'Posting...' : 'Post'}
                      </Button>
                 </div>
             </header>
 
-            <main className="container mx-auto py-8 max-w-2xl">
-                 <form id="new-post-form" onSubmit={handleSubmit}>
-                    <Card className="shadow-none border border-border/60 rounded-lg overflow-hidden bg-card">
+            <main className="container mx-auto py-8 max-w-2xl" data-testid="new-post-main-content">
+                 <form id="new-post-form" onSubmit={handleSubmit} data-testid="new-post-form">
+                    <Card className="shadow-none border border-border/60 rounded-lg overflow-hidden bg-card" data-testid="new-post-card">
                         {/* Header removed, controls are in main header now */}
                          <CardContent className="p-4 flex gap-3">
-                             <Avatar className="h-10 w-10 bg-secondary mt-1 shrink-0">
+                             <Avatar className="h-10 w-10 bg-secondary mt-1 shrink-0" data-testid="user-avatar">
                                 <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
                              </Avatar>
                              <div className="flex-grow space-y-4">
                                 {/* Optional Title Input (shown for Code) */}
                                 {postType === 'code' && (
-                                    <div className="space-y-1">
+                                    <div className="space-y-1" data-testid="post-title-input-container">
                                         <Label htmlFor="title" className="sr-only">Title</Label>
                                         <Input
                                             id="title"
@@ -204,18 +205,19 @@ export default function NewCommunityPostPage() {
                                             disabled={loading}
                                             required
                                             className="text-lg font-semibold border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 bg-transparent h-auto"
+                                            data-testid="post-title-input"
                                         />
                                     </div>
                                 )}
 
                                 {/* Content Area */}
-                                <div className="space-y-1">
+                                <div className="space-y-1" data-testid="post-content-container">
                                     <Label htmlFor="content" className="sr-only">{getInputPlaceholder()}</Label>
                                     {renderContentInput()}
                                 </div>
 
                                  {/* Tags Input */}
-                                <div className="space-y-1">
+                                <div className="space-y-1" data-testid="post-tags-container">
                                     <Label htmlFor="tags" className="sr-only">Tags</Label>
                                     <Input
                                         id="tags"
@@ -224,19 +226,20 @@ export default function NewCommunityPostPage() {
                                         placeholder="#add #tags (optional, comma-separated)"
                                         disabled={loading}
                                         className="text-sm border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 bg-transparent h-auto"
+                                        data-testid="post-tags-input"
                                     />
                                 </div>
 
                                  {/* Suggestions Section */}
-                                 <div className="space-y-3 pt-2">
+                                 <div className="space-y-3 pt-2" data-testid="suggestions-section">
                                      {/* Popular Hashtags */}
-                                     <div>
+                                     <div data-testid="popular-tags-section">
                                         <Label className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1.5">
                                             <Hash size={14} /> Popular Tags
                                         </Label>
                                         <div className="flex flex-wrap gap-1.5">
                                             {popularHashtags.map(tag => (
-                                                <Badge key={tag} variant="secondary" className="cursor-pointer hover:bg-secondary/80 text-xs font-normal" onClick={() => addHashtag(tag)}>
+                                                <Badge key={tag} variant="secondary" className="cursor-pointer hover:bg-secondary/80 text-xs font-normal" onClick={() => addHashtag(tag)} data-testid={`popular-tag-${tag.replace('#', '')}`}>
                                                     {tag}
                                                 </Badge>
                                             ))}
@@ -244,7 +247,7 @@ export default function NewCommunityPostPage() {
                                      </div>
                                      {/* Post Templates (only show for text posts maybe?) */}
                                      {postType === 'text' && (
-                                        <div>
+                                        <div data-testid="post-templates-section">
                                             <Label className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1.5">
                                                  <FileTextIcon size={14} /> Post Templates
                                             </Label>
@@ -256,6 +259,7 @@ export default function NewCommunityPostPage() {
                                                         size="sm"
                                                         className="text-xs h-7 px-2"
                                                         onClick={() => applyTemplate(template.content)}
+                                                        data-testid={`template-button-${template.title.toLowerCase().replace(/\s+/g, '-')}`}
                                                     >
                                                         {template.title}
                                                     </Button>
@@ -269,27 +273,28 @@ export default function NewCommunityPostPage() {
                         </CardContent>
 
                          {/* Post Type Selector Footer */}
-                         <CardFooter className="p-4 border-t border-border/60 flex justify-between items-center">
+                         <CardFooter className="p-4 border-t border-border/60 flex justify-between items-center" data-testid="post-type-footer">
                              <RadioGroup
                                 defaultValue="text"
                                 className="flex flex-wrap gap-1"
                                 onValueChange={(value: PostType) => setPostType(value)}
                                 value={postType}
+                                data-testid="post-type-radiogroup"
                               >
-                                <Label htmlFor="r-text" className="cursor-pointer p-2 rounded-full hover:bg-blue-500/10 data-[state=checked]:bg-blue-500/10">
-                                    <RadioGroupItem value="text" id="r-text" className="sr-only" />
+                                <Label htmlFor="r-text" className="cursor-pointer p-2 rounded-full hover:bg-blue-500/10 data-[state=checked]:bg-blue-500/10" data-testid="post-type-label-text">
+                                    <RadioGroupItem value="text" id="r-text" className="sr-only" data-testid="post-type-radio-text"/>
                                     <Text size={20} className={postType === 'text' ? 'text-blue-500' : 'text-muted-foreground'}/>
                                 </Label>
-                                <Label htmlFor="r-image" className="cursor-pointer p-2 rounded-full hover:bg-green-500/10 data-[state=checked]:bg-green-500/10">
-                                    <RadioGroupItem value="image" id="r-image" className="sr-only"/>
+                                <Label htmlFor="r-image" className="cursor-pointer p-2 rounded-full hover:bg-green-500/10 data-[state=checked]:bg-green-500/10" data-testid="post-type-label-image">
+                                    <RadioGroupItem value="image" id="r-image" className="sr-only" data-testid="post-type-radio-image"/>
                                     <ImageIconLucid size={20} className={postType === 'image' ? 'text-green-500' : 'text-muted-foreground'}/>
                                 </Label>
-                                 <Label htmlFor="r-code" className="cursor-pointer p-2 rounded-full hover:bg-purple-500/10 data-[state=checked]:bg-purple-500/10">
-                                    <RadioGroupItem value="code" id="r-code" className="sr-only"/>
+                                 <Label htmlFor="r-code" className="cursor-pointer p-2 rounded-full hover:bg-purple-500/10 data-[state=checked]:bg-purple-500/10" data-testid="post-type-label-code">
+                                    <RadioGroupItem value="code" id="r-code" className="sr-only" data-testid="post-type-radio-code"/>
                                     <CodeXml size={20} className={postType === 'code' ? 'text-purple-500' : 'text-muted-foreground'}/>
                                  </Label>
-                                 <Label htmlFor="r-link" className="cursor-pointer p-2 rounded-full hover:bg-orange-500/10 data-[state=checked]:bg-orange-500/10">
-                                     <RadioGroupItem value="link" id="r-link" className="sr-only"/>
+                                 <Label htmlFor="r-link" className="cursor-pointer p-2 rounded-full hover:bg-orange-500/10 data-[state=checked]:bg-orange-500/10" data-testid="post-type-label-link">
+                                     <RadioGroupItem value="link" id="r-link" className="sr-only" data-testid="post-type-radio-link"/>
                                      <LinkIconLucid size={20} className={postType === 'link' ? 'text-orange-500' : 'text-muted-foreground'}/>
                                  </Label>
                                   {/* Video Post Type - Add if supported */}
@@ -307,4 +312,4 @@ export default function NewCommunityPostPage() {
     );
 }
 
-    
+

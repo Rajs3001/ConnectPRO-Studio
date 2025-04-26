@@ -16,12 +16,13 @@ const SiteLoader: React.FC<SiteLoaderProps> = ({ className, size = 'md' }) => {
   };
 
   return (
-    <div className={cn('flex items-center justify-center p-4', className)}>
+    <div className={cn('flex items-center justify-center p-4', className)} data-testid={`site-loader-${size}`}>
       <Logo
         className={cn(
           sizeClasses[size],
           'text-primary animate-pulse-logo' // Apply custom pulse animation
         )}
+        data-testid="site-loader-logo"
       />
     </div>
   );

@@ -37,6 +37,7 @@ const Preloader: React.FC = () => {
       initial="hidden"
       animate="visible"
       exit="exit"
+      data-testid="preloader-container"
     >
       {/* Stage 1 & 2: Logo and Name */}
        <motion.div
@@ -44,13 +45,15 @@ const Preloader: React.FC = () => {
           initial="visible" // Start visible
           animate="visible"
           exit="exit" // Exit when initiative text appears
+          data-testid="preloader-logo-name-stage"
        >
-        <motion.div variants={logoVariants}>
+        <motion.div variants={logoVariants} data-testid="preloader-logo">
           <Logo className="h-20 w-20 md:h-28 md:w-28 text-primary" />
         </motion.div>
         <motion.h1
           className="mt-4 text-3xl md:text-4xl font-bold font-poppins text-glow-primary"
           variants={nameVariants}
+          data-testid="preloader-app-name"
         >
           ConnectPro
         </motion.h1>
@@ -60,8 +63,9 @@ const Preloader: React.FC = () => {
        <motion.div
           className="absolute bottom-10" // Positioned at the bottom
           variants={initiativeVariants}
+          data-testid="preloader-initiative-stage"
         >
-        <p className="text-lg md:text-xl font-medium text-primary text-glow-primary font-poppins">
+        <p className="text-lg md:text-xl font-medium text-primary text-glow-primary font-poppins" data-testid="preloader-initiative-text">
           An Initiative by Rajdeep Saha
         </p>
        </motion.div>
