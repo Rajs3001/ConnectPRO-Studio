@@ -24,7 +24,8 @@ import NewCommunityPostPage from "./new/page"; // Import Create Post page compon
 
 // Mock data for community posts (replace with actual API fetching)
 
-type CommunitySection = "feed" | "shorts" | "create" | "search" | "groups" | "messages" | "profile"; // Updated section name
+type CommunitySection = "feed" | "shorts" | "search" | "create" | "groups" | "messages" | "profile"; // Updated section order
+
 interface CommunityPost {
     id: string;
     type: 'text' | 'image' | 'code' | 'link';
@@ -96,11 +97,12 @@ const typeIcons = {
     link: LinkIconLucid, // Use the aliased import
 };
 
+// Updated section titles
 const sectionTitles: Record<CommunitySection, string> = {
     feed: "Community Feed",
     shorts: "Pro Shorts",
-    create: "Create Post",
     search: "Search Community",
+    create: "Create Post",
     groups: "Community Groups",
     messages: "Messages & Chats",
     profile: "My Profile",
@@ -202,10 +204,9 @@ export default function CommunityPage() {
                     <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary">
                         {sectionTitles[activeSection]}
                     </h1>
-                    {/* Back to Home or other global actions */}
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href="/">Home</Link>
-                    </Button>
+                    {/* Removed Back to Home button */}
+                    {/* Placeholder for potential future actions */}
+                    <div></div>
                 </div>
              </header>
 
@@ -233,9 +234,9 @@ export default function CommunityPage() {
                      </div>
                  )}
                  {activeSection === "shorts" && <ProShortsSection />}
-                  {/* Render the NewCommunityPostPage component directly for 'create' section */}
-                  {activeSection === "create" && <NewCommunityPostPage />}
                  {activeSection === "search" && <CommunitySearchSection />}
+                 {/* Render the NewCommunityPostPage component directly for 'create' section */}
+                 {activeSection === "create" && <NewCommunityPostPage />}
                  {activeSection === "groups" && <CommunityGroupsSection />}
                  {activeSection === "messages" && <CommunityMessagesSection />}
                  {activeSection === "profile" && <CommunityProfileSection />}
@@ -257,6 +258,12 @@ export default function CommunityPage() {
                           {activeSection === 'shorts' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
                       </button>
 
+                       {/* Search Icon */}
+                       <button onClick={() => setActiveSection("search")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}>
+                          <Search className="h-6 w-6" />
+                          {activeSection === 'search' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
+                       </button>
+
                       {/* Create Icon (Centered, Larger, Background) */}
                       <button
                          onClick={() => setActiveSection("create")}
@@ -267,12 +274,6 @@ export default function CommunityPage() {
                             <PlusCircle className={`h-7 w-7 transition-colors duration-200 ${activeSection === "create" ? "text-primary-foreground" : "text-primary group-hover:text-primary"}`} />
                          </div>
                           {/* No text label for create button */}
-                      </button>
-
-                      {/* Search Icon */}
-                      <button onClick={() => setActiveSection("search")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 relative ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}>
-                         <Search className="h-6 w-6" />
-                         {activeSection === 'search' && <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"></span>}
                       </button>
 
                       {/* Groups Icon */}
