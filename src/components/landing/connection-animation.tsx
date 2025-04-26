@@ -41,24 +41,22 @@ const ConnectionAnimation: React.FC = () => {
   const iconClass = "h-7 w-7 md:h-8 md:w-8 transition-colors duration-300"; // Responsive icon size
   const textClass = "text-[10px] md:text-xs font-semibold text-muted-foreground mt-1.5 text-center"; // Responsive text size
 
-  // Adjusted node positions using percentages for better responsiveness in SVG viewBox 0 0 600 250
-  // Increased viewBox height for more vertical space
+  // Adjusted node positions for better alignment within viewBox="0 0 600 250"
   const nodeSize = 45; // Approximate icon container size for path calculation
-  const studentPos = { x: 50, y: 125 }; // Centered vertically
-  const searchPos = { x: 180, y: 75 }; // Top path
-  const filterPos = { x: 180, y: 175 }; // Bottom path
-  const messagePos = { x: 310, y: 75 }; // Top path
-  const videoPos = { x: 310, y: 175 }; // Bottom path
-  const professionalPos = { x: 440, y: 125 }; // Centered vertically
-  const growthPos = { x: 550, y: 125 }; // Centered vertically
+  const pathOffset = nodeSize / 2.5; // Offset for path start/end
 
-  // Calculate path end/start points closer to icon centers/edges
-  const pathOffset = nodeSize / 2.5; // Offset based on icon container size
+  const studentPos = { x: 50, y: 125 };
+  const searchPos = { x: 180, y: 75 };
+  const filterPos = { x: 180, y: 175 };
+  const messagePos = { x: 310, y: 75 };
+  const videoPos = { x: 310, y: 175 };
+  const professionalPos = { x: 440, y: 125 };
+  const growthPos = { x: 550, y: 125 };
+
 
   return (
     <motion.div
-      // Removed card background, use relative positioning for layout
-      className="relative w-full max-w-5xl mx-auto flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-hidden"
+      className="relative w-full max-w-5xl mx-auto flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-visible" // Changed overflow to visible
       key={Date.now()} // Key to force re-render on view, triggering animation
       variants={containerVariants}
       initial="hidden"
@@ -68,11 +66,11 @@ const ConnectionAnimation: React.FC = () => {
       {/* SVG for lines */}
       <motion.svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 600 250" // Adjusted viewBox
+        viewBox="0 0 600 250" // Keep viewBox
         preserveAspectRatio="xMidYMid meet"
         style={{ zIndex: 5 }}
       >
-        {/* Lines from Student to Search/Filter (using Bezier curves for smoother paths) */}
+        {/* Lines from Student to Search/Filter */}
         <motion.path
            d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 60},${studentPos.y} ${searchPos.x - 60},${searchPos.y} ${searchPos.x - pathOffset},${searchPos.y}`}
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
@@ -182,7 +180,7 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-20 md:w-24" // Wider for longer text
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Use auto width for label
          style={{ left: `${videoPos.x / 6}%`, top: `${videoPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
@@ -190,7 +188,7 @@ const ConnectionAnimation: React.FC = () => {
              <div className={cn(`${iconBgClass} bg-red-500/10 border-red-500/30 group-hover:bg-red-500/20 group-hover:border-red-500/50 group-hover:shadow-glow-primary`)}>
                <Video className={`${iconClass} text-red-500 group-hover:text-red-400`} />
              </div>
-             <span className={textClass}>Video Call</span>
+             <span className={textClass}>Video Call</span> {/* Ensure label is not cut off */}
            </Link>
        </motion.div>
 

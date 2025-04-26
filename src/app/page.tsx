@@ -14,6 +14,7 @@ import Logo from '@/components/shared/logo'; // Import the shared Logo component
 import React from 'react'; // Keep React import
 import MatrixBackground from '@/components/landing/matrix-background';
 import FeedbackModal from '@/components/landing/FeedbackModal'; // Import the new modal
+import ConnectingDotsBackground from '@/components/landing/connecting-dots-background'; // Import the new background animation
 
 
 export default function Home() {
@@ -26,7 +27,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity font-poppins">
-                <Logo /> {/* Use Logo component */}
+                <Logo className="h-8 w-8" /> {/* Adjusted size */}
                 <span className="text-glow-primary">ConnectPro</span>
             </Link>
           <nav className="space-x-2 md:space-x-4">
@@ -44,7 +45,7 @@ export default function Home() {
       <main className="flex-grow relative z-10"> {/* Ensure main content is above background */}
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
-          {/* Background Shapes & Logo Backdrop */}
+          {/* Background Shapes & Logo Backdrop & Connecting Dots */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
              {/* Subtle gradient shapes */}
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
@@ -53,6 +54,8 @@ export default function Home() {
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-20">
                  <Logo className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] opacity-5 text-primary/50 blur-[2px]" /> {/* Large, transparent, blurred logo */}
              </div>
+             {/* Connecting Dots Animation */}
+             <ConnectingDotsBackground className="absolute inset-0 opacity-30" />
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
@@ -292,7 +295,7 @@ export default function Home() {
            {/* Logo and Copyright */}
            <div className="flex flex-col items-center md:items-start gap-4">
              <div className="flex items-center gap-2">
-                 <Logo /> {/* Use Logo component */}
+                 <Logo className="h-8 w-8" /> {/* Adjusted size */}
                  <span className="text-lg font-semibold text-foreground font-poppins">ConnectPro</span>
              </div>
              <p className="text-sm font-sans text-center md:text-left">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
