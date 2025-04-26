@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle, Plus, Search, Text, UserCircle, Share2, Repeat, Video, PlusCircle, Home, Users } from 'lucide-react'; // Added Home, Users icons
+import { Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle, Plus, Search, Text, UserCircle, Share2, Repeat, Video, PlusCircle, Home, Users, Clapperboard } from 'lucide-react'; // Added Clapperboard icon
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -18,16 +18,18 @@ import CommunityProfileSection from "@/components/community/ProfileSection"; // 
 import CommunitySearchSection from "@/components/community/SearchSection"; // Import search section component
 import CommunityGroupsSection from "@/components/community/GroupsSection"; // Import groups section component
 import CommunityMessagesSection from "@/components/community/MessagesSection"; // Import messages section component
+import ProShortsSection from "@/components/community/ProShortsSection"; // Import Pro Shorts section component
 
 
 // Mock data for community posts (replace with actual API fetching)
 
-type CommunitySection = "feed" | "reels" | "create" | "search" | "groups" | "messages" | "profile"; // Added groups, messages
+type CommunitySection = "feed" | "shorts" | "create" | "search" | "groups" | "messages" | "profile"; // Updated section name
 interface CommunityPost {
     id: string;
     type: 'text' | 'image' | 'code' | 'link';
     // authorId: string; // Link post to an author for profile viewing later (even if displayed as Anonymous)
-    // authorName: string; // For display if not anonymous, or internal linking
+    authorName?: string; // Generated display name
+    displayName: string; // Anonymous display name
     title: string;
     content?: string; // Add full content for potential preview expansion
     excerpt: string;
@@ -67,11 +69,11 @@ const fetchCommunityPosts = async (filters: { query?: string; type?: string } = 
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
 
     const allPosts: CommunityPost[] = [
-        { id: 'p1', type: 'text', title: 'Navigating Career Change in Tech?', excerpt: 'Feeling stuck in my current role. Anyone successfully transitioned from non-tech to a dev role? Looking for advice and resources...', tags: ['career', 'tech', 'advice'], timestamp: new Date(Date.now() - 3600000), commentCount: 15, likeCount: 42, reshareCount: 5, likedByMe: false, resharedByMe: false },
-        { id: 'p2', type: 'code', title: 'Python Script for Data Cleaning', content: '```python\nimport pandas as pd\n# ... rest of the script ...\n```', excerpt: 'Sharing a small script I wrote for cleaning CSV files. Hope it helps someone! #python #datascience', tags: ['python', 'data-science', 'code'], timestamp: new Date(Date.now() - 7200000), commentCount: 8, likeCount: 25, reshareCount: 2, likedByMe: true, resharedByMe: false },
-        { id: 'p3', type: 'image', title: 'My Remote Work Setup Inspiration', content: 'https://picsum.photos/seed/setup/800/600', excerpt: 'Finally happy with my home office setup! Thought I\'d share for inspiration. #remotework #productivity', tags: ['remote-work', 'setup', 'inspiration'], timestamp: new Date(Date.now() - 10800000), commentCount: 22, likeCount: 68, reshareCount: 12, likedByMe: false, resharedByMe: true },
-        { id: 'p4', type: 'link', title: 'Useful Free Resource for Learning Docker', content: 'https://docs.docker.com/get-started/', excerpt: 'Found this comprehensive free tutorial on Docker basics. Highly recommended!', tags: ['docker', 'devops', 'learning', 'resource'], timestamp: new Date(Date.now() - 14400000), commentCount: 5, likeCount: 18, reshareCount: 3, likedByMe: false, resharedByMe: false },
-        { id: 'p5', type: 'text', title: 'Best Practices for API Design?', excerpt: 'What are some key principles you follow when designing RESTful APIs? Looking for different perspectives.', tags: ['api', 'design', 'best-practices', 'backend'], timestamp: new Date(Date.now() - 18000000), commentCount: 30, likeCount: 95, reshareCount: 10, likedByMe: true, resharedByMe: true },
+        { id: 'p1', type: 'text', displayName: 'TechSeeker34', title: 'Navigating Career Change in Tech?', excerpt: 'Feeling stuck in my current role. Anyone successfully transitioned from non-tech to a dev role? Looking for advice and resources...', tags: ['career', 'tech', 'advice'], timestamp: new Date(Date.now() - 3600000), commentCount: 15, likeCount: 42, reshareCount: 5, likedByMe: false, resharedByMe: false },
+        { id: 'p2', type: 'code', displayName: 'CodeWhisperer99', title: 'Python Script for Data Cleaning', content: '```python\nimport pandas as pd\n# ... rest of the script ...\n```', excerpt: 'Sharing a small script I wrote for cleaning CSV files. Hope it helps someone! #python #datascience', tags: ['python', 'data-science', 'code'], timestamp: new Date(Date.now() - 7200000), commentCount: 8, likeCount: 25, reshareCount: 2, likedByMe: true, resharedByMe: false },
+        { id: 'p3', type: 'image', displayName: 'PixelDreamer1', title: 'My Remote Work Setup Inspiration', content: 'https://picsum.photos/seed/setup/800/600', excerpt: 'Finally happy with my home office setup! Thought I\'d share for inspiration. #remotework #productivity', tags: ['remote-work', 'setup', 'inspiration'], timestamp: new Date(Date.now() - 10800000), commentCount: 22, likeCount: 68, reshareCount: 12, likedByMe: false, resharedByMe: true },
+        { id: 'p4', type: 'link', displayName: 'InfoHunter7', title: 'Useful Free Resource for Learning Docker', content: 'https://docs.docker.com/get-started/', excerpt: 'Found this comprehensive free tutorial on Docker basics. Highly recommended!', tags: ['docker', 'devops', 'learning', 'resource'], timestamp: new Date(Date.now() - 14400000), commentCount: 5, likeCount: 18, reshareCount: 3, likedByMe: false, resharedByMe: false },
+        { id: 'p5', type: 'text', displayName: 'APIMastermind', title: 'Best Practices for API Design?', excerpt: 'What are some key principles you follow when designing RESTful APIs? Looking for different perspectives.', tags: ['api', 'design', 'best-practices', 'backend'], timestamp: new Date(Date.now() - 18000000), commentCount: 30, likeCount: 95, reshareCount: 10, likedByMe: true, resharedByMe: true },
     ];
 
     // Client-side filtering for demo purposes
@@ -216,17 +218,8 @@ export default function CommunityPage() {
                         )}
                      </div>
                  )}
-                 {activeSection === "reels" && (
-                    <div className="text-center py-12">
-                         <p className="text-muted-foreground">Reels section coming soon...</p>
-                         {/* Placeholder for Reels */}
-                         <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mt-4">
-                             {[...Array(9)].map((_, i) => (
-                                 <div key={i} className="bg-muted aspect-square animate-pulse"></div>
-                             ))}
-                         </div>
-                    </div>
-                 )}
+                 {/* Replaced Reels with Pro Shorts */}
+                 {activeSection === "shorts" && <ProShortsSection />}
                   {activeSection === "create" && (
                      <div className="text-center py-12 flex flex-col items-center">
                          <p className="text-muted-foreground mb-4">Ready to share something?</p>
@@ -251,10 +244,10 @@ export default function CommunityPage() {
                          <Home className="h-6 w-6" />
                          {/* <p className="text-xs font-medium mt-0.5">Feed</p> */}
                      </button>
-                     {/* Reels Icon */}
-                     <button onClick={() => setActiveSection("reels")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "reels" ? "text-primary" : "text-muted-foreground"}`}>
-                         <Video className="h-6 w-6" />
-                         {/* <p className="text-xs font-medium mt-0.5">Reels</p> */}
+                     {/* Pro Shorts Icon */}
+                     <button onClick={() => setActiveSection("shorts")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "shorts" ? "text-primary" : "text-muted-foreground"}`}>
+                         <Clapperboard className="h-6 w-6" /> {/* Changed Icon */}
+                         {/* <p className="text-xs font-medium mt-0.5">Shorts</p> */}
                      </button>
                      {/* Create Icon */}
                      <button onClick={() => setActiveSection("create")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "create" ? "text-primary" : "text-muted-foreground"}`}>
@@ -383,7 +376,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, onReshare }) => {
             {/* Avatar Column */}
             <div className="shrink-0">
                  {/* Link Avatar to user's community profile */}
-                <Link href={`/community/profile/anonymous-${post.id}`}> {/* Simplified anonymous link */}
+                 {/* Use post.displayName which should be the anonymous one */}
+                <Link href={`/community/profile/${post.displayName.replace(/\s+/g, '-').toLowerCase()}`}>
                     <Avatar className="h-10 w-10 bg-secondary cursor-pointer">
                         <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
                     </Avatar>
@@ -395,8 +389,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, onReshare }) => {
                  {/* Post Header */}
                  <div className="flex items-center justify-between gap-2">
                      <div className="flex items-center gap-2 overflow-hidden"> {/* Added overflow-hidden */}
-                        <Link href={`/community/profile/anonymous-${post.id}`}> {/* Link name to profile */}
-                             <span className="font-semibold text-sm truncate hover:underline cursor-pointer">Anonymous</span>
+                        {/* Use post.displayName which should be the anonymous one */}
+                        <Link href={`/community/profile/${post.displayName.replace(/\s+/g, '-').toLowerCase()}`}>
+                             <span className="font-semibold text-sm truncate hover:underline cursor-pointer">{post.displayName}</span>
                         </Link>
                          <span className="text-xs text-muted-foreground">&middot;</span>
                          <Link href={`/community/post/${post.id}`} className="text-xs text-muted-foreground hover:underline flex-shrink-0">{timeAgo(post.timestamp)}</Link>
@@ -476,4 +471,5 @@ const PostSkeleton = () => (
         </div>
     </Card>
 );
+
 
