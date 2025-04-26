@@ -12,29 +12,21 @@ import ConnectionAnimation from '@/components/landing/connection-animation';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/shared/logo'; // Import the shared Logo component
 import React from 'react'; // Keep React import
-
-// Removed MatrixBackground import and isClient state
-// import MatrixBackground from '@/components/landing/matrix-background';
-// import React, { useState, useEffect } from 'react';
+import MatrixBackground from '@/components/landing/matrix-background';
+import FeedbackModal from '@/components/landing/FeedbackModal'; // Import the new modal
 
 
 export default function Home() {
-   // Removed isClient state management
-   // const [isClient, setIsClient] = useState(false);
-   // useEffect(() => {
-   //   setIsClient(true); // Set to true once component mounts on the client
-   // }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden"> {/* Kept relative isolate and overflow-hidden */}
-       {/* Removed Matrix Background rendering */}
-       {/* {isClient && <MatrixBackground />} */}
+    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden">
+       <MatrixBackground /> {/* Render the matrix background */}
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6">
            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-90 transition-opacity font-poppins">
-                <Logo className="h-7 w-7" /> {/* Use Logo component */}
+                <Logo /> {/* Use Logo component */}
                 <span className="text-glow-primary">ConnectPro</span>
             </Link>
           <nav className="space-x-2 md:space-x-4">
@@ -99,7 +91,7 @@ export default function Home() {
                     {/* Step 1: Student */}
                      <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-blue-500/30 hover:bg-blue-950/20" style={{ animationDelay: '0.2s' }}>
                         <div className="flex items-center gap-4 mb-3">
-                            <div className="p-3 bg-blue-500/20 rounded-full border border-blue-500/50">
+                            <div className="p-3 bg-blue-500/10 rounded-full border border-blue-500/30">
                                 <GraduationCap className="h-8 w-8 text-blue-400" />
                             </div>
                              <h3 className="text-2xl font-semibold text-blue-300 font-poppins">Step 1: The User Journey Begins</h3>
@@ -112,10 +104,10 @@ export default function Home() {
                     {/* Step 2: Find & Filter */}
                     <div id="step-find" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-purple-500/30 hover:bg-purple-950/20" style={{ animationDelay: '0.3s' }}>
                         <div className="flex items-center gap-4 mb-3">
-                             <div className="p-3 bg-purple-500/20 rounded-full border border-purple-500/50">
+                             <div className="p-3 bg-purple-500/10 rounded-full border border-purple-500/30">
                                 <Search className="h-8 w-8 text-purple-400" />
                              </div>
-                             <div className="p-3 bg-orange-500/20 rounded-full border border-orange-500/50 -ml-2">
+                             <div className="p-3 bg-orange-500/10 rounded-full border border-orange-500/30 -ml-2">
                                <Filter className="h-8 w-8 text-orange-400" />
                              </div>
                              <h3 className="text-2xl font-semibold text-purple-300 font-poppins">Step 2: Discover the Right Expertise</h3>
@@ -128,10 +120,10 @@ export default function Home() {
                      {/* Step 3: Connect */}
                     <div id="step-connect" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-yellow-500/30 hover:bg-yellow-950/20" style={{ animationDelay: '0.4s' }}>
                         <div className="flex items-center gap-4 mb-3">
-                             <div className="p-3 bg-yellow-500/20 rounded-full border border-yellow-500/50">
+                             <div className="p-3 bg-yellow-500/10 rounded-full border border-yellow-500/30">
                                <MessageSquare className="h-8 w-8 text-yellow-400" />
                              </div>
-                             <div className="p-3 bg-red-500/20 rounded-full border border-red-500/50 -ml-2">
+                             <div className="p-3 bg-red-500/10 rounded-full border border-red-500/30 -ml-2">
                                 <Video className="h-8 w-8 text-red-400" />
                              </div>
                              <h3 className="text-2xl font-semibold text-yellow-300 font-poppins">Step 3: Initiate Contact</h3>
@@ -144,7 +136,7 @@ export default function Home() {
                      {/* Step 4: Professional Interaction */}
                      <div id="step-professional" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-indigo-500/30 hover:bg-indigo-950/20" style={{ animationDelay: '0.5s' }}>
                          <div className="flex items-center gap-4 mb-3">
-                             <div className="p-3 bg-indigo-500/20 rounded-full border border-indigo-500/50">
+                             <div className="p-3 bg-indigo-500/10 rounded-full border border-indigo-500/30">
                                 <UserCheck className="h-8 w-8 text-indigo-400" />
                              </div>
                              <h3 className="text-2xl font-semibold text-indigo-300 font-poppins">Step 4: Engage & Learn</h3>
@@ -157,7 +149,7 @@ export default function Home() {
                      {/* Step 5: Growth */}
                      <div id="step-growth" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-accent animate-fade-in-up border border-transparent hover:border-green-500/30 hover:bg-green-950/20" style={{ animationDelay: '0.6s' }}>
                          <div className="flex items-center gap-4 mb-3">
-                             <div className="p-3 bg-green-500/20 rounded-full border border-green-500/50">
+                             <div className="p-3 bg-green-500/10 rounded-full border border-green-500/30">
                                 <TrendingUp className="h-8 w-8 text-green-400" />
                              </div>
                              <h3 className="text-2xl font-semibold text-green-300 font-poppins">Step 5: Apply & Grow</h3>
@@ -181,7 +173,7 @@ export default function Home() {
               {/* Feature Card 1 */}
               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/20 group animate-fade-in-up hover:border-primary/50" style={{ animationDelay: '0.4s' }}>
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-primary/20 rounded-full w-fit mb-4 border border-primary/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-primary">
+                    <div className="p-3 bg-primary/10 rounded-full w-fit mb-4 border border-primary/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-primary">
                         <Briefcase className="h-8 w-8 text-primary" />
                     </div>
                     <CardTitle className="text-xl font-semibold font-poppins">Vetted Expert Network</CardTitle>
@@ -195,7 +187,7 @@ export default function Home() {
               {/* Feature Card 2 */}
               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/20 group animate-fade-in-up hover:border-accent/50" style={{ animationDelay: '0.5s' }}>
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-accent/20 rounded-full w-fit mb-4 border border-accent/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-accent">
+                     <div className="p-3 bg-accent/10 rounded-full w-fit mb-4 border border-accent/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-accent">
                         <BrainCircuit className="h-8 w-8 text-accent" />
                      </div>
                     <CardTitle className="text-xl font-semibold font-poppins">AI-Powered Guidance</CardTitle>
@@ -209,7 +201,7 @@ export default function Home() {
                {/* Feature Card 3 */}
               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/20 group animate-fade-in-up hover:border-blue-500/50" style={{ animationDelay: '0.6s' }}>
                  <CardHeader className="p-6">
-                    <div className="p-3 bg-blue-500/20 rounded-full w-fit mb-4 border border-blue-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(59,130,246,0.3)]">
+                    <div className="p-3 bg-blue-500/10 rounded-full w-fit mb-4 border border-blue-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(59,130,246,0.3)]">
                        <Video className="h-8 w-8 text-blue-400" />
                     </div>
                    <CardTitle className="text-xl font-semibold font-poppins">Seamless Video Sessions</CardTitle>
@@ -223,7 +215,7 @@ export default function Home() {
                {/* Feature Card 4 */}
               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/20 group animate-fade-in-up hover:border-green-500/50" style={{ animationDelay: '0.7s' }}>
                  <CardHeader className="p-6">
-                     <div className="p-3 bg-green-500/20 rounded-full w-fit mb-4 border border-green-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(34,197,94,0.3)]">
+                     <div className="p-3 bg-green-500/10 rounded-full w-fit mb-4 border border-green-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(34,197,94,0.3)]">
                          <Users className="h-8 w-8 text-green-400" />
                      </div>
                      <CardTitle className="text-xl font-semibold font-poppins">Supportive Community</CardTitle>
@@ -237,7 +229,7 @@ export default function Home() {
                 {/* Feature Card 5 */}
                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/20 group animate-fade-in-up hover:border-yellow-500/50" style={{ animationDelay: '0.8s' }}>
                   <CardHeader className="p-6">
-                       <div className="p-3 bg-yellow-500/20 rounded-full w-fit mb-4 border border-yellow-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(234,179,8,0.3)]">
+                       <div className="p-3 bg-yellow-500/10 rounded-full w-fit mb-4 border border-yellow-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(234,179,8,0.3)]">
                           <MessageSquare className="h-8 w-8 text-yellow-400" />
                        </div>
                      <CardTitle className="text-xl font-semibold font-poppins">Contextual AI Chat</CardTitle>
@@ -251,7 +243,7 @@ export default function Home() {
                 {/* Feature Card 6 */}
                 <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/20 group animate-fade-in-up hover:border-red-500/50" style={{ animationDelay: '0.9s' }}>
                    <CardHeader className="p-6">
-                       <div className="p-3 bg-red-500/20 rounded-full w-fit mb-4 border border-red-500/50 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(239,68,68,0.3)]">
+                       <div className="p-3 bg-red-500/10 rounded-full w-fit mb-4 border border-red-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(239,68,68,0.3)]">
                          <ShieldCheck className="h-8 w-8 text-red-400" />
                        </div>
                       <CardTitle className="text-xl font-semibold font-poppins">Privacy & Security First</CardTitle>
@@ -294,20 +286,38 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border/40 bg-card/30 text-muted-foreground">
-        <div className="container mx-auto px-4 md:px-6 py-8 text-center sm:text-left sm:flex sm:justify-between sm:items-center">
-           <div className="flex items-center justify-center sm:justify-start gap-2 mb-4 sm:mb-0">
-             <Logo className="h-6 w-6" /> {/* Use Logo component */}
-             <p className="text-sm font-sans">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
+       {/* Footer */}
+       <footer className="border-t border-border/40 bg-card/30 text-muted-foreground py-12"> {/* Increased padding */}
+         <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+           {/* Logo and Copyright */}
+           <div className="flex flex-col items-center md:items-start gap-4">
+             <div className="flex items-center gap-2">
+                 <Logo /> {/* Use Logo component */}
+                 <span className="text-lg font-semibold text-foreground font-poppins">ConnectPro</span>
+             </div>
+             <p className="text-sm font-sans text-center md:text-left">&copy; {new Date().getFullYear()} ConnectPro. All rights reserved.</p>
            </div>
-           <nav className="mt-4 sm:mt-0 space-x-4 text-sm font-sans">
-              <Link href="/privacy" className="hover:text-foreground transition-colors hover:underline">Privacy Policy</Link> {/* Updated link color */}
-              <Link href="/terms" className="hover:text-foreground transition-colors hover:underline">Terms of Service</Link> {/* Updated link color */}
-              <Link href="/contact" className="hover:text-foreground transition-colors hover:underline">Contact Us</Link> {/* Updated link color */}
+
+           {/* Navigation Links */}
+           <nav className="flex flex-col items-center md:items-start gap-2 text-sm font-sans">
+             <h4 className="font-semibold text-foreground mb-2">Quick Links</h4>
+             <Link href="/privacy" className="hover:text-foreground transition-colors hover:underline">Privacy Policy</Link>
+             <Link href="/terms" className="hover:text-foreground transition-colors hover:underline">Terms of Service</Link>
+             <Link href="/contact" className="hover:text-foreground transition-colors hover:underline">Contact Us</Link>
+             <Link href="/community" className="hover:text-foreground transition-colors hover:underline">Community</Link>
            </nav>
-        </div>
-      </footer>
+
+           {/* Developer Message & Feedback */}
+           <div className="flex flex-col items-center md:items-start text-center md:text-left gap-4">
+             <h4 className="font-semibold text-foreground mb-1">Message from the Developer</h4>
+             <p className="text-xs font-sans leading-relaxed">
+               Connect PRO is a Free Open Source project, this whole site is Single handedly developed and maintained by developer Rajdeep Saha. So some possible feature breakdown and optimisation issues maybe there, Please consider leaving your Review, it will help us a lot to improve the user experience.
+             </p>
+             {/* Feedback Button - Triggers the Modal */}
+             <FeedbackModal />
+           </div>
+         </div>
+       </footer>
     </div>
   );
 }
