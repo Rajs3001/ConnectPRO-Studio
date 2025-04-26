@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark"> {/* Ensure dark class is always present */}
       <head>
-         {/* Title and meta tags can be added here or managed by Next.js metadata API in pages */}
+        {/* Title and meta tags can be added here or managed by Next.js metadata API in pages */}
          <title>ConnectPro - Expert Connections</title>
          <meta name="description" content="Connect with verified professionals, gain insights with AI, and engage with a supportive community." />
          {/* Add viewport meta tag for responsiveness */}
