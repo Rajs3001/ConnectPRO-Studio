@@ -35,11 +35,12 @@ const dummyPosts = [
 
 export default function CommunityPreview() {
   return (
-    <section className="py-16 md:py-24 bg-background animate-fade-in-up" style={{ animationDelay: '0.7s' }}> {/* Section animation */}
+     // Removed bg-background, relying on main page background
+    <section className="py-16 md:py-24 animate-fade-in-up" style={{ animationDelay: '0.7s' }}> {/* Section animation */}
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-accent">Join the Conversation</h2>
-          <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+          <p className="text-lg text-foreground/80 mt-2 max-w-2xl mx-auto"> {/* Adjusted text color */}
             Engage with peers, share insights, and ask questions in our anonymous community.
           </p>
         </div>
@@ -50,7 +51,7 @@ export default function CommunityPreview() {
               key={post.id}
               className={cn(
                   "border border-border/60 shadow-md transition-all duration-300 hover:shadow-lg hover:border-accent/40 hover:-translate-y-1 flex flex-col animate-fade-in-up",
-                  "bg-card" // Ensure card background
+                  "bg-background/70 backdrop-blur-sm" // Use slightly transparent background with blur
               )}
               style={{ animationDelay: `${index * 0.15 + 0.1}s` }} // Staggered animation
             >
@@ -83,3 +84,6 @@ export default function CommunityPreview() {
     </section>
   );
 }
+
+
+    

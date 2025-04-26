@@ -83,6 +83,7 @@ const ConnectionAnimation: React.FC = () => {
 
   return (
     <motion.div
+      // Removed bg-card background
       className="relative w-full max-w-5xl mx-auto flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-visible"
       variants={containerVariants}
       initial="hidden"
@@ -159,7 +160,8 @@ const ConnectionAnimation: React.FC = () => {
            variants={itemVariants}
         >
          <Link href="#step-student" aria-label="Go to Student Step Description">
-            <div className={cn(`${iconBgClass} bg-blue-500/10 border-blue-500/30 group-hover:bg-blue-500/20 group-hover:border-blue-500/50 group-hover:shadow-glow-primary`)}>
+           {/* Use transparent background for icon container */}
+            <div className={cn(`${iconBgClass} bg-background/70 border-blue-500/30 group-hover:bg-blue-500/20 group-hover:border-blue-500/50 group-hover:shadow-glow-primary`)}>
               <GraduationCap className={`${iconClass} text-blue-500 group-hover:text-blue-400`} />
             </div>
             <span className={textClass}>User</span>
@@ -172,7 +174,8 @@ const ConnectionAnimation: React.FC = () => {
           variants={itemVariants}
         >
           <Link href="#step-find" aria-label="Go to Find Professional Step Description">
-             <div className={cn(`${iconBgClass} bg-purple-500/10 border-purple-500/30 group-hover:bg-purple-500/20 group-hover:border-purple-500/50 group-hover:shadow-glow-primary`)}>
+             {/* Use transparent background */}
+             <div className={cn(`${iconBgClass} bg-background/70 border-purple-500/30 group-hover:bg-purple-500/20 group-hover:border-purple-500/50 group-hover:shadow-glow-primary`)}>
                <Search className={`${iconClass} text-purple-500 group-hover:text-purple-400`} />
              </div>
              <span className={textClass}>Find</span>
@@ -185,7 +188,8 @@ const ConnectionAnimation: React.FC = () => {
           variants={itemVariants}
         >
            <Link href="#step-find" aria-label="Go to Filter Professional Step Description">
-             <div className={cn(`${iconBgClass} bg-orange-500/10 border-orange-500/30 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 group-hover:shadow-glow-primary`)}>
+              {/* Use transparent background */}
+             <div className={cn(`${iconBgClass} bg-background/70 border-orange-500/30 group-hover:bg-orange-500/20 group-hover:border-orange-500/50 group-hover:shadow-glow-primary`)}>
                <Filter className={`${iconClass} text-orange-500 group-hover:text-orange-400`} />
              </div>
              <span className={textClass}>Filter</span>
@@ -198,7 +202,8 @@ const ConnectionAnimation: React.FC = () => {
          variants={itemVariants}
         >
          <Link href="#step-connect" aria-label="Go to Connect Step Description">
-             <div className={cn(`${iconBgClass} bg-yellow-500/10 border-yellow-500/30 group-hover:bg-yellow-500/20 group-hover:border-yellow-500/50 group-hover:shadow-glow-primary`)}>
+             {/* Use transparent background */}
+             <div className={cn(`${iconBgClass} bg-background/70 border-yellow-500/30 group-hover:bg-yellow-500/20 group-hover:border-yellow-500/50 group-hover:shadow-glow-primary`)}>
               <MessageSquare className={`${iconClass} text-yellow-500 group-hover:text-yellow-400`} />
             </div>
             <span className={textClass}>Chat</span>
@@ -211,7 +216,8 @@ const ConnectionAnimation: React.FC = () => {
          variants={itemVariants}
         >
           <Link href="#step-connect" aria-label="Go to Video Call Step Description">
-             <div className={cn(`${iconBgClass} bg-red-500/10 border-red-500/30 group-hover:bg-red-500/20 group-hover:border-red-500/50 group-hover:shadow-glow-primary`)}>
+             {/* Use transparent background */}
+             <div className={cn(`${iconBgClass} bg-background/70 border-red-500/30 group-hover:bg-red-500/20 group-hover:border-red-500/50 group-hover:shadow-glow-primary`)}>
                <Video className={`${iconClass} text-red-500 group-hover:text-red-400`} />
              </div>
              <span className={textClass}>Video Call</span>
@@ -224,7 +230,8 @@ const ConnectionAnimation: React.FC = () => {
          variants={itemVariants}
         >
           <Link href="#step-professional" aria-label="Go to Professional Interaction Step Description">
-             <div className={cn(`${iconBgClass} bg-indigo-500/10 border-indigo-500/30 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/50 group-hover:shadow-glow-primary`)}>
+             {/* Use transparent background */}
+             <div className={cn(`${iconBgClass} bg-background/70 border-indigo-500/30 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/50 group-hover:shadow-glow-primary`)}>
                <UserCheck className={`${iconClass} text-indigo-500 group-hover:text-indigo-400`} />
              </div>
              <span className={textClass}>Professional</span>
@@ -237,7 +244,8 @@ const ConnectionAnimation: React.FC = () => {
          variants={itemVariants}
         >
            <Link href="#step-growth" aria-label="Go to Growth Step Description">
-             <div className={cn(`${iconBgClass} bg-green-500/10 border-green-500/30 group-hover:bg-green-500/20 group-hover:border-green-500/50 group-hover:shadow-glow-accent`)}>
+              {/* Use transparent background */}
+             <div className={cn(`${iconBgClass} bg-background/70 border-green-500/30 group-hover:bg-green-500/20 group-hover:border-green-500/50 group-hover:shadow-glow-accent`)}>
               <TrendingUp className={`${iconClass} text-green-500 group-hover:text-green-400`} />
             </div>
             <span className={textClass}>Growth</span>
@@ -249,3 +257,6 @@ const ConnectionAnimation: React.FC = () => {
 };
 
 export default ConnectionAnimation;
+
+
+    

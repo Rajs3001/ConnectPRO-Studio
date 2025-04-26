@@ -80,10 +80,11 @@ export default function Home() {
         </section>
 
         {/* How It Works Section */}
-        <section className="py-16 md:py-24 relative overflow-hidden bg-background/50 backdrop-blur-sm animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
+        {/* Removed bg-background/50 backdrop-blur-sm */}
+        <section className="py-16 md:py-24 relative overflow-hidden animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
             <div className="container mx-auto px-4 md:px-6 relative z-10"> {/* Added relative positioning */}
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2>
-                <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
+                <p className="text-center text-lg text-foreground/80 mb-16 max-w-4xl mx-auto font-sans"> {/* Adjusted text color */}
                    A simple, streamlined process to connect students and users with experienced professionals, fostering growth and providing clear guidance. Click on the icons to learn more about each step.
                 </p>
                 <div className="mb-16 md:mb-20">
@@ -93,6 +94,7 @@ export default function Home() {
                 {/* Detailed Step Descriptions */}
                  <div className="mt-20 space-y-12">
                     {/* Step 1: Student */}
+                     {/* Adjusted background/border for semi-transparency */}
                      <div id="step-student" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-blue-500/30 hover:bg-blue-950/20" style={{ animationDelay: '0.2s' }}>
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-blue-500/10 rounded-full border border-blue-500/30">
@@ -106,6 +108,7 @@ export default function Home() {
                     </div>
 
                     {/* Step 2: Find & Filter */}
+                    {/* Adjusted background/border for semi-transparency */}
                     <div id="step-find" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-purple-500/30 hover:bg-purple-950/20" style={{ animationDelay: '0.3s' }}>
                         <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-purple-500/10 rounded-full border border-purple-500/30">
@@ -122,6 +125,7 @@ export default function Home() {
                     </div>
 
                      {/* Step 3: Connect */}
+                     {/* Adjusted background/border for semi-transparency */}
                     <div id="step-connect" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-yellow-500/30 hover:bg-yellow-950/20" style={{ animationDelay: '0.4s' }}>
                         <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-yellow-500/10 rounded-full border border-yellow-500/30">
@@ -138,6 +142,7 @@ export default function Home() {
                      </div>
 
                      {/* Step 4: Professional Interaction */}
+                     {/* Adjusted background/border for semi-transparency */}
                      <div id="step-professional" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-primary animate-fade-in-up border border-transparent hover:border-indigo-500/30 hover:bg-indigo-950/20" style={{ animationDelay: '0.5s' }}>
                          <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-indigo-500/10 rounded-full border border-indigo-500/30">
@@ -151,6 +156,7 @@ export default function Home() {
                      </div>
 
                      {/* Step 5: Growth */}
+                     {/* Adjusted background/border for semi-transparency */}
                      <div id="step-growth" className="scroll-mt-20 md:scroll-mt-24 p-6 rounded-lg transition-all duration-300 hover:shadow-glow-accent animate-fade-in-up border border-transparent hover:border-green-500/30 hover:bg-green-950/20" style={{ animationDelay: '0.6s' }}>
                          <div className="flex items-center gap-4 mb-3">
                              <div className="p-3 bg-green-500/10 rounded-full border border-green-500/30">
@@ -167,15 +173,16 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-background/70 backdrop-blur-sm animate-fade-in-up relative z-10" style={{ animationDelay: '0.4s' }}> {/* Added relative z-10 */}
+         {/* Removed bg-background/70 backdrop-blur-sm */}
+        <section className="py-16 md:py-24 animate-fade-in-up relative z-10" style={{ animationDelay: '0.4s' }}> {/* Added relative z-10 */}
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent text-glow-accent font-poppins">Why ConnectPro?</h2>
-             <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
+             <p className="text-center text-lg text-foreground/80 mb-16 max-w-4xl mx-auto font-sans"> {/* Adjusted text color */}
                ConnectPro is more than just a platform; it's your dedicated partner in professional growth. We offer a unique blend of human expertise and AI intelligence to empower your journey.
              </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature Card 1 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/20 group animate-fade-in-up hover:border-primary/50" style={{ animationDelay: '0.4s' }}>
+              {/* Feature Card 1 - Use bg-background/80 for slight distinction */}
+              <Card className="bg-background/80 border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-primary/20 group animate-fade-in-up hover:border-primary/50" style={{ animationDelay: '0.4s' }}>
                  <CardHeader className="p-6">
                     <div className="p-3 bg-primary/10 rounded-full w-fit mb-4 border border-primary/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-primary">
                         <Briefcase className="h-8 w-8 text-primary" />
@@ -188,8 +195,8 @@ export default function Home() {
                     </CardDescription>
                  </CardContent>
               </Card>
-              {/* Feature Card 2 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/20 group animate-fade-in-up hover:border-accent/50" style={{ animationDelay: '0.5s' }}>
+              {/* Feature Card 2 - Use bg-background/80 */}
+              <Card className="bg-background/80 border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/20 group animate-fade-in-up hover:border-accent/50" style={{ animationDelay: '0.5s' }}>
                  <CardHeader className="p-6">
                      <div className="p-3 bg-accent/10 rounded-full w-fit mb-4 border border-accent/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-glow-accent">
                         <BrainCircuit className="h-8 w-8 text-accent" />
@@ -202,8 +209,8 @@ export default function Home() {
                     </CardDescription>
                  </CardContent>
               </Card>
-               {/* Feature Card 3 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/20 group animate-fade-in-up hover:border-blue-500/50" style={{ animationDelay: '0.6s' }}>
+               {/* Feature Card 3 - Use bg-background/80 */}
+              <Card className="bg-background/80 border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/20 group animate-fade-in-up hover:border-blue-500/50" style={{ animationDelay: '0.6s' }}>
                  <CardHeader className="p-6">
                     <div className="p-3 bg-blue-500/10 rounded-full w-fit mb-4 border border-blue-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(59,130,246,0.3)]">
                        <Video className="h-8 w-8 text-blue-400" />
@@ -216,8 +223,8 @@ export default function Home() {
                    </CardDescription>
                  </CardContent>
               </Card>
-               {/* Feature Card 4 */}
-              <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/20 group animate-fade-in-up hover:border-green-500/50" style={{ animationDelay: '0.7s' }}>
+               {/* Feature Card 4 - Use bg-background/80 */}
+              <Card className="bg-background/80 border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-green-500/20 group animate-fade-in-up hover:border-green-500/50" style={{ animationDelay: '0.7s' }}>
                  <CardHeader className="p-6">
                      <div className="p-3 bg-green-500/10 rounded-full w-fit mb-4 border border-green-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(34,197,94,0.3)]">
                          <Users className="h-8 w-8 text-green-400" />
@@ -230,8 +237,8 @@ export default function Home() {
                      </CardDescription>
                  </CardContent>
                </Card>
-                {/* Feature Card 5 */}
-               <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/20 group animate-fade-in-up hover:border-yellow-500/50" style={{ animationDelay: '0.8s' }}>
+                {/* Feature Card 5 - Use bg-background/80 */}
+               <Card className="bg-background/80 border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-yellow-500/20 group animate-fade-in-up hover:border-yellow-500/50" style={{ animationDelay: '0.8s' }}>
                   <CardHeader className="p-6">
                        <div className="p-3 bg-yellow-500/10 rounded-full w-fit mb-4 border border-yellow-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(234,179,8,0.3)]">
                           <MessageSquare className="h-8 w-8 text-yellow-400" />
@@ -244,8 +251,8 @@ export default function Home() {
                      </CardDescription>
                   </CardContent>
                </Card>
-                {/* Feature Card 6 */}
-                <Card className="bg-card border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/20 group animate-fade-in-up hover:border-red-500/50" style={{ animationDelay: '0.9s' }}>
+                {/* Feature Card 6 - Use bg-background/80 */}
+                <Card className="bg-background/80 border border-border/60 overflow-hidden transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-500/20 group animate-fade-in-up hover:border-red-500/50" style={{ animationDelay: '0.9s' }}>
                    <CardHeader className="p-6">
                        <div className="p-3 bg-red-500/10 rounded-full w-fit mb-4 border border-red-500/30 transform group-hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_15px_1px_rgba(239,68,68,0.3)]">
                          <ShieldCheck className="h-8 w-8 text-red-400" />
@@ -269,13 +276,14 @@ export default function Home() {
          <CommunityPreview />
 
         {/* Call to Action Section */}
-        <section className="py-16 md:py-24 text-center relative overflow-hidden animate-fade-in-up bg-background/50 backdrop-blur-sm" style={{ animationDelay: '0.4s' }}>
+        {/* Removed bg-background/50 backdrop-blur-sm */}
+        <section className="py-16 md:py-24 text-center relative overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
              {/* Background Glow */}
              <div className="absolute inset-x-0 bottom-0 h-64 -z-10 bg-gradient-to-t from-primary/10 via-primary/5 to-transparent blur-3xl"></div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary text-glow-primary font-poppins">Ready to Connect & Grow?</h2>
-                <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto font-sans">
+                <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto font-sans"> {/* Adjusted text color */}
                   Join ConnectPro today. Unlock personalized expert guidance, leverage cutting-edge AI insights for clearer direction, and participate in a thriving, anonymous community dedicated to mutual support and advancement.
                 </p>
                 <div className="space-y-4 sm:space-y-0 sm:space-x-4 font-sans">
@@ -291,7 +299,8 @@ export default function Home() {
       </main>
 
        {/* Footer */}
-       <footer className="border-t border-border/40 bg-card/30 text-muted-foreground py-12 relative z-10"> {/* Increased padding, Added relative z-10 */}
+       {/* Removed bg-card/30 */}
+       <footer className="border-t border-border/40 text-muted-foreground py-12 relative z-10"> {/* Increased padding, Added relative z-10 */}
          <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
            {/* Logo and Copyright */}
            <div className="flex flex-col items-center md:items-start gap-4">
@@ -327,3 +336,6 @@ export default function Home() {
 }
 
 
+
+
+    

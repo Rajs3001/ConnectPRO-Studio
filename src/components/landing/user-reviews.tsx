@@ -25,7 +25,8 @@ export default function UserReviews() {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="py-16 md:py-24 bg-card/30 animate-fade-in-up overflow-hidden" style={{ animationDelay: '0.5s' }}>
+    // Removed bg-card/30, added relative positioning for gradients
+    <section className="py-16 md:py-24 animate-fade-in-up overflow-hidden relative" style={{ animationDelay: '0.5s' }}>
       <div className="container mx-auto px-0 md:px-6"> {/* Remove horizontal padding on small screens */}
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 px-4 md:px-0 text-primary">What Our Users Say</h2>
 
@@ -39,9 +40,10 @@ export default function UserReviews() {
 
            {reviews.map((review, index) => (
             <div key={review.id} className="snap-center shrink-0 w-4/5 sm:w-3/5 md:w-1/2 lg:w-1/3 px-2 md:px-3"> {/* Adjust width and padding */}
+              {/* Adjusted Card background for slight transparency */}
               <Card className={cn(
                  "border border-border/60 h-full flex flex-col justify-between shadow-lg transition-all duration-300 hover:shadow-xl hover:border-primary/40 hover:scale-105 animate-fade-in-up", // Keep hover effect
-                 "bg-card cursor-pointer" // Make it seem interactive
+                 "bg-background/80 backdrop-blur-sm cursor-pointer" // Make it seem interactive, slightly transparent background
                  )}
                  style={{ animationDelay: `${index * 0.1 + 0.1}s` }}
                  tabIndex={0} // Make focusable
@@ -78,9 +80,9 @@ export default function UserReviews() {
         </div>
         {/* Removed Carousel controls */}
       </div>
-       {/* Add subtle gradient overlays at the edges */}
-        <div className="absolute inset-y-0 left-0 w-16 md:w-24 bg-gradient-to-r from-card/30 to-transparent pointer-events-none"></div>
-        <div className="absolute inset-y-0 right-0 w-16 md:w-24 bg-gradient-to-l from-card/30 to-transparent pointer-events-none"></div>
+       {/* Add subtle gradient overlays at the edges using background color */}
+        <div className="absolute inset-y-0 left-0 w-16 md:w-24 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
+        <div className="absolute inset-y-0 right-0 w-16 md:w-24 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
     </section>
   );
 }
@@ -103,3 +105,6 @@ if (typeof window !== 'undefined') {
   styleSheet.innerText = scrollbarHideCSS;
   document.head.appendChild(styleSheet);
 }
+
+
+    
