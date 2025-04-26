@@ -42,22 +42,48 @@ const ConnectionAnimation: React.FC = () => {
   const textClass = "text-[10px] md:text-xs font-semibold text-muted-foreground mt-1.5 text-center"; // Responsive text size
 
   // Adjusted node positions for better alignment within viewBox="0 0 600 250"
-  // Node X positions spread more evenly, Y positions adjusted
-  const studentPos = { x: 50, y: 125 }; // Start node
-  const searchPos = { x: 170, y: 70 }; // Search slightly higher
-  const filterPos = { x: 170, y: 180 }; // Filter slightly lower
-  const messagePos = { x: 290, y: 70 }; // Message aligned with Search
-  const videoPos = { x: 290, y: 180 }; // Video aligned with Filter
-  const professionalPos = { x: 410, y: 125 }; // Professional centered vertically
-  const growthPos = { x: 530, y: 125 }; // Growth centered vertically
+  // Increased X separation, slight Y adjustments for clarity
+  const nodeRadius = 28; // Approximate radius of the icon container for path offset calculation
+  const studentPos = { x: 60, y: 125 };
+  const searchPos = { x: 180, y: 70 };
+  const filterPos = { x: 180, y: 180 };
+  const messagePos = { x: 300, y: 70 };
+  const videoPos = { x: 300, y: 180 };
+  const professionalPos = { x: 420, y: 125 };
+  const growthPos = { x: 540, y: 125 };
 
-  // Adjust path offsets if needed based on icon container size
-  const pathOffset = 15; // Offset for path start/end from node center
+  // Function to create curved paths (simplified Bezier)
+  const createCurve = (p1: {x: number, y: number}, p2: {x: number, y: number}) => {
+    const midX = (p1.x + p2.x) / 2;
+    const midY = (p1.y + p2.y) / 2;
+    // Control point calculation (adjust curvature here)
+    const ctrl1X = midX;
+    const ctrl1Y = p1.y;
+    const ctrl2X = midX;
+    const ctrl2Y = p2.y;
+    // Offset start/end points slightly away from node center
+    const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    const startX = p1.x + nodeRadius * Math.cos(angle);
+    const startY = p1.y + nodeRadius * Math.sin(angle);
+    const endX = p2.x - nodeRadius * Math.cos(angle);
+    const endY = p2.y - nodeRadius * Math.sin(angle);
+
+    return `M ${startX},${startY} C ${ctrl1X},${ctrl1Y} ${ctrl2X},${ctrl2Y} ${endX},${endY}`;
+  };
+
+  // Function for straight line (offset from center)
+   const createLine = (p1: {x: number, y: number}, p2: {x: number, y: number}) => {
+      const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+      const startX = p1.x + nodeRadius * Math.cos(angle);
+      const startY = p1.y + nodeRadius * Math.sin(angle);
+      const endX = p2.x - nodeRadius * Math.cos(angle);
+      const endY = p2.y - nodeRadius * Math.sin(angle);
+      return `M ${startX},${startY} L ${endX},${endY}`;
+   };
 
   return (
     <motion.div
-      className="relative w-full max-w-5xl mx-auto flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-visible" // Changed overflow to visible
-      key={Date.now()} // Key to force re-render on view, triggering animation
+      className="relative w-full max-w-5xl mx-auto flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-visible"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -66,19 +92,19 @@ const ConnectionAnimation: React.FC = () => {
       {/* SVG for lines */}
       <motion.svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 600 250" // Updated viewBox to match coordinate space
+        viewBox="0 0 600 250" // Maintained viewBox
         preserveAspectRatio="xMidYMid meet"
         style={{ zIndex: 5 }}
       >
         {/* Lines from Student to Search/Filter */}
         <motion.path
-           d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 60},${studentPos.y} ${searchPos.x - 60},${searchPos.y} ${searchPos.x - pathOffset},${searchPos.y}`}
+           d={createCurve(studentPos, searchPos)}
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
            variants={lineVariants} custom={0}
            className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
          />
          <motion.path
-            d={`M ${studentPos.x + pathOffset},${studentPos.y} C ${studentPos.x + 60},${studentPos.y} ${filterPos.x - 60},${filterPos.y} ${filterPos.x - pathOffset},${filterPos.y}`}
+            d={createCurve(studentPos, filterPos)}
             stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
             variants={lineVariants} custom={0.3}
             className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
@@ -86,13 +112,13 @@ const ConnectionAnimation: React.FC = () => {
 
         {/* Lines from Search/Filter to Message/Video */}
          <motion.path
-           d={`M ${searchPos.x + pathOffset},${searchPos.y} L ${messagePos.x - pathOffset},${messagePos.y}`} // Straight line
+           d={createLine(searchPos, messagePos)}
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
            variants={lineVariants} custom={0.6}
            className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
          />
          <motion.path
-            d={`M ${filterPos.x + pathOffset},${filterPos.y} L ${videoPos.x - pathOffset},${videoPos.y}`} // Straight line
+            d={createLine(filterPos, videoPos)}
             stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
             variants={lineVariants} custom={0.9}
             className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
@@ -100,45 +126,45 @@ const ConnectionAnimation: React.FC = () => {
 
         {/* Lines from Message/Video to Professional */}
         <motion.path
-             d={`M ${messagePos.x + pathOffset},${messagePos.y} C ${messagePos.x + 60},${messagePos.y} ${professionalPos.x - 60},${professionalPos.y} ${professionalPos.x - pathOffset},${professionalPos.y}`}
+             d={createCurve(messagePos, professionalPos)}
             stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
             variants={lineVariants} custom={1.2}
             className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
         />
          <motion.path
-             d={`M ${videoPos.x + pathOffset},${videoPos.y} C ${videoPos.x + 60},${videoPos.y} ${professionalPos.x - 60},${professionalPos.y} ${professionalPos.x - pathOffset},${professionalPos.y}`}
+             d={createCurve(videoPos, professionalPos)}
            stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.5" fill="none"
            variants={lineVariants} custom={1.5}
            className="transition-all duration-300 hover:stroke-primary hover:stroke-[2px] shadow-glow-primary"
          />
 
         {/* Line from Professional to Growth */}
-        <motion.line
-          x1={professionalPos.x + pathOffset} y1={professionalPos.y}
-          x2={growthPos.x - pathOffset} y2={growthPos.y}
+        <motion.path
+          d={createLine(professionalPos, growthPos)}
           stroke="hsl(var(--accent) / 0.6)"
           strokeWidth="1.5"
           strokeDasharray="4 2"
+          fill="none"
           variants={lineVariants}
           custom={1.8}
           className="transition-all duration-300 hover:stroke-accent hover:stroke-[2px] shadow-glow-accent"
         />
       </motion.svg>
 
-      {/* Nodes - Use absolute positioning within the parent motion.div */}
-      {/* Adjusted percentages based on new coordinate space and parent padding */}
-      <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Allow text wrapping
-          style={{ left: `${(studentPos.x / 600) * 100}%`, top: `${(studentPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
-          variants={itemVariants}
-       >
+      {/* Nodes - Positioned absolutely */}
+      {/* Node positions adjusted to match SVG viewBox coordinates */}
+       <motion.div
+           className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20"
+           style={{ left: `${(studentPos.x / 600) * 100}%`, top: `${(studentPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
+           variants={itemVariants}
+        >
          <Link href="#step-student" aria-label="Go to Student Step Description">
             <div className={cn(`${iconBgClass} bg-blue-500/10 border-blue-500/30 group-hover:bg-blue-500/20 group-hover:border-blue-500/50 group-hover:shadow-glow-primary`)}>
               <GraduationCap className={`${iconClass} text-blue-500 group-hover:text-blue-400`} />
             </div>
             <span className={textClass}>User</span>
          </Link>
-      </motion.div>
+       </motion.div>
 
        <motion.div
           className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20"
@@ -180,7 +206,7 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Use auto width for label
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-[80px] md:min-w-[90px]" // Increased min-width for longer text
          style={{ left: `${(videoPos.x / 600) * 100}%`, top: `${(videoPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
@@ -188,12 +214,12 @@ const ConnectionAnimation: React.FC = () => {
              <div className={cn(`${iconBgClass} bg-red-500/10 border-red-500/30 group-hover:bg-red-500/20 group-hover:border-red-500/50 group-hover:shadow-glow-primary`)}>
                <Video className={`${iconClass} text-red-500 group-hover:text-red-400`} />
              </div>
-             <span className={textClass}>Video Call</span> {/* Ensure label is not cut off */}
+             <span className={textClass}>Video Call</span>
            </Link>
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Wider for text
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-[80px] md:min-w-[90px]" // Increased min-width for longer text
          style={{ left: `${(professionalPos.x / 600) * 100}%`, top: `${(professionalPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >

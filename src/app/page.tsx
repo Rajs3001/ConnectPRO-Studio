@@ -12,7 +12,7 @@ import ConnectionAnimation from '@/components/landing/connection-animation';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/shared/logo'; // Import the shared Logo component
 import React from 'react'; // Keep React import
-import MatrixBackground from '@/components/landing/matrix-background';
+import MatrixBackground from '@/components/landing/matrix-background'; // Keep for reference, but commented out below
 import FeedbackModal from '@/components/landing/FeedbackModal'; // Import the new modal
 import ConnectingDotsBackground from '@/components/landing/connecting-dots-background'; // Import the new background animation
 
@@ -21,7 +21,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden">
-       {/* Removed Matrix Background */}
+       {/* Background Animations - Choose one or combine subtly */}
+       {/* <MatrixBackground className="opacity-10" /> */} {/* Example: Use Matrix with low opacity */}
+       {/* Connecting Dots is added within the Hero section below for better layering */}
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
