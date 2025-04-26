@@ -7,14 +7,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle, Plus, Search, Text, UserCircle, Share2, Repeat } from 'lucide-react'; // Renamed LinkIcon to LinkIconLucid, added Share2, Repeat
+import { Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle, Plus, Search, Text, UserCircle, Share2, Repeat, Video, PlusCircle } from 'lucide-react'; // Added Video, PlusCircle
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils'; // Import cn
 import { useToast } from '@/hooks/use-toast'; // Import useToast
-import { HiOutlineVideoCamera, HiOutlineUserCircle, HiOutlinePlusCircle } from "react-icons/hi2";
-import { RiSearchLine } from "react-icons/ri";
+// Removed react-icons imports
 import { Loader2 } from "lucide-react";
 
 
@@ -193,16 +192,16 @@ export default function CommunityPage() {
                             <p className="text-xs font-medium">Feed</p>
                         </button>
                         <button onClick={() => setActiveSection("reels")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "reels" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                            <HiOutlineVideoCamera className="h-5 w-5 mx-auto" />
+                            <Video className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
                         </button>
                         <button onClick={() => setActiveSection("create")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "create" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                            <HiOutlinePlusCircle className="h-5 w-5 mx-auto" />
+                            <PlusCircle className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
                         </button>
                          <button onClick={() => setActiveSection("search")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                           <RiSearchLine className="h-5 w-5 mx-auto" /> {/* Updated button classname */}
+                           <Search className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
                          </button>
                          <button onClick={() => setActiveSection("profile")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "profile" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                           <HiOutlineUserCircle className="h-5 w-5 mx-auto" /> {/* Updated button classname */}
+                           <UserCircle className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
                         </button>
                     </div>
                 </nav>

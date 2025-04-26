@@ -11,21 +11,24 @@ import CommunityPreview from '@/components/landing/community-preview';
 import ConnectionAnimation from '@/components/landing/connection-animation';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/shared/logo'; // Import the shared Logo component
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
-import MatrixBackground from '@/components/landing/matrix-background'; // Import MatrixBackground
+import React from 'react'; // Keep React import
+
+// Removed MatrixBackground import and isClient state
+// import MatrixBackground from '@/components/landing/matrix-background';
+// import React, { useState, useEffect } from 'react';
 
 
 export default function Home() {
-   const [isClient, setIsClient] = useState(false);
-
-   useEffect(() => {
-     setIsClient(true); // Set to true once component mounts on the client
-   }, []);
+   // Removed isClient state management
+   // const [isClient, setIsClient] = useState(false);
+   // useEffect(() => {
+   //   setIsClient(true); // Set to true once component mounts on the client
+   // }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden"> {/* Added relative isolate and overflow-hidden */}
-       {/* Add Matrix Background - Render only on client */}
-       {isClient && <MatrixBackground />}
+    <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden"> {/* Kept relative isolate and overflow-hidden */}
+       {/* Removed Matrix Background rendering */}
+       {/* {isClient && <MatrixBackground />} */}
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -49,8 +52,8 @@ export default function Home() {
       <main className="flex-grow relative z-10"> {/* Ensure main content is above background */}
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
-          {/* Background Shapes & Logo Backdrop (Kept, but now behind Matrix if z-index is lower) */}
-          <div className="absolute inset-0 -z-10 overflow-hidden"> {/* Lower z-index than matrix */}
+          {/* Background Shapes & Logo Backdrop */}
+          <div className="absolute inset-0 -z-10 overflow-hidden">
              {/* Subtle gradient shapes */}
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
              <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl opacity-40 animate-[spin_25s_linear_infinite]"></div>
