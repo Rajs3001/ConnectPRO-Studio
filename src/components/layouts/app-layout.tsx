@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOut, User, Calendar, MessageSquare, Settings, LayoutDashboard, Search, UserCog, Bot, Users, CodeXml } from 'lucide-react'; // Added Bot, Users icons
 import { useToast } from '@/hooks/use-toast';
-import React from 'react';
+import React, { useEffect, useState } from 'react'; // Import useEffect and useState
 import { cn } from '@/lib/utils'; // Import cn
 import Logo from '@/components/shared/logo'; // Import the shared Logo component
 
@@ -42,7 +42,7 @@ const getUserMenuItems = (): MenuItem[] => [
     { href: '/user/appointments', label: 'My Appointments', icon: Calendar },
     { href: '/user/chat', label: 'Chats', icon: MessageSquare },
     { href: '/user/chat/ai', label: 'AI Counselor', icon: Bot },
-    { href: '/community', label: 'Community', icon: Users }, // Added Community Link
+    // { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
     { href: `/user/profile`, label: 'Profile Settings', icon: Settings },
 ];
 
@@ -50,7 +50,7 @@ const getProfessionalMenuItems = (): MenuItem[] => [
     { href: `/professional/dashboard`, label: 'Dashboard', icon: LayoutDashboard, exact: true },
     { href: '/professional/schedule', label: 'Manage Schedule', icon: Calendar },
     { href: '/professional/appointments', label: 'Appointments', icon: UserCog },
-    { href: '/community', label: 'Community', icon: Users }, // Added Community Link
+    // { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
     // { href: '/professional/chat', label: 'Chats', icon: MessageSquare }, // Keep commented if not implemented
     { href: `/professional/profile`, label: 'Profile & Settings', icon: Settings },
 ];
@@ -60,13 +60,21 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
   const router = useRouter();
   const pathname = usePathname(); // Get current path
   const { toast } = useToast();
+  const [isClient, setIsClient] = useState(false); // Track client-side rendering
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component mounts
+  }, []);
+
 
   // TODO: Replace with actual user/professional data from auth context
-  const userData = {
+  // Simulating user data based on type
+  const userData = React.useMemo(() => ({
     name: userType === 'user' ? 'Alice Student' : 'Dr. Bob Professional',
-    initials: userType === 'user' ? 'AS' : 'BP',
-    avatarUrl: `https://picsum.photos/seed/${userType}/40/40`
-  };
+    initials: userType === 'user' ? 'AS' : 'DB', // Initials for fallback
+    avatarUrl: `https://picsum.photos/seed/${userType === 'user' ? 'user' : 'pro'}/40/40` // Different seeds
+  }), [userType]);
+
 
   const handleLogout = () => {
     console.log('Logging out...');
@@ -80,6 +88,11 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
 
   // Select menu items based on user type
   const menuItems = userType === 'user' ? getUserMenuItems() : getProfessionalMenuItems();
+
+  // Render null on server to avoid hydration mismatch for user data
+  if (!isClient) {
+    return null;
+  }
 
   return (
     // Use SidebarProvider for context
@@ -114,13 +127,7 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
                           finalIsActive = true; // Activate 'AI Counselor' specifically
                      } else if (item.href === '/user/chat' && pathname === '/user/chat/ai') {
                          finalIsActive = false; // Deactivate base 'Chats' if on AI chat page
-                     } else if (item.href === '/community' && pathname.startsWith('/community')) {
-                          finalIsActive = true; // Activate community if on any community sub-page
                      }
-                  } else if (userType === 'professional') {
-                      if (item.href === '/community' && pathname.startsWith('/community')) {
-                          finalIsActive = true; // Activate community for professionals too
-                      }
                   }
 
 

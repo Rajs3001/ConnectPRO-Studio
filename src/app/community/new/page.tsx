@@ -1,8 +1,9 @@
 
 "use client";
 
-import React, { useState } from 'react';
-import AppLayout from '@/components/layouts/app-layout';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Use for redirection
+// Removed AppLayout import
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'; // Adjusted imports
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,13 +11,35 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
 import { CodeXml, Image as ImageIconLucid, Link as LinkIconLucid, Send, Text, ArrowLeft, UserCircle } from 'lucide-react'; // Renamed icons
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'; // Added Avatar
+import Link from 'next/link'; // Import Link
 
 type PostType = 'text' | 'image' | 'code' | 'link';
 
+// Simulate authentication check - Replace with actual auth logic
+const useAuthCheck = () => {
+    const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Start as null
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Simulate async check
+            const authStatus = true; // Assume user is logged in for now
+            setIsAuthenticated(authStatus);
+            if (!authStatus) {
+                console.log("User not authenticated, redirecting to login...");
+                router.push('/login/user?redirect=/community/new'); // Redirect to login if not authenticated
+            }
+        };
+        checkAuth();
+    }, [router]);
+
+    return isAuthenticated; // Return the auth status
+};
+
 export default function NewCommunityPostPage() {
+    const isAuthenticated = useAuthCheck();
     const { toast } = useToast();
     const router = useRouter();
     const [title, setTitle] = useState(''); // Optional title
@@ -24,6 +47,7 @@ export default function NewCommunityPostPage() {
     const [tags, setTags] = useState('');
     const [postType, setPostType] = useState<PostType>('text');
     const [loading, setLoading] = useState(false);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -93,22 +117,47 @@ export default function NewCommunityPostPage() {
         return <Textarea {...commonProps} rows={5} />;
     };
 
-    return (
-        <AppLayout userType="user">
-            <div className="container mx-auto py-8 max-w-3xl">
-                <form onSubmit={handleSubmit}>
-                    <Card className="shadow-none border-none rounded-none p-0">
-                        <CardHeader className="p-4 flex flex-row items-center justify-between border-b border-border/60">
-                             <Button variant="ghost" size="icon" type="button" onClick={() => router.back()} className="text-muted-foreground hover:text-foreground">
-                                 <ArrowLeft size={20} />
-                             </Button>
-                             <h1 className="text-lg font-semibold">Create New Post</h1>
-                             <Button type="submit" disabled={loading || !content.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 h-9">
-                                {loading ? 'Posting...' : 'Post'}
-                            </Button>
-                        </CardHeader>
+     // Show loading or require login screen
+     if (isAuthenticated === null) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-background">
+                <p className="text-muted-foreground">Checking authentication...</p>
+            </div>
+        );
+    }
+    if (isAuthenticated === false) {
+         return (
+             <div className="flex items-center justify-center min-h-screen bg-background">
+                <p className="text-muted-foreground">Redirecting to login...</p>
+             </div>
+         );
+     }
 
-                        <CardContent className="p-4 flex gap-3">
+    return (
+       // Removed AppLayout
+        <div className="bg-background min-h-screen">
+           {/* Community Header */}
+           <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+                     {/* Back Button */}
+                     <Button variant="ghost" size="icon" className="text-foreground" onClick={() => router.back()}>
+                         <ArrowLeft size={20} />
+                     </Button>
+                     <h1 className="text-lg font-semibold text-primary font-poppins text-glow-primary">
+                         Create New Post
+                     </h1>
+                     {/* Post Button */}
+                      <Button type="submit" form="new-post-form" disabled={loading || !content.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-5 h-9">
+                         {loading ? 'Posting...' : 'Post'}
+                     </Button>
+                </div>
+            </header>
+
+            <main className="container mx-auto py-8 max-w-2xl">
+                 <form id="new-post-form" onSubmit={handleSubmit}>
+                    <Card className="shadow-none border border-border/60 rounded-lg overflow-hidden bg-card">
+                        {/* Header removed, controls are in main header now */}
+                         <CardContent className="p-4 flex gap-3">
                              <Avatar className="h-10 w-10 bg-secondary mt-1 shrink-0">
                                 <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
                              </Avatar>
@@ -179,7 +228,7 @@ export default function NewCommunityPostPage() {
                          </CardFooter>
                     </Card>
                  </form>
-            </div>
-        </AppLayout>
+            </main>
+        </div>
     );
 }
