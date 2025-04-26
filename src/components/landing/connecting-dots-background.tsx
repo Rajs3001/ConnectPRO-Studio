@@ -10,6 +10,7 @@ interface Dot {
   vx: number;
   vy: number;
   radius: number;
+  isGlowing?: boolean; // Added property for glowing dots
 }
 
 const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className }) => {
@@ -31,11 +32,12 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
 
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
-    const MAX_DOTS = Math.floor((width * height) / 10000); // Adjust density based on area
-    const CONNECT_DISTANCE = 100; // Max distance to draw a line between dots
-    const DOT_SPEED = 0.3; // Max speed of dots
-    const DOT_RADIUS_MIN = 1;
-    const DOT_RADIUS_MAX = 2.5;
+    const MAX_DOTS = Math.floor((width * height) / 12000); // Adjust density
+    const CONNECT_DISTANCE = 120; // Increase connection distance slightly
+    const DOT_SPEED = 0.3;
+    const DOT_RADIUS_MIN = 1.5; // Increase min radius
+    const DOT_RADIUS_MAX = 3.5; // Increase max radius
+    const GLOW_PROBABILITY = 0.05; // Chance for a dot to glow
 
     const initDots = () => {
         dots.current = [];
@@ -46,6 +48,7 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
                 vx: (Math.random() - 0.5) * DOT_SPEED * 2,
                 vy: (Math.random() - 0.5) * DOT_SPEED * 2,
                 radius: Math.random() * (DOT_RADIUS_MAX - DOT_RADIUS_MIN) + DOT_RADIUS_MIN,
+                isGlowing: Math.random() < GLOW_PROBABILITY, // Randomly assign glow
             });
         }
     };
@@ -64,15 +67,30 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
         if (dot.x < 0 || dot.x > width) dot.vx *= -1;
         if (dot.y < 0 || dot.y > height) dot.vy *= -1;
 
+        // Determine color and glow
+         const primaryHslMatch = getComputedStyle(document.documentElement).getPropertyValue('--primary').match(/(\d+)\s+(\d+)%\s+(\d+)%/);
+         const accentHslMatch = getComputedStyle(document.documentElement).getPropertyValue('--accent').match(/(\d+)\s+(\d+)%\s+(\d+)%/);
+
+         let dotColor = primaryHslMatch ? `hsla(${primaryHslMatch[1]}, ${primaryHslMatch[2]}%, ${primaryHslMatch[3]}%, 0.8)` : 'rgba(67, 100, 247, 0.8)'; // Increase opacity
+
+         if (dot.isGlowing) {
+             dotColor = accentHslMatch ? `hsla(${accentHslMatch[1]}, ${accentHslMatch[2]}%, ${accentHslMatch[3]}%, 0.9)` : 'rgba(111, 177, 252, 0.9)'; // Accent color for glowing dots
+             ctx.shadowColor = dotColor;
+             ctx.shadowBlur = 5; // Add glow effect
+         } else {
+              ctx.shadowBlur = 0; // Remove glow for non-glowing dots
+         }
+
+
         // Draw dot
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
-        // Use theme color for dots, slightly more opaque
-        const primaryHslMatch = getComputedStyle(document.documentElement).getPropertyValue('--primary').match(/(\d+)\s+(\d+)%\s+(\d+)%/);
-        const dotColor = primaryHslMatch ? `hsla(${primaryHslMatch[1]}, ${primaryHslMatch[2]}%, ${primaryHslMatch[3]}%, 0.7)` : 'rgba(67, 100, 247, 0.7)'; // Fallback color
         ctx.fillStyle = dotColor;
         ctx.fill();
       });
+
+       // Reset shadow before drawing lines
+      ctx.shadowBlur = 0;
 
       // Draw connecting lines
       for (let i = 0; i < dots.current.length; i++) {
@@ -82,15 +100,15 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < CONNECT_DISTANCE) {
-            const opacity = 1 - distance / CONNECT_DISTANCE; // Fade line with distance
+            const opacity = 1 - distance / CONNECT_DISTANCE;
             ctx.beginPath();
             ctx.moveTo(dots.current[i].x, dots.current[i].y);
             ctx.lineTo(dots.current[j].x, dots.current[j].y);
-            // Use theme color for lines, fainter
+            // Use theme color for lines, slightly thicker and more opaque
             const primaryHslMatch = getComputedStyle(document.documentElement).getPropertyValue('--primary').match(/(\d+)\s+(\d+)%\s+(\d+)%/);
-            const lineColor = primaryHslMatch ? `hsla(${primaryHslMatch[1]}, ${primaryHslMatch[2]}%, ${primaryHslMatch[3]}%, ${opacity * 0.3})` : `rgba(67, 100, 247, ${opacity * 0.3})`; // Fallback color
+            const lineColor = primaryHslMatch ? `hsla(${primaryHslMatch[1]}, ${primaryHslMatch[2]}%, ${primaryHslMatch[3]}%, ${opacity * 0.5})` : `rgba(67, 100, 247, ${opacity * 0.5})`; // Increase line opacity
             ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 0.7; // Increase line width
             ctx.stroke();
           }
         }
@@ -105,9 +123,9 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
       }
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-      initDots(); // Reinitialize dots for new size
+      initDots();
       if (ctx) {
-        draw(); // Restart animation
+        draw();
       }
     };
 
@@ -119,9 +137,8 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
 
 
     window.addEventListener('resize', debouncedResizeHandler);
-    draw(); // Initial draw
+    draw();
 
-    // Cleanup function
     return () => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
@@ -129,9 +146,8 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
       window.removeEventListener('resize', debouncedResizeHandler);
       clearTimeout(resizeTimeout);
     };
-  }, [isClient]); // Depend on isClient
+  }, [isClient]);
 
-  // Render nothing server-side or before hydration
   if (!isClient) {
     return null;
   }
@@ -140,7 +156,7 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
     <canvas
       ref={canvasRef}
       className={cn(
-          'absolute inset-0 -z-10 w-full h-full pointer-events-none', // Position behind content
+          'absolute inset-0 -z-10 w-full h-full pointer-events-none opacity-50', // Adjusted opacity
           className
       )}
     />

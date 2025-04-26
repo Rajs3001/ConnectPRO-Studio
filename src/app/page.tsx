@@ -21,9 +21,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden">
-       {/* Background Animations - Choose one or combine subtly */}
-       {/* <MatrixBackground className="opacity-10" /> */} {/* Example: Use Matrix with low opacity */}
-       {/* Connecting Dots is added within the Hero section below for better layering */}
+       {/* Background Animations - Positioned to cover viewport */}
+       {/* <MatrixBackground className="opacity-10 fixed inset-0 -z-20" />  */}
+       <ConnectingDotsBackground className="fixed inset-0 -z-20" /> {/* Covers full viewport */}
+
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,7 +48,7 @@ export default function Home() {
       <main className="flex-grow relative z-10"> {/* Ensure main content is above background */}
         {/* Hero Section */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden animate-fade-in">
-          {/* Background Shapes & Logo Backdrop & Connecting Dots */}
+          {/* Background Shapes & Logo Backdrop (Removed Connecting Dots from here) */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
              {/* Subtle gradient shapes */}
              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-40 animate-[spin_20s_linear_infinite_reverse]"></div>
@@ -56,8 +57,6 @@ export default function Home() {
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-20">
                  <Logo className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] opacity-5 text-primary/50 blur-[2px]" /> {/* Large, transparent, blurred logo */}
              </div>
-             {/* Connecting Dots Animation */}
-             <ConnectingDotsBackground className="absolute inset-0 opacity-30" />
           </div>
 
           <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
@@ -326,4 +325,5 @@ export default function Home() {
     </div>
   );
 }
+
 
