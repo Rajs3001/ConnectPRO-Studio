@@ -40,8 +40,7 @@ const getUserMenuItems = (): MenuItem[] => [
     { href: `/user/dashboard`, label: 'Dashboard', icon: LayoutDashboard, exact: true },
     { href: '/user/find-professional', label: 'Find Professionals', icon: Search },
     { href: '/user/appointments', label: 'My Appointments', icon: Calendar },
-    { href: '/user/chat', label: 'Chats', icon: MessageSquare },
-    { href: '/user/chat/ai', label: 'AI Counselor', icon: Bot },
+    { href: '/user/chat/ai', label: 'AI Counselor', icon: Bot }, // Direct link to AI chat
     // { href: '/community', label: 'Community', icon: Users }, // Removed Community Link
     { href: `/user/profile`, label: 'Profile Settings', icon: Settings },
 ];
@@ -116,19 +115,7 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
                  // Determine active state based on path matching
                  const isActive = item.exact
                    ? pathname === item.href
-                   : pathname.startsWith(item.href) && (item.href !== `/${userType}/dashboard` || pathname === `/${userType}/dashboard`) && item.href !== '/user/chat'; // Ensure dashboard matches exactly, avoid matching base chat url if sub-chats exist
-
-                 // Special handling for chat parent and AI chat item
-                  let finalIsActive = isActive;
-                  if (userType === 'user') {
-                     if (item.href === '/user/chat' && pathname.startsWith('/user/chat/') && !pathname.startsWith('/user/chat/ai')) {
-                         finalIsActive = true; // Activate base 'Chats' if in a specific user/pro chat
-                     } else if (item.href === '/user/chat/ai' && pathname === '/user/chat/ai') {
-                          finalIsActive = true; // Activate 'AI Counselor' specifically
-                     } else if (item.href === '/user/chat' && pathname === '/user/chat/ai') {
-                         finalIsActive = false; // Deactivate base 'Chats' if on AI chat page
-                     }
-                  }
+                   : pathname.startsWith(item.href); // Default to startsWith for non-exact
 
 
                return (
@@ -136,14 +123,14 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
                    <SidebarMenuButton
                      asChild
                      tooltip={item.label}
-                     isActive={finalIsActive} // Use the refined active state
+                     isActive={isActive} // Use the active state
                      className={cn(
                        'hover:bg-muted/80', // Subtle hover
-                       finalIsActive && 'bg-primary/10 text-primary font-semibold' // Active state style
+                       isActive && 'bg-primary/10 text-primary font-semibold' // Active state style
                      )}
                    >
                      <Link href={item.href}>
-                       <item.icon className={cn(finalIsActive && 'text-primary')} />
+                       <item.icon className={cn(isActive && 'text-primary')} />
                        <span>{item.label}</span>
                      </Link>
                    </SidebarMenuButton>

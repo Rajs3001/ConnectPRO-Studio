@@ -7,22 +7,27 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle, Plus, Search, Text, UserCircle, Share2, Repeat, Video, PlusCircle } from 'lucide-react'; // Added Video, PlusCircle
+import { Code, Heart, ImageIcon, Link as LinkIconLucid, MessageCircle, Plus, Search, Text, UserCircle, Share2, Repeat, Video, PlusCircle, Home, Users } from 'lucide-react'; // Added Home, Users icons
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils'; // Import cn
-import { useToast } from '@/hooks/use-toast'; // Import useToast
-// Removed react-icons imports
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from "lucide-react";
+import CommunityProfileSection from "@/components/community/ProfileSection"; // Import profile section component
+import CommunitySearchSection from "@/components/community/SearchSection"; // Import search section component
+import CommunityGroupsSection from "@/components/community/GroupsSection"; // Import groups section component
+import CommunityMessagesSection from "@/components/community/MessagesSection"; // Import messages section component
 
 
 // Mock data for community posts (replace with actual API fetching)
 
-type CommunitySection = "feed" | "reels" | "create" | "search" | "profile";
+type CommunitySection = "feed" | "reels" | "create" | "search" | "groups" | "messages" | "profile"; // Added groups, messages
 interface CommunityPost {
     id: string;
     type: 'text' | 'image' | 'code' | 'link';
+    // authorId: string; // Link post to an author for profile viewing later (even if displayed as Anonymous)
+    // authorName: string; // For display if not anonymous, or internal linking
     title: string;
     content?: string; // Add full content for potential preview expansion
     excerpt: string;
@@ -69,6 +74,7 @@ const fetchCommunityPosts = async (filters: { query?: string; type?: string } = 
         { id: 'p5', type: 'text', title: 'Best Practices for API Design?', excerpt: 'What are some key principles you follow when designing RESTful APIs? Looking for different perspectives.', tags: ['api', 'design', 'best-practices', 'backend'], timestamp: new Date(Date.now() - 18000000), commentCount: 30, likeCount: 95, reshareCount: 10, likedByMe: true, resharedByMe: true },
     ];
 
+    // Client-side filtering for demo purposes
     return allPosts.filter((post) => {
         const queryMatch = !filters.query ||
                            post.title.toLowerCase().includes(filters.query.toLowerCase()) ||
@@ -92,25 +98,34 @@ export default function CommunityPage() {
     const isAuthenticated = useAuthCheck();
     const [posts, setPosts] = useState<CommunityPost[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // Search term now used in SearchSection
     const [activeSection, setActiveSection] = useState<CommunitySection>("feed");
+    const router = useRouter();
 
     useEffect(() => {
         if (isAuthenticated === false) return; // Don't fetch if not authenticated (or still checking)
 
         const loadPosts = async () => {
             setLoading(true);
-            const fetchedPosts = await fetchCommunityPosts({ query: searchTerm });
+            // Fetch all posts initially for feed, search section will handle its own fetching
+            const fetchedPosts = await fetchCommunityPosts({});
             setPosts(fetchedPosts);
             setLoading(false);
         };
 
-        if (isAuthenticated === true) {
+        if (isAuthenticated === true && activeSection === "feed") {
            loadPosts();
+        } else if (isAuthenticated === true && activeSection !== "feed") {
+           setLoading(false); // Don't show loading skeleton for non-feed sections initially
         }
-    }, [searchTerm, isAuthenticated]);
+    }, [activeSection, isAuthenticated]);
 
      const handleLike = (postId: string) => {
+        // Only allow interaction if authenticated
+        if (!isAuthenticated) {
+            router.push('/login/user?redirect=/community');
+            return;
+        }
         setPosts(prevPosts =>
             prevPosts.map(post =>
                 post.id === postId
@@ -127,6 +142,10 @@ export default function CommunityPage() {
     };
 
      const handleReshare = (postId: string) => {
+         if (!isAuthenticated) {
+             router.push('/login/user?redirect=/community');
+             return;
+         }
         setPosts(prevPosts =>
             prevPosts.map(post =>
                 post.id === postId
@@ -143,23 +162,16 @@ export default function CommunityPage() {
      };
 
 
-    const handleSearch = (e: React.FormEvent) => {
-      e.preventDefault();
-      // Fetching is handled by useEffect on searchTerm change
-      console.log("Searching for:", searchTerm);
-    };
-
      // Show loading or require login screen
      if (isAuthenticated === null) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-background">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                 {/* Optionally add a spinner */}
             </div>
         );
     }
+    // Redirect is handled by the hook, this is a fallback message
     if (isAuthenticated === false) {
-         // The hook redirects, but we can show a message briefly
          return (
              <div className="flex items-center justify-center min-h-screen bg-background">
                 <p className="text-muted-foreground">Redirecting to login...</p>
@@ -169,95 +181,55 @@ export default function CommunityPage() {
 
 
     return (
-        // Use a different layout or no layout if community is standalone
-         <div className="bg-background min-h-screen">
+         <div className="bg-background min-h-screen flex flex-col">
              {/* Community Header */}
             <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
                     <Link href="/" className="text-2xl font-bold text-primary font-poppins text-glow-primary">
                         ConnectPro Community
                      </Link>
-                    <div className="flex items-center gap-4">
-                         <Avatar className="h-9 w-9">
-                             {/* <AvatarImage src="user-avatar.png" /> */}
-                            <AvatarFallback><UserCircle size={20} /></AvatarFallback>
-                         </Avatar>
-                     </div>
+                     {/* Profile icon removed from here */}
+                     <div>{/* Placeholder for potential future header actions */}</div>
                 </div>
              </header>
-                {/* Community Taskbar (like Instagram) */}
-                <nav className="sticky top-[4rem] z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <div className="container mx-auto flex h-12 items-center justify-around px-4 md:px-6">
-                        <button onClick={() => setActiveSection("feed")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "feed" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                            <p className="text-xs font-medium">Feed</p>
-                        </button>
-                        <button onClick={() => setActiveSection("reels")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "reels" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                            <Video className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
-                        </button>
-                        <button onClick={() => setActiveSection("create")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "create" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                            <PlusCircle className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
-                        </button>
-                         <button onClick={() => setActiveSection("search")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                           <Search className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
-                         </button>
-                         <button onClick={() => setActiveSection("profile")} className={`flex-1 text-center hover:text-primary transition-colors duration-200 ${activeSection === "profile" ? "text-primary" : "text-muted-foreground"}`}> {/* Updated button classname */}
-                           <UserCircle className="h-5 w-5 mx-auto" /> {/* Use Lucide icon */}
-                        </button>
+
+             {/* Main Content Area */}
+             <main className="flex-grow container mx-auto py-8 max-w-4xl">
+                 {/* Render content based on active section */}
+                 {activeSection === "feed" && (
+                     <div className="space-y-0 border border-border/60 rounded-lg overflow-hidden bg-card max-h-[calc(100vh-14rem)] overflow-y-auto"> {/* Adjusted max-height */}
+                        {loading ? (
+                          [...Array(5)].map((_, i) => <PostSkeleton key={i} />)
+                        ) : posts.length > 0 ? (
+                          posts.map((post) => (
+                            <PostCard
+                              key={post.id}
+                              post={post}
+                              onLike={handleLike}
+                              onReshare={handleReshare}
+                            />
+                          ))
+                        ) : (
+                          <div className="text-center py-12">
+                            <p className="text-muted-foreground">No posts available in the feed.</p>
+                          </div>
+                        )}
+                     </div>
+                 )}
+                 {activeSection === "reels" && (
+                    <div className="text-center py-12">
+                         <p className="text-muted-foreground">Reels section coming soon...</p>
+                         {/* Placeholder for Reels */}
+                         <div className="grid grid-cols-2 md:grid-cols-3 gap-1 mt-4">
+                             {[...Array(9)].map((_, i) => (
+                                 <div key={i} className="bg-muted aspect-square animate-pulse"></div>
+                             ))}
+                         </div>
                     </div>
-                </nav>
-
-            <main className="container mx-auto py-8 max-w-4xl"> {/* Centered content, similar to LinkedIn */}
-
-                {/* Search Bar (Optional) */}
-                {activeSection === "feed" && (
-
-                 <form onSubmit={handleSearch} className="mb-6 p-3 bg-card border border-border/60 rounded-lg shadow-sm flex items-center gap-3">
-                    <Search className="h-4 w-4 text-muted-foreground" />
-                     <Input
-                        placeholder="Search community..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="flex-grow bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto p-0 text-sm"
-                     />
-                     {/* <Button type="submit" size="sm" variant="ghost" className="text-primary">Search</Button> */}
-                 </form>
-                )}
-                {/* Posts Feed */}
-                {activeSection === "feed" && (
-                  <div className="space-y-0 border border-border/60 rounded-lg overflow-hidden bg-card max-h-[calc(100vh-20rem)] overflow-y-auto">
-                    {loading ? (
-                      [...Array(5)].map((_, i) => <PostSkeleton key={i} />)
-                    ) : posts.length > 0 ? (
-                      posts.map((post) => (
-                        <PostCard
-                          key={post.id}
-                          post={post}
-                          onLike={handleLike}
-                          onReshare={handleReshare}
-                        />
-                      ))
-                    ) : (
-                      <div className="text-center py-12">
-                        <p className="text-muted-foreground">No posts available</p>
-                        {searchTerm && <Button variant="link" onClick={() => setSearchTerm("")}>Clear search</Button>}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {activeSection === "reels" && (
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {[...Array(6)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-muted/40 rounded-lg aspect-video"
-                      >
-                        <img src={`https://picsum.photos/seed/${i}/800/600`} alt={`Reel ${i+1}`} className="w-full h-full object-cover rounded-lg" />
-                      </div>
-                    ))}
-                  </div>
                  )}
                   {activeSection === "create" && (
-                     <div className="text-center py-12">
+                     <div className="text-center py-12 flex flex-col items-center">
+                         <p className="text-muted-foreground mb-4">Ready to share something?</p>
                         <Button asChild size="lg">
                           <Link href="/community/new">
                              <Plus className="mr-2 h-5 w-5" /> Create New Post
@@ -265,13 +237,52 @@ export default function CommunityPage() {
                         </Button>
                      </div>
                    )}
-                     {activeSection === "profile" && (
-                        <div className="text-center py-12">
-                            <p className="text-muted-foreground">User profile section coming soon...</p>
-                             {/* Add a dummy profile section here */}
-                        </div>
-                    )}
-            </main>
+                 {activeSection === "search" && <CommunitySearchSection />}
+                 {activeSection === "groups" && <CommunityGroupsSection />}
+                 {activeSection === "messages" && <CommunityMessagesSection />}
+                 {activeSection === "profile" && <CommunityProfileSection />}
+             </main>
+
+             {/* Community Bottom Navigation Bar (Fixed) */}
+             <nav className="sticky bottom-0 z-40 w-full border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                 <div className="container mx-auto flex h-14 items-center justify-around px-4 md:px-6">
+                     {/* Feed Icon */}
+                     <button onClick={() => setActiveSection("feed")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "feed" ? "text-primary" : "text-muted-foreground"}`}>
+                         <Home className="h-6 w-6" />
+                         {/* <p className="text-xs font-medium mt-0.5">Feed</p> */}
+                     </button>
+                     {/* Reels Icon */}
+                     <button onClick={() => setActiveSection("reels")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "reels" ? "text-primary" : "text-muted-foreground"}`}>
+                         <Video className="h-6 w-6" />
+                         {/* <p className="text-xs font-medium mt-0.5">Reels</p> */}
+                     </button>
+                     {/* Create Icon */}
+                     <button onClick={() => setActiveSection("create")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "create" ? "text-primary" : "text-muted-foreground"}`}>
+                         <PlusCircle className="h-6 w-6" />
+                         {/* <p className="text-xs font-medium mt-0.5">Create</p> */}
+                     </button>
+                     {/* Search Icon */}
+                      <button onClick={() => setActiveSection("search")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "search" ? "text-primary" : "text-muted-foreground"}`}>
+                        <Search className="h-6 w-6" />
+                        {/* <p className="text-xs font-medium mt-0.5">Search</p> */}
+                      </button>
+                       {/* Groups Icon */}
+                       <button onClick={() => setActiveSection("groups")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "groups" ? "text-primary" : "text-muted-foreground"}`}>
+                           <Users className="h-6 w-6" />
+                           {/* <p className="text-xs font-medium mt-0.5">Groups</p> */}
+                       </button>
+                       {/* Messages Icon */}
+                       <button onClick={() => setActiveSection("messages")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "messages" ? "text-primary" : "text-muted-foreground"}`}>
+                           <MessageCircle className="h-6 w-6" />
+                           {/* <p className="text-xs font-medium mt-0.5">Messages</p> */}
+                       </button>
+                      {/* Profile Icon */}
+                      <button onClick={() => setActiveSection("profile")} className={`flex-1 flex flex-col items-center justify-center hover:text-primary transition-colors duration-200 ${activeSection === "profile" ? "text-primary" : "text-muted-foreground"}`}>
+                        <UserCircle className="h-6 w-6" />
+                        {/* <p className="text-xs font-medium mt-0.5">Profile</p> */}
+                     </button>
+                 </div>
+             </nav>
         </div>
     );
 }
@@ -335,7 +346,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, onReshare }) => {
             case 'image':
                 return (
                     <Link href={`/community/post/${post.id}`} className="block mt-2 overflow-hidden rounded-lg border border-border/60 aspect-video">
-                        <img src={post.content} alt={post.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
+                        {/* Use picsum for placeholder image */}
+                        <img src={post.content || `https://picsum.photos/seed/${post.id}/800/600`} alt={post.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
                     </Link>
                 );
             case 'code':
@@ -365,16 +377,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, onReshare }) => {
 
     return (
         <Card className={cn(
-            "shadow-none hover:bg-muted/30 transition-colors duration-150 border-b border-border/60 rounded-none last:border-b-0", // More like LinkedIn
+            "shadow-none hover:bg-muted/30 transition-colors duration-150 border-b border-border/60 rounded-none last:border-b-0", // More like LinkedIn/Threads
             "flex p-4 gap-3" // Use flex layout
         )}>
             {/* Avatar Column */}
             <div className="shrink-0">
-                <Avatar className="h-10 w-10 bg-secondary">
-                    <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
-                </Avatar>
-                {/* Optional: Add a vertical line connector for threads view */}
-                 {/* <div className="h-full w-0.5 bg-border/40 mx-auto mt-2"></div> */}
+                 {/* Link Avatar to user's community profile */}
+                <Link href={`/community/profile/anonymous-${post.id}`}> {/* Simplified anonymous link */}
+                    <Avatar className="h-10 w-10 bg-secondary cursor-pointer">
+                        <AvatarFallback><UserCircle size={24} className="text-muted-foreground" /></AvatarFallback>
+                    </Avatar>
+                </Link>
             </div>
 
              {/* Content Column */}
@@ -382,7 +395,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, onReshare }) => {
                  {/* Post Header */}
                  <div className="flex items-center justify-between gap-2">
                      <div className="flex items-center gap-2 overflow-hidden"> {/* Added overflow-hidden */}
-                         <span className="font-semibold text-sm truncate">Anonymous</span> {/* Truncate if needed */}
+                        <Link href={`/community/profile/anonymous-${post.id}`}> {/* Link name to profile */}
+                             <span className="font-semibold text-sm truncate hover:underline cursor-pointer">Anonymous</span>
+                        </Link>
                          <span className="text-xs text-muted-foreground">&middot;</span>
                          <Link href={`/community/post/${post.id}`} className="text-xs text-muted-foreground hover:underline flex-shrink-0">{timeAgo(post.timestamp)}</Link>
                      </div>
@@ -461,3 +476,4 @@ const PostSkeleton = () => (
         </div>
     </Card>
 );
+
