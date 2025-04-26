@@ -20,6 +20,7 @@ import CommunityGroupsSection from "@/components/community/GroupsSection";
 import CommunityMessagesSection from "@/components/community/MessagesSection";
 import ProShortsSection from "@/components/community/ProShortsSection"; // Import Pro Shorts section component
 import NewCommunityPostPage from "./new/page"; // Import Create Post page component
+import SiteLoader from "@/components/shared/site-loader"; // Import SiteLoader
 
 
 // Mock data for community posts (replace with actual API fetching)
@@ -99,12 +100,12 @@ const typeIcons = {
 
 // Updated section titles
 const sectionTitles: Record<CommunitySection, string> = {
-    feed: "Community Feed",
+    feed: "Home", // Changed from "Community Feed"
     shorts: "Pro Shorts",
-    search: "Search Community",
+    search: "Search", // Changed from "Search Community"
     create: "Create Post",
-    groups: "Community Groups",
-    messages: "Messages & Chats",
+    groups: "Groups", // Changed from "Community Groups"
+    messages: "Messages", // Changed from "Messages & Chats"
     profile: "My Profile",
 };
 
@@ -112,7 +113,7 @@ const sectionTitles: Record<CommunitySection, string> = {
 export default function CommunityPage() {
     const isAuthenticated = useAuthCheck();
     const [posts, setPosts] = useState<CommunityPost[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // Combined loading state
     const [searchTerm, setSearchTerm] = useState(''); // Search term now used in SearchSection
     const [activeSection, setActiveSection] = useState<CommunitySection>("feed");
     const router = useRouter();
@@ -120,19 +121,22 @@ export default function CommunityPage() {
     useEffect(() => {
         if (isAuthenticated === false) return; // Don't fetch if not authenticated (or still checking)
 
-        const loadPosts = async () => {
-            setLoading(true);
-            // Fetch all posts initially for feed, search section will handle its own fetching
-            const fetchedPosts = await fetchCommunityPosts({});
-            setPosts(fetchedPosts);
+        const loadData = async () => {
+            setLoading(true); // Set loading true for all section changes initially
+             if (activeSection === "feed") {
+                 const fetchedPosts = await fetchCommunityPosts({});
+                 setPosts(fetchedPosts);
+             }
+            // Other sections load their own data within their components
+            // Simulate a small delay for non-feed sections to show loader briefly
+             await new Promise(resolve => setTimeout(resolve, 300));
             setLoading(false);
         };
 
-        if (isAuthenticated === true && activeSection === "feed") {
-           loadPosts();
-        } else if (isAuthenticated === true && activeSection !== "feed") {
-           setLoading(false); // Don't show loading skeleton for non-feed sections initially
+        if (isAuthenticated === true) {
+           loadData();
         }
+
     }, [activeSection, isAuthenticated]);
 
      const handleLike = (postId: string) => {
@@ -181,7 +185,8 @@ export default function CommunityPage() {
      if (isAuthenticated === null) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-background">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                 {/* Use SiteLoader for initial auth check */}
+                 <SiteLoader size="lg" />
             </div>
         );
     }
@@ -212,34 +217,38 @@ export default function CommunityPage() {
 
              {/* Main Content Area */}
              <main className="flex-grow container mx-auto py-8 max-w-4xl">
-                 {/* Render content based on active section */}
-                 {activeSection === "feed" && (
-                     <div className="space-y-0 border border-border/60 rounded-lg overflow-hidden bg-card max-h-[calc(100vh-14rem)] overflow-y-auto"> {/* Adjusted max-height */}
-                        {loading ? (
-                          [...Array(5)].map((_, i) => <PostSkeleton key={i} />)
-                        ) : posts.length > 0 ? (
-                          posts.map((post) => (
-                            <PostCard
-                              key={post.id}
-                              post={post}
-                              onLike={handleLike}
-                              onReshare={handleReshare}
-                            />
-                          ))
-                        ) : (
-                          <div className="text-center py-12">
-                            <p className="text-muted-foreground">No posts available in the feed.</p>
-                          </div>
-                        )}
+                {loading ? (
+                     <div className="flex items-center justify-center min-h-[300px]">
+                         <SiteLoader size="lg" />
                      </div>
+                 ) : (
+                     <>
+                         {activeSection === "feed" && (
+                             <div className="space-y-0 border border-border/60 rounded-lg overflow-hidden bg-card max-h-[calc(100vh-14rem)] overflow-y-auto scrollbar-hide"> {/* Adjusted max-height and hide scrollbar */}
+                                {posts.length > 0 ? (
+                                  posts.map((post) => (
+                                    <PostCard
+                                      key={post.id}
+                                      post={post}
+                                      onLike={handleLike}
+                                      onReshare={handleReshare}
+                                    />
+                                  ))
+                                ) : (
+                                  <div className="text-center py-12">
+                                    <p className="text-muted-foreground">No posts available in the feed.</p>
+                                  </div>
+                                )}
+                             </div>
+                         )}
+                         {activeSection === "shorts" && <ProShortsSection />}
+                         {activeSection === "search" && <CommunitySearchSection />}
+                         {activeSection === "create" && <NewCommunityPostPage />}
+                         {activeSection === "groups" && <CommunityGroupsSection />}
+                         {activeSection === "messages" && <CommunityMessagesSection />}
+                         {activeSection === "profile" && <CommunityProfileSection />}
+                     </>
                  )}
-                 {activeSection === "shorts" && <ProShortsSection />}
-                 {activeSection === "search" && <CommunitySearchSection />}
-                 {/* Render the NewCommunityPostPage component directly for 'create' section */}
-                 {activeSection === "create" && <NewCommunityPostPage />}
-                 {activeSection === "groups" && <CommunityGroupsSection />}
-                 {activeSection === "messages" && <CommunityMessagesSection />}
-                 {activeSection === "profile" && <CommunityProfileSection />}
              </main>
 
              {/* Community Bottom Navigation Bar (Fixed) */}
@@ -490,8 +499,3 @@ const PostSkeleton = () => (
         </div>
     </Card>
 );
-
-
-
-
-    

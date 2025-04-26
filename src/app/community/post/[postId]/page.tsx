@@ -18,6 +18,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from '@/lib/utils'; // Import cn
 import Link from 'next/link'; // Import Link
+import SiteLoader from '@/components/shared/site-loader'; // Import SiteLoader
 
 // Mock data (replace with actual API fetching)
 interface CommunityPost {
@@ -79,7 +80,7 @@ const fetchPostDetails = async (postId: string): Promise<CommunityPost | null> =
 };
 
 const fetchPostComments = async (postId: string): Promise<Comment[]> => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Increased delay
     const commentBase = `Comment on post ${postId}`;
     const count = Math.floor(Math.random() * 10) + 1;
     return Array.from({ length: count }, (_, i) => ({
@@ -119,7 +120,7 @@ const timeAgo = (date: Date): string => {
     if (interval > 1) return Math.floor(interval) + "h";
     interval = seconds / 60;
     if (interval > 1) return Math.floor(interval) + "m";
-    return Math.floor(seconds) + "s";
+    return "now";
 };
 
 
@@ -148,15 +149,16 @@ export default function CommunityPostPage() {
                     fetchPostDetails(postId),
                     fetchPostComments(postId),
                 ]);
-                setPost(postDetails);
-                // Sort comments newest first for display
-                setComments(postComments.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()));
+                 setPost(postDetails);
+                 // Sort comments newest first for display
+                 setComments(postComments.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()));
             } catch (error) {
                 console.error("Failed to load post details or comments:", error);
                 toast({ variant: "destructive", title: "Error", description: "Could not load the post or comments." });
             } finally {
-                setLoadingPost(false);
-                setLoadingComments(false);
+                 setLoadingPost(false); // Stop post loading first
+                 // Delay stopping comment loading slightly for smoother feel
+                 setTimeout(() => setLoadingComments(false), 300);
             }
         };
 
@@ -295,7 +297,7 @@ export default function CommunityPostPage() {
       if (isAuthenticated === null) {
          return (
              <div className="flex items-center justify-center min-h-screen bg-background">
-                 <p className="text-muted-foreground">Checking authentication...</p>
+                 <SiteLoader size="lg" />
              </div>
          );
      }
@@ -435,7 +437,9 @@ export default function CommunityPostPage() {
                 {/* Comments Section */}
                  <div className="mt-0 border-t border-border/60" id="comments"> {/* Anchor for comment button */}
                       {loadingComments ? (
-                          [...Array(3)].map((_, i) => <CommentSkeleton key={i} />)
+                           <div className="flex items-center justify-center py-8">
+                              <SiteLoader size="md" />
+                           </div>
                       ) : comments.length > 0 ? (
                           comments.map(comment => (
                                <CommentCard

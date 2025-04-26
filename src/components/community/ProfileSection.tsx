@@ -10,12 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, Edit3, Link as LinkIcon, MapPin, Settings, UserCircle, Share2 } from 'lucide-react'; // Added icons
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import SiteLoader from '@/components/shared/site-loader'; // Import SiteLoader
 import { generateUsername } from 'unique-username-generator'; // Assuming a library for username generation
 
 // Simulate fetching user profile data
 const fetchUserProfile = async (userId: string) => {
     // In a real app, fetch from API based on auth/profile ID
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 800)); // Increased delay
     // Generate or retrieve a persistent anonymous username
     const username = localStorage.getItem(`connectpro-username-${userId}`) || generateUsername("-", 3, 15);
     localStorage.setItem(`connectpro-username-${userId}`, username);
@@ -85,7 +86,12 @@ export default function CommunityProfileSection() {
   };
 
   if (loading) {
-      return <ProfileSkeleton />;
+      // return <ProfileSkeleton />; // Kept for reference
+      return (
+          <div className="flex items-center justify-center min-h-[400px]">
+              <SiteLoader size="lg" />
+          </div>
+      );
   }
 
   if (!profileData) {
@@ -190,7 +196,7 @@ export default function CommunityProfileSection() {
   );
 }
 
-// Skeleton Loader
+// Skeleton Loader (kept for reference)
 const ProfileSkeleton = () => (
      <div className="space-y-6">
       <Card className="overflow-hidden shadow-lg">
@@ -229,4 +235,3 @@ const ProfileSkeleton = () => (
       </Tabs>
     </div>
 );
-

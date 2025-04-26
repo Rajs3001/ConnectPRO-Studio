@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Users, PlusCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import SiteLoader from '@/components/shared/site-loader'; // Import SiteLoader
 
 // Mock data for groups (replace with actual API fetch)
 const mockGroups = [
@@ -17,6 +18,14 @@ const mockGroups = [
 export default function CommunityGroupsSection() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [loading, setLoading] = React.useState(false); // Simulate loading state
+
+  // Simulate loading on initial mount or search
+  React.useEffect(() => {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 700); // Simulate fetch time
+      return () => clearTimeout(timer);
+  }, [searchTerm]); // Re-trigger loading simulation on search
+
 
   const filteredGroups = mockGroups.filter(group =>
     group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -40,30 +49,33 @@ export default function CommunityGroupsSection() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
+              disabled={loading}
             />
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 min-h-[200px]"> {/* Added min-height */}
           {loading ? (
-            [...Array(3)].map((_, i) => <GroupSkeleton key={i} />)
+            <div className="flex items-center justify-center h-full">
+               <SiteLoader size="lg" />
+            </div>
           ) : filteredGroups.length > 0 ? (
             filteredGroups.map(group => (
               <Card key={group.id} className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 overflow-hidden">
                   <div className="p-2 bg-secondary rounded-full">
                     <Users className="h-5 w-5 text-secondary-foreground" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-sm">{group.name}</p>
+                  <div className='overflow-hidden'>
+                    <p className="font-semibold text-sm truncate">{group.name}</p>
                     <p className="text-xs text-muted-foreground line-clamp-1">{group.description}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{group.members} members</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">Join</Button>
+                <Button variant="outline" size="sm" className='shrink-0'>Join</Button>
               </Card>
             ))
           ) : (
-            <p className="text-center text-muted-foreground py-4">No groups found matching your search.</p>
+            <p className="text-center text-muted-foreground py-4">No groups found{searchTerm ? ' matching your search' : ''}.</p>
           )}
         </CardContent>
       </Card>
@@ -71,6 +83,7 @@ export default function CommunityGroupsSection() {
   );
 }
 
+// Skeleton kept for reference, but SiteLoader is used now
 const GroupSkeleton = () => (
   <Card className="flex items-center justify-between p-4">
     <div className="flex items-center gap-3">

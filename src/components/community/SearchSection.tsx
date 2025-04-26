@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Search, Users, Hash, FileText } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import SiteLoader from '@/components/shared/site-loader'; // Import SiteLoader
 
 // Mock search results (replace with actual API fetch based on query)
 const mockResults = {
@@ -32,26 +33,33 @@ export default function CommunitySearchSection() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<typeof mockResults | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) {
-      setResults(null);
-      return;
-    }
-    setLoading(true);
-    console.log("Searching community for:", searchTerm);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 700));
-    // Filter mock results based on term (basic example)
-    const filteredResults = {
-        posts: mockResults.posts.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase())),
-        users: mockResults.users.filter(u => u.displayName.toLowerCase().includes(searchTerm.toLowerCase())),
-        groups: mockResults.groups.filter(g => g.name.toLowerCase().includes(searchTerm.toLowerCase())),
-        tags: mockResults.tags.filter(t => t.toLowerCase().includes(searchTerm.toLowerCase())),
-    };
-    setResults(filteredResults);
-    setLoading(false);
-  };
+  // Debounce search effect
+  useEffect(() => {
+      if (!searchTerm.trim()) {
+          setResults(null);
+          setLoading(false); // No loading if search is empty
+          return;
+      }
+
+      setLoading(true);
+      const handler = setTimeout(() => {
+          console.log("Searching community for:", searchTerm);
+          // Simulate API call
+          const filteredResults = {
+              posts: mockResults.posts.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase())),
+              users: mockResults.users.filter(u => u.displayName.toLowerCase().includes(searchTerm.toLowerCase())),
+              groups: mockResults.groups.filter(g => g.name.toLowerCase().includes(searchTerm.toLowerCase())),
+              tags: mockResults.tags.filter(t => t.toLowerCase().includes(searchTerm.toLowerCase())),
+          };
+          setResults(filteredResults);
+          setLoading(false);
+      }, 500); // Debounce search input by 500ms
+
+      return () => {
+          clearTimeout(handler);
+      };
+  }, [searchTerm]);
+
 
   const hasResults = results && (results.posts.length > 0 || results.users.length > 0 || results.groups.length > 0 || results.tags.length > 0);
 
@@ -60,7 +68,8 @@ export default function CommunitySearchSection() {
       <Card>
         <CardHeader>
           <CardTitle>Search Community</CardTitle>
-          <form onSubmit={handleSearch} className="relative mt-4">
+          {/* Removed form, search triggers on input change (debounced) */}
+          <div className="relative mt-4">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search posts, people, groups, tags..."
@@ -68,12 +77,13 @@ export default function CommunitySearchSection() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
             />
-            {/* <Button type="submit" size="sm" className="absolute right-1 top-1 h-7">Search</Button> */}
-          </form>
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="min-h-[200px]"> {/* Added min-height */}
           {loading ? (
-            <SearchSkeleton />
+             <div className="flex items-center justify-center h-full py-8">
+                <SiteLoader size="lg" />
+             </div>
           ) : results ? (
              hasResults ? (
                 <div className="space-y-4">
@@ -121,17 +131,19 @@ export default function CommunitySearchSection() {
                  <p className="text-center text-muted-foreground py-4">No results found for "{searchTerm}".</p>
              )
           ) : (
-            // Show suggestions or popular items before search
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-2">Suggestions</h3>
-              <div className="flex flex-wrap gap-2">
-                {mockSuggestions.map((suggestion, i) => (
-                  <Badge key={i} variant="outline" className="cursor-pointer hover:bg-accent" onClick={() => setSearchTerm(suggestion.replace('#', ''))}>
-                    {suggestion}
-                  </Badge>
-                ))}
+            // Show suggestions or popular items before search if search term is empty
+            !searchTerm.trim() && (
+              <div>
+                <h3 className="text-sm font-medium text-muted-foreground mb-2">Suggestions</h3>
+                <div className="flex flex-wrap gap-2">
+                  {mockSuggestions.map((suggestion, i) => (
+                    <Badge key={i} variant="outline" className="cursor-pointer hover:bg-accent" onClick={() => setSearchTerm(suggestion.replace('#', ''))}>
+                      {suggestion}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            </div>
+            )
           )}
         </CardContent>
       </Card>
@@ -139,7 +151,7 @@ export default function CommunitySearchSection() {
   );
 }
 
-// Skeleton for search results
+// Skeleton for search results (kept for reference)
 const SearchSkeleton = () => (
   <div className="space-y-4">
     {[...Array(3)].map((_, i) => (
