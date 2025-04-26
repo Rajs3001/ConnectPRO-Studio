@@ -1,4 +1,3 @@
-
 "use client"; // Required for hooks
 
 import type {Metadata} from 'next'; // Keep Metadata type import

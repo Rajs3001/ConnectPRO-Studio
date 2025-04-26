@@ -42,17 +42,17 @@ const ConnectionAnimation: React.FC = () => {
   const textClass = "text-[10px] md:text-xs font-semibold text-muted-foreground mt-1.5 text-center"; // Responsive text size
 
   // Adjusted node positions for better alignment within viewBox="0 0 600 250"
-  const nodeSize = 45; // Approximate icon container size for path calculation
-  const pathOffset = nodeSize / 2.5; // Offset for path start/end
+  // Node X positions spread more evenly, Y positions adjusted
+  const studentPos = { x: 50, y: 125 }; // Start node
+  const searchPos = { x: 170, y: 70 }; // Search slightly higher
+  const filterPos = { x: 170, y: 180 }; // Filter slightly lower
+  const messagePos = { x: 290, y: 70 }; // Message aligned with Search
+  const videoPos = { x: 290, y: 180 }; // Video aligned with Filter
+  const professionalPos = { x: 410, y: 125 }; // Professional centered vertically
+  const growthPos = { x: 530, y: 125 }; // Growth centered vertically
 
-  const studentPos = { x: 50, y: 125 };
-  const searchPos = { x: 180, y: 75 };
-  const filterPos = { x: 180, y: 175 };
-  const messagePos = { x: 310, y: 75 };
-  const videoPos = { x: 310, y: 175 };
-  const professionalPos = { x: 440, y: 125 };
-  const growthPos = { x: 550, y: 125 };
-
+  // Adjust path offsets if needed based on icon container size
+  const pathOffset = 15; // Offset for path start/end from node center
 
   return (
     <motion.div
@@ -66,7 +66,7 @@ const ConnectionAnimation: React.FC = () => {
       {/* SVG for lines */}
       <motion.svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 600 250" // Keep viewBox
+        viewBox="0 0 600 250" // Updated viewBox to match coordinate space
         preserveAspectRatio="xMidYMid meet"
         style={{ zIndex: 5 }}
       >
@@ -126,10 +126,10 @@ const ConnectionAnimation: React.FC = () => {
       </motion.svg>
 
       {/* Nodes - Use absolute positioning within the parent motion.div */}
-      {/* Positioning with left/top percentages and transform for centering */}
+      {/* Adjusted percentages based on new coordinate space and parent padding */}
       <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20" // Fixed width for text wrapping
-          style={{ left: `${studentPos.x / 6}%`, top: `${studentPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Allow text wrapping
+          style={{ left: `${(studentPos.x / 600) * 100}%`, top: `${(studentPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
           variants={itemVariants}
        >
          <Link href="#step-student" aria-label="Go to Student Step Description">
@@ -141,8 +141,8 @@ const ConnectionAnimation: React.FC = () => {
       </motion.div>
 
        <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
-          style={{ left: `${searchPos.x / 6}%`, top: `${searchPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20"
+          style={{ left: `${(searchPos.x / 600) * 100}%`, top: `${(searchPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
           variants={itemVariants}
         >
           <Link href="#step-find" aria-label="Go to Find Professional Step Description">
@@ -154,8 +154,8 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
-           style={{ left: `${filterPos.x / 6}%`, top: `${filterPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20"
+           style={{ left: `${(filterPos.x / 600) * 100}%`, top: `${(filterPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
           variants={itemVariants}
         >
            <Link href="#step-find" aria-label="Go to Filter Professional Step Description">
@@ -167,8 +167,8 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
-         style={{ left: `${messagePos.x / 6}%`, top: `${messagePos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20"
+         style={{ left: `${(messagePos.x / 600) * 100}%`, top: `${(messagePos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
          <Link href="#step-connect" aria-label="Go to Connect Step Description">
@@ -181,7 +181,7 @@ const ConnectionAnimation: React.FC = () => {
 
        <motion.div
          className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Use auto width for label
-         style={{ left: `${videoPos.x / 6}%`, top: `${videoPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+         style={{ left: `${(videoPos.x / 600) * 100}%`, top: `${(videoPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
           <Link href="#step-connect" aria-label="Go to Video Call Step Description">
@@ -193,8 +193,8 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
        <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-20 md:w-24" // Wider for text
-         style={{ left: `${professionalPos.x / 6}%`, top: `${professionalPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20" // Wider for text
+         style={{ left: `${(professionalPos.x / 600) * 100}%`, top: `${(professionalPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
           <Link href="#step-professional" aria-label="Go to Professional Interaction Step Description">
@@ -206,8 +206,8 @@ const ConnectionAnimation: React.FC = () => {
        </motion.div>
 
       <motion.div
-         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-16 md:w-20"
-         style={{ left: `${growthPos.x / 6}%`, top: `${growthPos.y / 2.5}%`, transform: 'translate(-50%, -50%)' }}
+         className="absolute flex flex-col items-center text-center z-10 cursor-pointer group w-auto min-w-16 md:min-w-20"
+         style={{ left: `${(growthPos.x / 600) * 100}%`, top: `${(growthPos.y / 250) * 100}%`, transform: 'translate(-50%, -50%)' }}
          variants={itemVariants}
         >
            <Link href="#step-growth" aria-label="Go to Growth Step Description">

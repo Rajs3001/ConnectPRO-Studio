@@ -67,7 +67,10 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
         // Draw dot
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'hsl(var(--primary) / 0.6)'; // Use theme primary color with opacity
+        // Use theme color for dots, slightly more opaque
+        const primaryHslMatch = getComputedStyle(document.documentElement).getPropertyValue('--primary').match(/(\d+)\s+(\d+)%\s+(\d+)%/);
+        const dotColor = primaryHslMatch ? `hsla(${primaryHslMatch[1]}, ${primaryHslMatch[2]}%, ${primaryHslMatch[3]}%, 0.7)` : 'rgba(67, 100, 247, 0.7)'; // Fallback color
+        ctx.fillStyle = dotColor;
         ctx.fill();
       });
 
@@ -83,7 +86,10 @@ const ConnectingDotsBackground: React.FC<{ className?: string }> = ({ className 
             ctx.beginPath();
             ctx.moveTo(dots.current[i].x, dots.current[i].y);
             ctx.lineTo(dots.current[j].x, dots.current[j].y);
-            ctx.strokeStyle = `hsla(var(--primary) / ${opacity * 0.3})`; // Use theme color, make lines fainter
+            // Use theme color for lines, fainter
+            const primaryHslMatch = getComputedStyle(document.documentElement).getPropertyValue('--primary').match(/(\d+)\s+(\d+)%\s+(\d+)%/);
+            const lineColor = primaryHslMatch ? `hsla(${primaryHslMatch[1]}, ${primaryHslMatch[2]}%, ${primaryHslMatch[3]}%, ${opacity * 0.3})` : `rgba(67, 100, 247, ${opacity * 0.3})`; // Fallback color
+            ctx.strokeStyle = lineColor;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }

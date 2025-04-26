@@ -21,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative isolate overflow-hidden">
-       <MatrixBackground /> {/* Render the matrix background */}
+       {/* Removed Matrix Background */}
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -80,7 +80,7 @@ export default function Home() {
 
         {/* How It Works Section */}
         <section className="py-16 md:py-24 relative overflow-hidden bg-background/50 backdrop-blur-sm animate-fade-in-up scroll-mt-20" id="how-it-works" style={{ animationDelay: '0.3s' }}>
-            <div className="container mx-auto px-4 md:px-6">
+            <div className="container mx-auto px-4 md:px-6 relative z-10"> {/* Added relative positioning */}
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary text-glow-primary font-poppins">How ConnectPro Works</h2>
                 <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
                    A simple, streamlined process to connect students and users with experienced professionals, fostering growth and providing clear guidance. Click on the icons to learn more about each step.
@@ -166,7 +166,7 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-24 bg-background/70 backdrop-blur-sm animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <section className="py-16 md:py-24 bg-background/70 backdrop-blur-sm animate-fade-in-up relative z-10" style={{ animationDelay: '0.4s' }}> {/* Added relative z-10 */}
           <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-accent text-glow-accent font-poppins">Why ConnectPro?</h2>
              <p className="text-center text-lg text-muted-foreground mb-16 max-w-4xl mx-auto font-sans">
@@ -290,7 +290,7 @@ export default function Home() {
       </main>
 
        {/* Footer */}
-       <footer className="border-t border-border/40 bg-card/30 text-muted-foreground py-12"> {/* Increased padding */}
+       <footer className="border-t border-border/40 bg-card/30 text-muted-foreground py-12 relative z-10"> {/* Increased padding, Added relative z-10 */}
          <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
            {/* Logo and Copyright */}
            <div className="flex flex-col items-center md:items-start gap-4">
@@ -324,3 +324,4 @@ export default function Home() {
     </div>
   );
 }
+
