@@ -68,12 +68,12 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up font-sans" style={{ animationDelay: '0.6s' }} data-testid="hero-cta-buttons">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild data-testid="find-mentor-button">
-                 <Link href="/user/find-professional" className="flex items-center justify-center">
+                 <Link href="/user/find-professional" className="flex items-center justify-center"> {/* Link to the correct page */}
                     Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" />
                  </Link>
               </Button>
                <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-300 transform hover:scale-105" asChild data-testid="explore-community-button">
-                 <Link href="/community">Explore Community</Link>
+                 <Link href="/community/join">Explore Community</Link> {/* Updated link */}
                </Button>
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function Home() {
              <Link href="/privacy" className="hover:text-foreground transition-colors hover:underline" data-testid="footer-link-privacy">Privacy Policy</Link>
              <Link href="/terms" className="hover:text-foreground transition-colors hover:underline" data-testid="footer-link-terms">Terms of Service</Link>
              <Link href="/contact" className="hover:text-foreground transition-colors hover:underline" data-testid="footer-link-contact">Contact Us</Link>
-             <Link href="/community" className="hover:text-foreground transition-colors hover:underline" data-testid="footer-link-community">Community</Link>
+             <Link href="/community/join" className="hover:text-foreground transition-colors hover:underline" data-testid="footer-link-community">Community</Link> {/* Updated link */}
            </nav>
 
            {/* Developer Message & Feedback */}
@@ -334,7 +334,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
