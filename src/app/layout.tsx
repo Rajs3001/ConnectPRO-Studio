@@ -1,5 +1,4 @@
 
-
 "use client"; // Required for hooks
 
 import { Inter, Poppins } from 'next/font/google'; // Import Poppins
@@ -9,8 +8,8 @@ import { useState, useEffect } from 'react'; // Import hooks for state managemen
 import { AnimatePresence } from 'framer-motion'; // Import AnimatePresence
 import { AuthProvider, useAuth } from '@/hooks/useAuth'; // Import AuthProvider and useAuth
 import './globals.css';
-import { useRouter, usePathname } from 'next/navigation'; // Import useRouter and usePathname
-import ProtectedRoute from '@/components/auth/ProtectedRoute'; // Correct import path
+import { useRouter } from 'next/navigation'; // Import useRouter
+import ProtectedRoute from '@/components/auth/ProtectedRoute'; // Import ProtectedRoute
 
 
 // Configure Inter font (for body text)
@@ -77,13 +76,13 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-       <head>
+       <head>{/* Removed whitespace here */}
          {/* Meta tags managed by Next.js metadata API in pages */}
          {/* Basic meta tags required in head */}
          <meta charSet="utf-8" />
          <meta name="viewport" content="width=device-width, initial-scale=1" />
-         <title>ConnectPro - Expert Connections</title> {/* Default title */}
-         <meta name="description" content="Connect with verified professionals, gain insights with AI, and engage with a supportive community." /> {/* Default description */}
+         <title>ConnectPro - Expert Connections</title>{/* Default title */}
+         <meta name="description" content="Connect with verified professionals, gain insights with AI, and engage with a supportive community." />{/* Default description */}
          {/* Favicon links (optional) - ensure favicon.ico exists in /public */}
           <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16" />{/* Use default favicon */}
       </head>
