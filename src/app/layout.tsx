@@ -1,7 +1,7 @@
 
 "use client"; // Required for hooks
 
-import type {Metadata} from 'next'; // Keep Metadata type import
+import type { Metadata } from 'next'; // Keep Metadata type import
 import { Inter, Poppins } from 'next/font/google'; // Import Poppins
 import { Toaster } from "@/components/ui/toaster"
 import Preloader from '@/components/preloader/preloader'; // Import Preloader
@@ -39,16 +39,19 @@ export default function RootLayout({
     setIsClient(true); // Ensure this runs client-side
     // Simulate loading time and then hide the preloader
     const timer = setTimeout(() => {
+      console.log("Preloader timeout finished, setting isLoading to false.");
       setIsLoading(false);
     }, 3500); // Adjust timing (e.g., 3500ms = 3.5s) to match animation
 
     return () => clearTimeout(timer); // Cleanup timer on unmount
   }, []);
 
+  console.log("RootLayout Render:", { isClient, isLoading });
+
 
   return (
-    <html lang="en" className="dark">{/* Removed whitespace here */}
-       <head>{/* Removed whitespace here */}
+    <html lang="en" className="dark">
+       <head>
          {/* Meta tags managed by Next.js metadata API in pages */}
          {/* Basic meta tags required in head */}
          <meta charSet="utf-8" />
@@ -65,7 +68,14 @@ export default function RootLayout({
             {isClient && isLoading ? <Preloader key="preloader" /> : null}
             </AnimatePresence>
             {/* Render children only after loading is complete */}
-            {isClient && !isLoading && children}
+            {isClient && !isLoading && (
+               <div data-testid="main-content-wrapper"> {/* Wrapper for easier inspection */}
+                   {console.log("Rendering main children content")}
+                   {children}
+                </div>
+            )}
+             {/* Log if children are not rendered */}
+             {(!isClient || isLoading) && console.log("Main children content NOT rendered yet.")}
             <Toaster />
          </AuthProvider>
       </body>
