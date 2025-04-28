@@ -34,12 +34,16 @@ export default function Home() {
                 <span className="text-glow-primary" data-testid="header-title">ConnectPro</span>
             </Link>
           <nav className="space-x-2 md:space-x-4" data-testid="header-nav">
-            <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted transition-colors font-sans" asChild data-testid="user-login-button">
-              <Link href="/login/user">User Login</Link>
-            </Button>
-            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10 transition-colors font-sans shadow-glow-primary hover:shadow-none" asChild data-testid="join-pro-button">
-              <Link href="/signup/professional">Join as Pro</Link>
-            </Button>
+            <Link href="/login/user" passHref data-testid="user-login-button-link">
+              <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted transition-colors font-sans" data-testid="user-login-button">
+                User Login
+              </Button>
+            </Link>
+            <Link href="/signup/professional" passHref data-testid="join-pro-button-link">
+               <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10 transition-colors font-sans shadow-glow-primary hover:shadow-none" data-testid="join-pro-button">
+                 Join as Pro
+               </Button>
+             </Link>
           </nav>
         </div>
       </header>
@@ -67,14 +71,18 @@ export default function Home() {
               Access verified professionals for personalized guidance, leverage intelligent AI insights to navigate your path, and engage with a supportive, anonymous community. Bridge the gap between ambition and achievement with secure video calls and contextual chat support.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up font-sans" style={{ animationDelay: '0.6s' }} data-testid="hero-cta-buttons">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild data-testid="find-mentor-button">
-                 <Link href="/user/find-professional" className="flex items-center justify-center"> {/* Link to the correct page */}
-                    Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" />
-                 </Link>
-              </Button>
-               <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-300 transform hover:scale-105" asChild data-testid="explore-community-button">
-                 <Link href="/community/join">Explore Community</Link> {/* Updated link */}
-               </Button>
+               {/* Refactored Button */}
+               <Link href="/user/find-professional" passHref data-testid="find-mentor-button-link">
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105 flex items-center justify-center" data-testid="find-mentor-button">
+                     Find Your Mentor <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+               </Link>
+               {/* Refactored Button */}
+               <Link href="/community/join" passHref data-testid="explore-community-button-link">
+                  <Button size="lg" variant="outline" className="border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-300 transform hover:scale-105" data-testid="explore-community-button">
+                    Explore Community {/* Updated link */}
+                  </Button>
+                </Link>
             </div>
           </div>
         </section>
@@ -287,12 +295,18 @@ export default function Home() {
                   Join ConnectPro today. Unlock personalized expert guidance, leverage cutting-edge AI insights for clearer direction, and participate in a thriving, anonymous community dedicated to mutual support and advancement.
                 </p>
                 <div className="space-y-4 sm:space-y-0 sm:space-x-4 font-sans" data-testid="cta-buttons">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" asChild data-testid="cta-signup-user-button">
-                    <Link href="/signup/user">Get Started as User</Link>
-                  </Button>
-                  <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 transition-colors transform hover:scale-105 shadow-glow-primary hover:shadow-none" asChild data-testid="cta-signup-pro-button">
-                    <Link href="/signup/professional">Join as a Professional</Link>
-                  </Button>
+                   {/* Refactored Button */}
+                  <Link href="/signup/user" passHref data-testid="cta-signup-user-button-link">
+                    <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-primary hover:shadow-none transition-all duration-300 transform hover:scale-105" data-testid="cta-signup-user-button">
+                      Get Started as User
+                    </Button>
+                  </Link>
+                  {/* Refactored Button */}
+                   <Link href="/signup/professional" passHref data-testid="cta-signup-pro-button-link">
+                     <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 transition-colors transform hover:scale-105 shadow-glow-primary hover:shadow-none" data-testid="cta-signup-pro-button">
+                       Join as a Professional
+                     </Button>
+                   </Link>
                 </div>
             </div>
         </section>
