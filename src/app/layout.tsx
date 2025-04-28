@@ -1,4 +1,5 @@
 
+
 "use client"; // Required for hooks
 
 import { Inter, Poppins } from 'next/font/google'; // Import Poppins
@@ -76,7 +77,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-       <head>{/* Removed whitespace here */}
+       <head>
          {/* Meta tags managed by Next.js metadata API in pages */}
          {/* Basic meta tags required in head */}
          <meta charSet="utf-8" />
