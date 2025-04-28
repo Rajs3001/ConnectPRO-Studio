@@ -8,8 +8,9 @@ import { useState, useEffect } from 'react'; // Import hooks for state managemen
 import { AnimatePresence } from 'framer-motion'; // Import AnimatePresence
 import { AuthProvider, useAuth } from '@/hooks/useAuth'; // Import AuthProvider and useAuth
 import './globals.css';
-import { useRouter } from 'next/navigation'; // Import useRouter
-import ProtectedRoute from '@/components/auth/ProtectedRoute'; // Import ProtectedRoute
+import { useRouter, usePathname } from 'next/navigation'; // Import useRouter and usePathname
+import ProtectedRoute from '@/components/auth/ProtectedRoute'; // Correct import path
+
 
 // Configure Inter font (for body text)
 const inter = Inter({
@@ -29,25 +30,14 @@ const poppins = Poppins({
 
 
 // Wrapper component to handle conditional rendering based on auth state
+// Simplified: Primarily handles loading state and initial client check. Route protection is delegated.
 function AuthWrapper({ children }: { children: React.ReactNode }) {
-  const { user, loading, communityProfileExists } = useAuth(); // Include communityProfileExists
-  const router = useRouter();
+  const { loading } = useAuth();
   const [isClient, setIsClient] = useState(false);
-  const pathname = router.pathname; // Get current pathname
 
   useEffect(() => {
       setIsClient(true);
-      if (!loading && !user) {
-          // Redirect logic is now primarily handled by ProtectedRoute, but keep logging
-           console.log("AuthWrapper: No user found after loading, potential redirect handled by ProtectedRoute.");
-      }
-       // Specific check for community access
-       if (!loading && user && communityProfileExists === false && pathname?.startsWith('/community') && pathname !== '/community/join') {
-         console.log("AuthWrapper: User authenticated but no community profile, redirecting to /community/join");
-         router.replace('/community/join');
-       }
-
-  }, [user, loading, router, communityProfileExists, pathname]); // Add dependencies
+  }, []);
 
 
   if (loading || !isClient) {
@@ -56,7 +46,7 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     return null; // Or a minimal loading indicator if needed after preloader
   }
 
-  // ProtectedRoute will handle redirecting unauthenticated users for relevant paths
+  // Children rendering is now controlled by ProtectedRoute inside this wrapper
   return <>{children}</>;
 }
 
@@ -86,7 +76,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-       <head>
+       <head>{/* Removed whitespace here */}
          {/* Meta tags managed by Next.js metadata API in pages */}
          {/* Basic meta tags required in head */}
          <meta charSet="utf-8" />
