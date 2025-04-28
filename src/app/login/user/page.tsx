@@ -2,28 +2,28 @@
 "use client";
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react'; // Added useEffect
-import { useRouter, useSearchParams } from 'next/navigation'; // Added useSearchParams
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from '@/hooks/useAuth'; // Import useAuth
-import { Loader2 } from 'lucide-react'; // Import Loader2
+import { useAuth } from '@/hooks/useAuth';
+import { Loader2, Chrome } from 'lucide-react'; // Import Chrome for Google icon
 
 export default function UserLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams(); // Get query parameters
+  const searchParams = useSearchParams();
   const { toast } = useToast();
-  const { loginWithEmail, user, loading: authLoading } = useAuth(); // Use email login from useAuth
+  const { loginWithEmail, loginWithGoogle, user, loading: authLoading } = useAuth();
 
-  const redirectPath = searchParams.get('redirect') || '/user/dashboard'; // Get redirect path or default
+  const redirectPath = searchParams.get('redirect') || '/user/dashboard';
 
-  // Redirect if user is already logged in
   useEffect(() => {
     if (!authLoading && user) {
        console.log("User already logged in, redirecting to:", redirectPath);
@@ -31,33 +31,47 @@ export default function UserLoginPage() {
     }
   }, [user, authLoading, router, redirectPath]);
 
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log('User Login Attempt:', { email }); // Avoid logging password
-
     try {
-      await loginWithEmail(email, password); // Use the login function from context
+      await loginWithEmail(email, password);
       toast({
         title: "Login Successful",
         description: "Redirecting...",
       });
-       // Redirect logic is now handled by the useEffect hook listening to user state change
-       // router.push(redirectPath); // Remove direct push here
+      // Redirect is handled by useEffect
     } catch (error: any) {
-      console.error("Login failed:", error);
+      console.error("Email login failed:", error);
       toast({
         variant: "destructive",
         title: "Login Failed",
         description: error.message || "Invalid email or password. Please try again.",
       });
-      setLoading(false); // Keep loading false on error
+      setLoading(false);
     }
-     // setLoading(false) will be handled implicitly when auth state changes or on error
   };
 
-  // Show loading indicator while checking auth state
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true);
+    try {
+      await loginWithGoogle();
+      toast({
+        title: "Google Sign-In Successful",
+        description: "Redirecting...",
+      });
+      // Redirect is handled by useEffect
+    } catch (error: any) {
+      console.error("Google login failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Google Sign-In Failed",
+        description: error.message || "Could not sign in with Google. Please try again.",
+      });
+      setGoogleLoading(false);
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-secondary">
@@ -66,8 +80,7 @@ export default function UserLoginPage() {
     );
   }
 
-   // Prevent rendering login form if user becomes authenticated
-   if (user) {
+  if (user) {
      return (
        <div className="flex items-center justify-center min-h-screen bg-secondary">
          <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -75,7 +88,6 @@ export default function UserLoginPage() {
        </div>
      );
    }
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary" data-testid="user-login-page">
@@ -95,7 +107,7 @@ export default function UserLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
+                disabled={loading || googleLoading}
                 data-testid="email-input"
               />
             </div>
@@ -108,25 +120,34 @@ export default function UserLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
+                disabled={loading || googleLoading}
                 data-testid="password-input"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading} data-testid="login-submit-button">
+            <Button type="submit" className="w-full" disabled={loading || googleLoading} data-testid="login-submit-button">
               {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</> : 'Log In'}
             </Button>
           </form>
-           {/* Add alternative login methods if needed, e.g., Google Sign-In */}
-           {/*
-           <div className="mt-4 text-center text-sm">
-              Or log in with
+           <div className="mt-4 relative">
+              <div className="absolute inset-0 flex items-center">
+                 <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                 <span className="bg-background px-2 text-muted-foreground">
+                 Or continue with
+                 </span>
+              </div>
            </div>
-           <div className="mt-2 flex justify-center">
-              <Button variant="outline" onClick={loginWithGoogle} disabled={loading}>
+           <div className="mt-4 flex justify-center">
+              <Button variant="outline" onClick={handleGoogleLogin} disabled={loading || googleLoading} className="w-full">
+                {googleLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Chrome className="mr-2 h-4 w-4" /> // Using Chrome icon for Google
+                )}
                  Google
               </Button>
            </div>
-           */}
         </CardContent>
         <CardFooter className="flex flex-col items-center space-y-2" data-testid="login-footer">
           <Link href="/forgot-password" passHref>

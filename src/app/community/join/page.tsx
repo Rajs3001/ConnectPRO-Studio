@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; // Added useState import
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';

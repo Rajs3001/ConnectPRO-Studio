@@ -65,24 +65,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const handleSuccessfulLogin = async (loggedInUser: User) => {
-    // No need to call setUser here, onAuthStateChanged handles it.
-    // Check community profile status.
-    await checkOrCreateCommunityProfile(loggedInUser);
-    return loggedInUser; // Return user object
-  };
+  // No longer needed as onAuthStateChanged handles it
+  // const handleSuccessfulLogin = async (loggedInUser: User) => {
+  //   await checkOrCreateCommunityProfile(loggedInUser);
+  //   return loggedInUser; // Return user object
+  // };
 
   const loginWithProvider = async (provider: any): Promise<User | null> => { // GoogleAuthProvider | OAuthProvider | FacebookAuthProvider | TwitterAuthProvider
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
-      // handleSuccessfulLogin is called by onAuthStateChanged listener
+      // onAuthStateChanged will handle the rest
       console.log(`${provider.providerId} login successful:`, result.user.uid);
       return result.user;
     } catch (error: any) {
       console.error("Provider Authentication error:", error);
-      // Handle specific errors like popup closed, account exists with different credential, etc.
-      // alert(`Login failed: ${error.message}`); // Simple alert for demo
       setLoading(false); // Ensure loading is false on error
       throw error; // Re-throw error for component to handle
     } finally {
@@ -94,7 +91,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
      setLoading(true);
      try {
        const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-       // handleSuccessfulLogin is called by onAuthStateChanged listener
+       // onAuthStateChanged will handle the rest
        console.log(`Email login successful:`, userCredential.user.uid);
        return userCredential.user;
      } catch (error: any) {
@@ -110,12 +107,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-        // Update the user's profile with the name
         await updateProfile(userCredential.user, { displayName: name });
-        // Reload user to get the updated info (optional, onAuthStateChanged might catch it)
-        // await userCredential.user.reload();
+        // onAuthStateChanged will handle the rest
         console.log(`Email signup successful:`, userCredential.user.uid);
-        // handleSuccessfulLogin is called by onAuthStateChanged listener after signup
         return userCredential.user; // Return the newly created user
     } catch (error: any) {
         console.error("Email Signup error:", error);
@@ -136,7 +130,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true); // Indicate loading during logout
     try {
       await signOut(auth);
-      // State updates (user=null, communityProfileExists=false) handled by onAuthStateChanged
+      // State updates handled by onAuthStateChanged
       console.log("User logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);
