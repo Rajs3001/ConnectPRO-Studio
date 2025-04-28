@@ -76,7 +76,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-       <head>
+       <head>{/* Removed whitespace here */}
          {/* Meta tags managed by Next.js metadata API in pages */}
          {/* Basic meta tags required in head */}
          <meta charSet="utf-8" />
@@ -112,3 +112,4 @@ export default function RootLayout({
     </html>
   );
 }
+
