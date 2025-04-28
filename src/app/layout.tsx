@@ -7,8 +7,9 @@ import { Toaster } from "@/components/ui/toaster"
 import Preloader from '@/components/preloader/preloader'; // Import Preloader
 import { useState, useEffect } from 'react'; // Import hooks for state management
 import { AnimatePresence } from 'framer-motion'; // Import AnimatePresence
-import { AuthProvider } from '@/hooks/useAuth'; // Import AuthProvider
+import { AuthProvider, useAuth } from '@/hooks/useAuth'; // Import AuthProvider and useAuth
 import './globals.css';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 // Configure Inter font (for body text)
 const inter = Inter({
@@ -25,6 +26,31 @@ const poppins = Poppins({
 
 // Cannot export metadata from a Client Component
 // Metadata should be defined in page.tsx or child server components if needed
+
+
+// Wrapper component to handle conditional rendering based on auth state
+function AuthWrapper({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+      setIsClient(true);
+      if (!loading && !user) {
+          // Optional: Redirect logic can be placed here or handled by individual pages/middleware
+          // console.log("AuthWrapper: No user found after loading, potential redirect.");
+      }
+  }, [user, loading, router]);
+
+  if (loading || !isClient) {
+    // While checking auth or on server, show nothing or a minimal loader
+    // Preloader handles the initial site load, this handles auth checks
+    return null; // Or a minimal loading indicator if needed after preloader
+  }
+
+  return <>{children}</>;
+}
+
 
 export default function RootLayout({
   children,
@@ -67,12 +93,14 @@ export default function RootLayout({
             <AnimatePresence mode="wait">
             {isClient && isLoading ? <Preloader key="preloader" /> : null}
             </AnimatePresence>
-            {/* Render children only after loading is complete */}
+            {/* Render children only after loading is complete, wrapped in AuthWrapper */}
             {isClient && !isLoading && (
-               <div data-testid="main-content-wrapper"> {/* Wrapper for easier inspection */}
-                   {console.log("Rendering main children content")}
-                   {children}
-                </div>
+               <AuthWrapper>
+                   <div data-testid="main-content-wrapper"> {/* Wrapper for easier inspection */}
+                       {console.log("Rendering main children content within AuthWrapper")}
+                       {children}
+                   </div>
+                </AuthWrapper>
             )}
              {/* Log if children are not rendered */}
              {(!isClient || isLoading) && console.log("Main children content NOT rendered yet.")}
@@ -82,5 +110,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
