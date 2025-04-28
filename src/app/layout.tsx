@@ -1,7 +1,6 @@
 
 "use client"; // Required for hooks
 
-import type { Metadata } from 'next'; // Keep Metadata type import
 import { Inter, Poppins } from 'next/font/google'; // Import Poppins
 import { Toaster } from "@/components/ui/toaster"
 import Preloader from '@/components/preloader/preloader'; // Import Preloader
@@ -10,6 +9,7 @@ import { AnimatePresence } from 'framer-motion'; // Import AnimatePresence
 import { AuthProvider, useAuth } from '@/hooks/useAuth'; // Import AuthProvider and useAuth
 import './globals.css';
 import { useRouter } from 'next/navigation'; // Import useRouter
+import ProtectedRoute from '@/components/auth/ProtectedRoute'; // Import ProtectedRoute
 
 // Configure Inter font (for body text)
 const inter = Inter({
@@ -30,17 +30,25 @@ const poppins = Poppins({
 
 // Wrapper component to handle conditional rendering based on auth state
 function AuthWrapper({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading, communityProfileExists } = useAuth(); // Include communityProfileExists
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
+  const pathname = router.pathname; // Get current pathname
 
   useEffect(() => {
       setIsClient(true);
       if (!loading && !user) {
-          // Optional: Redirect logic can be placed here or handled by individual pages/middleware
-          // console.log("AuthWrapper: No user found after loading, potential redirect.");
+          // Redirect logic is now primarily handled by ProtectedRoute, but keep logging
+           console.log("AuthWrapper: No user found after loading, potential redirect handled by ProtectedRoute.");
       }
-  }, [user, loading, router]);
+       // Specific check for community access
+       if (!loading && user && communityProfileExists === false && pathname?.startsWith('/community') && pathname !== '/community/join') {
+         console.log("AuthWrapper: User authenticated but no community profile, redirecting to /community/join");
+         router.replace('/community/join');
+       }
+
+  }, [user, loading, router, communityProfileExists, pathname]); // Add dependencies
+
 
   if (loading || !isClient) {
     // While checking auth or on server, show nothing or a minimal loader
@@ -48,6 +56,7 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     return null; // Or a minimal loading indicator if needed after preloader
   }
 
+  // ProtectedRoute will handle redirecting unauthenticated users for relevant paths
   return <>{children}</>;
 }
 
@@ -77,7 +86,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
-       <head>{/* Removed whitespace here */}
+       <head>
          {/* Meta tags managed by Next.js metadata API in pages */}
          {/* Basic meta tags required in head */}
          <meta charSet="utf-8" />
@@ -94,12 +103,15 @@ export default function RootLayout({
             {isClient && isLoading ? <Preloader key="preloader" /> : null}
             </AnimatePresence>
             {/* Render children only after loading is complete, wrapped in AuthWrapper */}
+             {/* Wrap the main content potentially needing auth */}
             {isClient && !isLoading && (
                <AuthWrapper>
-                   <div data-testid="main-content-wrapper"> {/* Wrapper for easier inspection */}
-                       {console.log("Rendering main children content within AuthWrapper")}
-                       {children}
-                   </div>
+                    <ProtectedRoute> {/* Wrap children needing protection */}
+                       <div data-testid="main-content-wrapper"> {/* Wrapper for easier inspection */}
+                           {console.log("Rendering main children content within AuthWrapper/ProtectedRoute")}
+                           {children}
+                       </div>
+                    </ProtectedRoute>
                 </AuthWrapper>
             )}
              {/* Log if children are not rendered */}
