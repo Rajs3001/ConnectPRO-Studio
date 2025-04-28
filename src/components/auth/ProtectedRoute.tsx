@@ -8,6 +8,7 @@ import SiteLoader from '@/components/shared/site-loader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  requireCommunityProfile?: boolean; // New prop to enforce community profile check
 }
 
 const publicPaths = [
@@ -16,7 +17,7 @@ const publicPaths = [
   '/login/professional',
   '/signup/user',
   '/signup/professional',
-  '/community/join', // Allow access to join page even if not fully profiled
+  '/community/join', // Explicitly public
   '/privacy', // Example public pages
   '/terms',
   '/contact',
@@ -29,16 +30,16 @@ const authPaths = [
   '/signup/professional',
 ];
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading, communityProfileExists } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireCommunityProfile = false }) => {
+  const { user, loading: authLoading, communityProfileExists } = useAuth(); // Renamed loading to authLoading
   const router = useRouter();
   const pathname = usePathname();
-  const [isChecking, setIsChecking] = useState(true); // Separate checking state
+  const [isChecking, setIsChecking] = useState(true); // Use separate checking state
 
   useEffect(() => {
-    console.log("ProtectedRoute Effect:", { loading, user: !!user, pathname, communityProfileExists });
+    console.log("ProtectedRoute Effect:", { authLoading, user: !!user, pathname, communityProfileExists, requireCommunityProfile });
 
-    if (loading) {
+    if (authLoading) {
       console.log("ProtectedRoute: Auth loading, waiting...");
       setIsChecking(true);
       return; // Wait for auth state to resolve
@@ -53,11 +54,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       // User is not logged in
       if (!pathIsPublic && !pathIsAuth) {
         console.log(`ProtectedRoute: Not logged in, accessing protected route "${pathname}". Redirecting.`);
-        // Determine redirect based on intended area if possible, otherwise default to user login
         const redirectPath = pathname.startsWith('/professional') ? '/login/professional' : '/login/user';
         router.replace(`${redirectPath}?redirect=${pathname}`);
-        // Keep checking true until redirect happens
-        return;
+        return; // Keep checking true until redirect happens
       }
     } else {
       // User is logged in
@@ -66,27 +65,33 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         console.log(`ProtectedRoute: Logged in, accessing auth route "${pathname}". Redirecting to dashboard.`);
         const dashboardPath = pathname.includes('professional') ? '/professional/dashboard' : '/user/dashboard';
         router.replace(dashboardPath);
-        // Keep checking true until redirect happens
-        return;
+        return; // Keep checking true until redirect happens
       }
 
-       // Check for community profile if accessing community areas (and not the join page)
-       if (pathname.startsWith('/community') && pathname !== '/community/join' && communityProfileExists === false) {
-          console.log(`ProtectedRoute: Logged in but no community profile, accessing community route "${pathname}". Redirecting to /community/join.`);
-          router.replace('/community/join');
-           // Keep checking true until redirect happens
-           return;
-       }
+      // Check for community profile if required for this route
+      if (requireCommunityProfile) {
+         if (communityProfileExists === null) {
+            console.log("ProtectedRoute: Community profile check in progress...");
+            setIsChecking(true); // Still checking community profile
+            return;
+         } else if (communityProfileExists === false) {
+             console.log(`ProtectedRoute: Community profile required for "${pathname}" but not found. Redirecting to /community/join.`);
+             router.replace('/community/join');
+             return; // Keep checking true until redirect happens
+         }
+         // If communityProfileExists is true, continue
+          console.log("ProtectedRoute: Community profile check passed.");
+      }
     }
 
-    // If all checks pass or path is public/auth, allow rendering
+    // If all checks pass or path is public/auth (and community check passed if required), allow rendering
     console.log("ProtectedRoute: Checks passed, allowing access.");
     setIsChecking(false);
 
-  }, [user, loading, pathname, router, communityProfileExists]);
+  }, [user, authLoading, pathname, router, communityProfileExists, requireCommunityProfile]);
 
-  if (isChecking || loading) {
-    // Show a loader while checking authentication or if loading is true
+  if (isChecking || authLoading) {
+    // Show a loader while checking authentication or community profile status
     return (
       <div className="flex items-center justify-center min-h-screen bg-background" data-testid="protected-route-loader">
         <SiteLoader size="lg" />
@@ -94,7 +99,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  // Render children if authenticated or if the route is public
+  // Render children if checks passed
   return <>{children}</>;
 };
 
