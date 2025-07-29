@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/hooks/useAuth';
 
 // Example fields, replace with actual professional fields
 const professionalFields = [
@@ -36,6 +37,7 @@ export default function ProfessionalSignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { signupWithEmail } = useAuth();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,27 +58,18 @@ export default function ProfessionalSignupPage() {
        return;
      }
     setLoading(true);
-    // TODO: Implement actual professional registration logic here
-    const skillsArray = skills.split(',').map(s => s.trim()).filter(s => s);
-    console.log('Professional Signup Attempt:', { name, email, password, field, description, skills: skillsArray });
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Placeholder success state
-    const signupSuccess = true; // Replace with actual registration check
-
-    if (signupSuccess) {
+    try {
+      await signupWithEmail(name, email, password);
       toast({
         title: "Signup Successful",
         description: "Professional account created! Redirecting to login...",
       });
-      router.push('/login/professional'); // Redirect to professional login
-    } else {
+      router.push('/login/professional');
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Signup Failed",
-        description: "Could not create professional account. Please try again.", // Add specific error
+        description: error.message || "Could not create professional account. Please try again.",
       });
       setLoading(false);
     }

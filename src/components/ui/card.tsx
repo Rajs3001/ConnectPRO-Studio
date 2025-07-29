@@ -9,7 +9,9 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300", // Added transition
+      // Add 3D effect: perspective, transform, and shadow
+      "rounded-lg border bg-card text-card-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:-rotate-x-2 hover:rotate-y-2 hover:z-10",
+      "[perspective:1200px] hover:[transform-style:preserve-3d]",
       className
     )}
     {...props}

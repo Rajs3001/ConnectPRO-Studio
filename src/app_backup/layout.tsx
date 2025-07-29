@@ -10,6 +10,8 @@ import { AuthProvider, useAuth } from '@/hooks/useAuth'; // Import AuthProvider 
 import './globals.css';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import ProtectedRoute from '@/components/auth/ProtectedRoute'; // Import ProtectedRoute
+import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 
 // Configure Inter font (for body text)
@@ -98,16 +100,17 @@ export default function RootLayout({
                <AuthWrapper>
                     <ProtectedRoute> {/* Wrap children needing protection */}
                        <div data-testid="main-content-wrapper"> {/* Wrapper for easier inspection */}
-                           {console.log("Rendering main children content within AuthWrapper/ProtectedRoute")}
+                           {/* {console.log("Rendering main children content within AuthWrapper/ProtectedRoute")} */}
                            {children}
                        </div>
                     </ProtectedRoute>
                 </AuthWrapper>
             )}
              {/* Log if children are not rendered */}
-             {(!isClient || isLoading) && console.log("Main children content NOT rendered yet.")}
+             {/* {(!isClient || isLoading) && console.log("Main children content NOT rendered yet.")} */}
             <Toaster />
          </AuthProvider>
+         {/* 3D Character Chatbot (global, always present) */}
       </body>
     </html>
   );

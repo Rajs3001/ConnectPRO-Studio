@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/hooks/useAuth';
 
 export default function UserSignupPage() {
   const [name, setName] = useState('');
@@ -17,6 +18,7 @@ export default function UserSignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { signupWithEmail } = useAuth();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,26 +31,18 @@ export default function UserSignupPage() {
       return;
     }
     setLoading(true);
-    // TODO: Implement actual user registration logic here
-    console.log('User Signup Attempt:', { name, email, password });
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Placeholder success state
-    const signupSuccess = true; // Replace with actual registration check
-
-    if (signupSuccess) {
+    try {
+      await signupWithEmail(name, email, password);
       toast({
         title: "Signup Successful",
         description: "Account created! Redirecting to login...",
       });
-      router.push('/login/user'); // Redirect to user login
-    } else {
+      router.push('/login/user');
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Signup Failed",
-        description: "Could not create account. Please try again.", // Add more specific error if available
+        description: error.message || "Could not create account. Please try again.",
       });
       setLoading(false);
     }
